@@ -1,0 +1,13 @@
+node_modules/
+dist/
+.vercel/
+.npm-cache/
+.claude/
+chrome-shot-profile/
+edge-profile/
+*.log
+*.err
+*.tsbuildinfo
+*.bat
+.DS_Store
+Thumbs.db
