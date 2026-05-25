@@ -520,6 +520,17 @@ function ProjectVisual({ title, label, accent }: { title: string; label: string;
             <span>Nachher</span>
             <strong>Motion Premium Experience</strong>
           </div>
+          <motion.a
+            className="after-preview-button"
+            href="https://dekbau-premium.vercel.app"
+            target="_blank"
+            rel="noreferrer"
+            whileHover={{ y: -3, scale: 1.03 }}
+            transition={{ duration: 0.25, ease: "easeOut" }}
+          >
+            Neue Webseite öffnen
+            <ArrowUpRight size={14} />
+          </motion.a>
         </>
       )}
       <div className="floating-mini"><MousePointer2 size={15} /><span>Motion aktiv</span></div>
