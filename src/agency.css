@@ -2995,3 +2995,359 @@ button, input, textarea { font: inherit; }
     text-align: left;
   }
 }
+
+@media (max-width: 768px) {
+  html,
+  body,
+  #root {
+    width: 100%;
+    max-width: 100%;
+    overflow-x: hidden;
+  }
+
+  body {
+    min-width: 0;
+  }
+
+  .agency-app,
+  .hero,
+  .minimal-section,
+  .immersive-section,
+  .showcase,
+  .faq-section,
+  .contact-section,
+  .process-section,
+  .legal-section,
+  .footer,
+  .agency-grid,
+  .glow-feature-section {
+    width: 100%;
+    max-width: 100vw;
+    overflow-x: hidden;
+  }
+
+  .minimal-section,
+  .immersive-section,
+  .showcase,
+  .faq-section,
+  .contact-section,
+  .process-section,
+  .legal-section,
+  .footer,
+  .agency-grid,
+  .glow-feature-section {
+    width: calc(100vw - 40px);
+    margin-right: auto;
+    margin-left: auto;
+  }
+
+  .nav-glass {
+    right: 20px;
+    left: 20px;
+    width: auto;
+    max-width: calc(100vw - 40px);
+    padding: 10px 12px;
+    gap: 10px;
+    transform: none;
+  }
+
+  .nav-links {
+    display: none;
+  }
+
+  .brand,
+  .brand-logo {
+    max-width: 100%;
+    min-width: 0;
+  }
+
+  .brand-word {
+    max-width: min(180px, calc(100vw - 112px));
+    overflow: hidden;
+    font-size: 18px;
+    line-height: 1.05;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+
+  .hero {
+    min-height: auto;
+    padding-top: 112px;
+    padding-bottom: 54px;
+  }
+
+  .hero-layout {
+    width: calc(100vw - 40px);
+    max-width: calc(100vw - 40px);
+    grid-template-columns: minmax(0, 1fr);
+    gap: 34px;
+  }
+
+  .hero-copy,
+  .hero-copy > p,
+  .hero h1 {
+    max-width: 100%;
+  }
+
+  .hero h1 {
+    font-size: clamp(48px, 13vw, 78px);
+    line-height: 0.95;
+    overflow-wrap: normal;
+  }
+
+  .hero-copy > p {
+    font-size: clamp(15px, 4.2vw, 18px);
+    line-height: 1.62;
+  }
+
+  .eyebrow {
+    max-width: 100%;
+    font-size: 13px;
+  }
+
+  .hero-actions,
+  .contact-actions {
+    width: 100%;
+  }
+
+  .magnetic-button {
+    max-width: calc(100vw - 40px);
+    padding-right: 18px;
+    padding-left: 18px;
+    white-space: normal;
+    text-align: center;
+  }
+
+  .hero-depth {
+    min-height: 430px;
+    max-width: 100%;
+    overflow: hidden;
+  }
+
+  .hero-browser {
+    right: auto;
+    left: 0;
+    width: 100%;
+    max-width: 100%;
+  }
+
+  .float-card,
+  .phone-preview,
+  .seo-card {
+    max-width: calc(100vw - 64px);
+  }
+
+  .review-card {
+    left: 0;
+  }
+
+  .browser-mockup,
+  .project-visual,
+  .project-visual .browser-mockup {
+    width: 100%;
+    max-width: 100%;
+  }
+
+  .live-site-stage,
+  .browser-stage {
+    min-height: 300px;
+  }
+
+  .live-site-frame-wrap iframe {
+    width: 980px;
+    height: 720px;
+    transform: scale(0.36);
+  }
+
+  .live-site-overlay {
+    left: 18px;
+    bottom: 18px;
+    max-width: min(230px, calc(100% - 36px));
+    padding: 14px;
+    border-radius: 20px;
+  }
+
+  .live-site-overlay strong {
+    font-size: 22px;
+  }
+
+  .live-site-overlay a {
+    min-height: 38px;
+    padding: 0 12px;
+    font-size: 10px;
+  }
+
+  .project-stack,
+  .project-card {
+    width: 100%;
+    max-width: 100%;
+  }
+
+  .project-card {
+    grid-template-columns: minmax(0, 1fr);
+    gap: 28px;
+    padding: 22px;
+    border-radius: 26px;
+    overflow: hidden;
+  }
+
+  .project-card .project-copy,
+  .project-card .project-visual,
+  .project-card-reverse .project-copy,
+  .project-card-reverse .project-visual {
+    grid-column: 1 / -1;
+    grid-row: auto;
+    max-width: 100%;
+  }
+
+  .project-copy h3,
+  .section-heading h2,
+  .contact-panel h2 {
+    max-width: 100%;
+    font-size: clamp(40px, 11vw, 64px);
+    line-height: 1.02;
+    overflow-wrap: anywhere;
+  }
+
+  .before-preview-card,
+  .after-badge,
+  .after-preview-button,
+  .floating-mini {
+    position: relative;
+    right: auto;
+    bottom: auto;
+    left: auto;
+    width: 100%;
+    max-width: 100%;
+    margin-top: 14px;
+  }
+
+  .before-preview-card {
+    display: block;
+  }
+
+  .before-preview-frame {
+    height: 130px;
+  }
+
+  .after-preview-button {
+    justify-content: center;
+    min-height: 48px;
+  }
+
+  .floating-mini {
+    justify-content: center;
+  }
+
+  .pricing-section .pricing-grid,
+  .pricing-grid {
+    display: grid;
+    width: 100%;
+    max-width: 100%;
+    grid-template-columns: minmax(0, 1fr);
+    gap: 16px;
+  }
+
+  .price-card {
+    width: 100%;
+    min-width: 0;
+    min-height: auto;
+    padding: 22px;
+    border-radius: 24px;
+  }
+
+  .price-card h3 {
+    max-width: 100%;
+    margin-top: 0;
+    font-size: clamp(28px, 8vw, 38px);
+    line-height: 1.05;
+    overflow-wrap: anywhere;
+  }
+
+  .price-card strong {
+    display: block;
+    max-width: 100%;
+    font-size: clamp(32px, 9vw, 44px);
+    line-height: 1.08;
+    overflow-wrap: anywhere;
+  }
+
+  .price-card p {
+    max-width: 100%;
+    font-size: 15px;
+    line-height: 1.62;
+  }
+
+  .price-check {
+    align-items: flex-start;
+    font-size: 14px;
+    line-height: 1.4;
+  }
+
+  .spotlight {
+    width: 62vw;
+    height: 62vw;
+    max-width: 320px;
+    max-height: 320px;
+  }
+
+  .process-timeline {
+    width: 100%;
+    max-width: 100%;
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .process-step,
+  .process-step:nth-child(even) {
+    width: 100%;
+    max-width: 100%;
+    margin-top: 0;
+    transform: none !important;
+  }
+}
+
+@media (max-width: 430px) {
+  .minimal-section,
+  .immersive-section,
+  .showcase,
+  .faq-section,
+  .contact-section,
+  .process-section,
+  .legal-section,
+  .footer,
+  .agency-grid,
+  .glow-feature-section,
+  .hero-layout {
+    width: calc(100vw - 32px);
+    max-width: calc(100vw - 32px);
+  }
+
+  .nav-glass {
+    right: 16px;
+    left: 16px;
+    max-width: calc(100vw - 32px);
+  }
+
+  .hero h1 {
+    font-size: clamp(44px, 12.4vw, 58px);
+  }
+
+  .hero-copy > p {
+    font-size: 15.5px;
+  }
+
+  .magnetic-button {
+    width: 100%;
+    max-width: calc(100vw - 32px);
+  }
+
+  .section-heading h2,
+  .project-copy h3,
+  .contact-panel h2 {
+    font-size: clamp(36px, 10.2vw, 50px);
+  }
+
+  .pricing-section .section-heading h2 {
+    font-size: clamp(42px, 11vw, 56px);
+  }
+}
