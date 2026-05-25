@@ -3351,3 +3351,258 @@ button, input, textarea { font: inherit; }
     font-size: clamp(42px, 11vw, 56px);
   }
 }
+
+@media (max-width: 768px) {
+  #branchen.immersive-section {
+    width: calc(100vw - 40px);
+    max-width: 100%;
+    margin-right: auto;
+    margin-left: auto;
+    overflow: visible;
+  }
+
+  #branchen .motion-environment {
+    position: relative;
+    width: 100%;
+    max-width: 100%;
+    min-height: 520px;
+    margin-right: auto;
+    margin-left: auto;
+    overflow: hidden;
+    border-radius: 30px;
+    transform: none !important;
+    filter: none !important;
+    backdrop-filter: none !important;
+    will-change: auto !important;
+  }
+
+  #branchen .motion-environment::before,
+  #branchen .motion-environment::after {
+    position: absolute;
+    z-index: 2;
+    content: "";
+    pointer-events: none;
+  }
+
+  #branchen .motion-environment::before {
+    top: 46px;
+    right: 20px;
+    left: 20px;
+    height: 250px;
+    border: 1px solid rgba(94, 162, 255, 0.18);
+    border-radius: 24px;
+    background:
+      linear-gradient(180deg, rgba(5, 8, 22, 0.92) 0 42px, rgba(6, 10, 25, 0.76) 42px),
+      radial-gradient(circle at 78% 38%, rgba(94, 162, 255, 0.26), transparent 34%),
+      linear-gradient(rgba(255, 255, 255, 0.045) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(255, 255, 255, 0.045) 1px, transparent 1px);
+    background-size: auto, auto, 38px 38px, 38px 38px;
+    box-shadow: 0 22px 76px rgba(0, 0, 0, 0.36);
+  }
+
+  #branchen .motion-environment::after {
+    right: 34px;
+    top: 176px;
+    width: 92px;
+    height: 156px;
+    border: 1px solid rgba(94, 162, 255, 0.2);
+    border-radius: 24px;
+    background:
+      radial-gradient(circle at 50% 28%, rgba(94, 162, 255, 0.42), transparent 24%),
+      linear-gradient(180deg, rgba(13, 20, 42, 0.94), rgba(5, 8, 22, 0.98));
+    box-shadow: 0 20px 62px rgba(0, 0, 0, 0.34);
+  }
+
+  #branchen .cinematic-canvas {
+    display: none;
+  }
+
+  #branchen .webgl-caption {
+    right: 20px;
+    bottom: 22px;
+    left: 20px;
+    z-index: 4;
+    width: auto;
+    max-width: none;
+    padding: 22px;
+    border-radius: 24px;
+    transform: none !important;
+    filter: none !important;
+    backdrop-filter: none;
+    will-change: auto !important;
+  }
+
+  #branchen .webgl-caption strong {
+    max-width: 100%;
+    font-size: clamp(28px, 8.4vw, 38px);
+    line-height: 1.08;
+    overflow-wrap: anywhere;
+  }
+
+  #branchen .webgl-caption span {
+    font-size: 10px;
+    letter-spacing: 0.12em;
+  }
+
+  #projekte.showcase {
+    padding-top: 32px;
+  }
+
+  #projekte .project-stack {
+    gap: 32px;
+    perspective: none !important;
+  }
+
+  #projekte .project-card {
+    position: relative !important;
+    top: auto !important;
+    display: grid;
+    gap: 28px;
+    transform: none !important;
+    overflow: hidden;
+    will-change: auto;
+  }
+
+  #projekte .project-card,
+  #projekte .project-card::before,
+  #projekte .project-visual,
+  #projekte .browser-mockup,
+  #projekte .before-preview-card,
+  #projekte .after-badge,
+  #projekte .after-preview-button {
+    animation: none !important;
+    filter: none !important;
+    backdrop-filter: none !important;
+    transform: none !important;
+    will-change: auto !important;
+  }
+
+  #projekte .project-card::before {
+    display: none;
+  }
+
+  #projekte .project-visual {
+    position: relative;
+    display: grid;
+    width: 100%;
+    max-width: 100%;
+    gap: 26px;
+    perspective: none;
+    transform-style: flat;
+  }
+
+  #projekte .project-visual .browser-mockup,
+  #projekte .before-preview-card,
+  #projekte .after-badge,
+  #projekte .after-preview-button {
+    position: relative;
+    inset: auto;
+    right: auto;
+    bottom: auto;
+    left: auto;
+    width: 100%;
+    max-width: 100%;
+    margin: 0;
+  }
+
+  #projekte .project-visual .browser-mockup {
+    height: auto;
+    max-height: 420px;
+    overflow: hidden;
+  }
+
+  #projekte .live-site-stage,
+  #projekte .browser-stage {
+    min-height: clamp(250px, 68vw, 340px);
+    max-height: 420px;
+    overflow: hidden;
+  }
+
+  #projekte .live-site-frame-wrap,
+  #projekte .live-site-frame-wrap iframe,
+  #projekte .before-preview-frame iframe {
+    transform: none !important;
+    will-change: auto !important;
+  }
+
+  #projekte .live-site-frame-wrap iframe {
+    width: 1000px;
+    height: 700px;
+    transform: scale(0.34) !important;
+    transform-origin: top left;
+  }
+
+  #projekte .live-site-overlay {
+    left: 16px;
+    bottom: 16px;
+    max-width: min(210px, calc(100% - 32px));
+    padding: 14px;
+    box-shadow: 0 16px 42px rgba(0, 0, 0, 0.42);
+    backdrop-filter: none;
+  }
+
+  #projekte .before-preview-card {
+    display: block;
+    border-radius: 24px;
+    box-shadow: 0 18px 54px rgba(0, 0, 0, 0.36);
+  }
+
+  #projekte .before-preview-frame {
+    height: 150px;
+    max-height: 40vw;
+  }
+
+  #projekte .before-preview-frame iframe {
+    width: 1000px;
+    height: 680px;
+    transform: scale(0.34) !important;
+    transform-origin: top left;
+  }
+
+  #projekte .after-badge {
+    min-height: auto;
+    padding: 18px 20px;
+    border-radius: 22px;
+    box-shadow: 0 18px 54px rgba(0, 0, 0, 0.34);
+  }
+
+  #projekte .after-preview-button {
+    min-height: 54px;
+    justify-content: center;
+    border-radius: 999px;
+    box-shadow: 0 18px 54px rgba(77, 124, 255, 0.22);
+  }
+
+  #projekte .floating-mini {
+    display: none !important;
+  }
+
+  #projekte .project-card .project-copy,
+  #projekte .project-card-reverse .project-copy,
+  #projekte .project-card .project-visual,
+  #projekte .project-card-reverse .project-visual {
+    grid-column: 1 / -1;
+    grid-row: auto;
+  }
+}
+
+@media (max-width: 430px) {
+  #projekte .project-card {
+    gap: 24px;
+    padding: 20px;
+  }
+
+  #projekte .project-visual {
+    gap: 24px;
+  }
+
+  #projekte .live-site-stage,
+  #projekte .browser-stage {
+    min-height: 250px;
+  }
+
+  #projekte .before-preview-frame {
+    height: 138px;
+    max-height: 138px;
+  }
+}
