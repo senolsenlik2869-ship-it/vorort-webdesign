@@ -414,10 +414,20 @@ function CinematicSceneCanvas() {
     };
     window.addEventListener("pointermove", onPointerMove);
 
+    let mobileScene = false;
     const resize = () => {
       const rect = canvas.getBoundingClientRect();
+      mobileScene = rect.width <= 768;
       renderer.setSize(rect.width, rect.height, false);
+      camera.fov = mobileScene ? 40 : 34;
       camera.aspect = rect.width / rect.height || 1;
+      camera.position.set(0, mobileScene ? 0.2 : 0.1, mobileScene ? 12.2 : 11.5);
+      group.scale.setScalar(mobileScene ? 0.88 : 1);
+      browser.position.x = mobileScene ? -0.05 : -0.25;
+      phone.position.x = mobileScene ? 1.45 : 2.28;
+      phone.rotation.y = mobileScene ? -0.18 : -0.3;
+      leftGlass.visible = !mobileScene;
+      rightGlass.visible = !mobileScene;
       camera.updateProjectionMatrix();
     };
     resize();
@@ -427,14 +437,16 @@ function CinematicSceneCanvas() {
     const clock = new THREE.Clock();
     const animate = () => {
       const time = clock.getElapsedTime();
-      group.rotation.y += (mouse.x * 0.12 - group.rotation.y) * 0.045;
-      group.rotation.x += (-mouse.y * 0.07 - group.rotation.x) * 0.045;
-      browser.position.y = Math.sin(time * 0.55) * 0.08;
-      phone.position.y = -1.15 + Math.sin(time * 0.76) * 0.14;
+      const targetRotationY = mobileScene ? Math.sin(time * 0.22) * 0.025 : mouse.x * 0.12;
+      const targetRotationX = mobileScene ? Math.cos(time * 0.2) * 0.012 : -mouse.y * 0.07;
+      group.rotation.y += (targetRotationY - group.rotation.y) * 0.045;
+      group.rotation.x += (targetRotationX - group.rotation.x) * 0.045;
+      browser.position.y = (mobileScene ? 0.64 : 0.35) + Math.sin(time * 0.55) * (mobileScene ? 0.04 : 0.08);
+      phone.position.y = (mobileScene ? -0.78 : -1.15) + Math.sin(time * 0.76) * (mobileScene ? 0.06 : 0.14);
       leftGlass.position.y = -0.15 + Math.sin(time * 0.45) * 0.1;
       rightGlass.position.y = 0.05 + Math.cos(time * 0.4) * 0.12;
-      points.rotation.y = time * 0.025;
-      blueLight.intensity = 5.8 + Math.sin(time * 0.9) * 0.9;
+      points.rotation.y = time * (mobileScene ? 0.01 : 0.025);
+      blueLight.intensity = 5.8 + Math.sin(time * 0.9) * (mobileScene ? 0.32 : 0.9);
       renderer.render(scene, camera);
       raf = requestAnimationFrame(animate);
     };
