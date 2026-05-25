@@ -816,7 +816,7 @@ export default function AgencyApp() {
           <button type="button" onClick={() => setLegalView("impressum")}>Impressum</button>
           <button type="button" onClick={() => setLegalView("datenschutz")}>Datenschutz</button>
         </nav>
-        <p>Premium Webdesign, Motion und lokale SEO für moderne Unternehmen in NRW. Stand: Layout 22.05.</p>
+        <p>Premium Webdesign, Motion und lokale SEO für moderne Unternehmen in NRW. Stand: Portfolio 25.05.</p>
       </footer>
     </main>
   );
