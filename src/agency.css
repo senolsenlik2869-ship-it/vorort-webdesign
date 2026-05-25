@@ -1862,6 +1862,10 @@ button, input, textarea { font: inherit; }
   box-shadow: 0 22px 70px rgba(0, 0, 0, 0.44), 0 0 34px rgba(215, 255, 63, 0.16);
 }
 
+.shinzo-mobile-case {
+  display: none;
+}
+
 .floating-mini {
   right: -12px;
   bottom: 28px;
@@ -3415,7 +3419,7 @@ button, input, textarea { font: inherit; }
   }
 
   #projekte.showcase {
-    padding-top: 32px;
+    padding-top: 24px;
   }
 
   #projekte .project-stack {
@@ -3431,6 +3435,11 @@ button, input, textarea { font: inherit; }
     transform: none !important;
     overflow: hidden;
     will-change: auto;
+  }
+
+  #projekte .project-card-shinzo {
+    padding: 18px;
+    gap: 24px;
   }
 
   #projekte .project-card,
@@ -3459,6 +3468,223 @@ button, input, textarea { font: inherit; }
     gap: 26px;
     perspective: none;
     transform-style: flat;
+  }
+
+  #projekte .shinzo-case-visual {
+    display: block;
+  }
+
+  #projekte .shinzo-case-visual > .live-site-mockup,
+  #projekte .shinzo-case-visual > .before-preview-card,
+  #projekte .shinzo-case-visual > .after-badge,
+  #projekte .shinzo-case-visual > .after-preview-button,
+  #projekte .shinzo-case-visual > .floating-mini {
+    display: none !important;
+  }
+
+  #projekte .shinzo-mobile-case {
+    display: grid;
+    width: 100%;
+    max-width: 100%;
+    gap: 24px;
+  }
+
+  #projekte .shinzo-mobile-live,
+  #projekte .shinzo-mobile-before,
+  #projekte .shinzo-mobile-after {
+    position: relative;
+    width: 100%;
+    max-width: 100%;
+    overflow: hidden;
+    border: 1px solid rgba(94, 162, 255, 0.22);
+    border-radius: 24px;
+    background: rgba(5, 8, 22, 0.9);
+    box-shadow: none;
+    transform: none !important;
+    filter: none !important;
+    backdrop-filter: none !important;
+    will-change: auto !important;
+  }
+
+  #projekte .mobile-browser-top {
+    display: flex;
+    height: 46px;
+    align-items: center;
+    gap: 8px;
+    padding: 0 14px;
+    border-bottom: 1px solid rgba(247, 241, 232, 0.1);
+    background: rgba(2, 4, 12, 0.86);
+  }
+
+  #projekte .mobile-browser-top span {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background: rgba(247, 241, 232, 0.36);
+  }
+
+  #projekte .mobile-browser-top span:first-child {
+    background: var(--acid);
+    box-shadow: 0 0 12px rgba(215, 255, 63, 0.32);
+  }
+
+  #projekte .mobile-browser-top small {
+    min-width: 0;
+    margin-left: 10px;
+    color: rgba(247, 241, 232, 0.58);
+    font-size: 14px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+
+  #projekte .shinzo-mobile-live-stage {
+    position: relative;
+    display: flex;
+    min-height: 300px;
+    max-height: 360px;
+    flex-direction: column;
+    justify-content: flex-end;
+    padding: 20px;
+    overflow: hidden;
+    background:
+      linear-gradient(180deg, rgba(5, 8, 22, 0.15), rgba(5, 8, 22, 0.78)),
+      radial-gradient(circle at 72% 18%, rgba(94, 162, 255, 0.18), transparent 35%),
+      url("/projects/shinzo/hero.png");
+    background-position: center;
+    background-size: cover;
+  }
+
+  #projekte .shinzo-mobile-live-stage::before {
+    position: absolute;
+    inset: 0;
+    content: "";
+    background: rgba(5, 8, 22, 0.42);
+    pointer-events: none;
+  }
+
+  #projekte .shinzo-mobile-site-copy,
+  #projekte .shinzo-mobile-live-stage a {
+    position: relative;
+    z-index: 2;
+  }
+
+  #projekte .shinzo-mobile-site-copy {
+    display: grid;
+    width: min(230px, 100%);
+    gap: 8px;
+    padding: 18px;
+    border: 1px solid rgba(94, 162, 255, 0.2);
+    border-radius: 22px;
+    background: rgba(5, 8, 22, 0.86);
+  }
+
+  #projekte .shinzo-mobile-site-copy span,
+  #projekte .shinzo-mobile-before-stage span,
+  #projekte .shinzo-mobile-before-label span,
+  #projekte .shinzo-mobile-after span {
+    color: var(--quiet);
+    font-size: 11px;
+    font-weight: 900;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+  }
+
+  #projekte .shinzo-mobile-site-copy strong {
+    color: var(--ivory);
+    font-size: clamp(34px, 10vw, 46px);
+    line-height: 1;
+  }
+
+  #projekte .shinzo-mobile-live-stage a {
+    display: inline-flex;
+    width: fit-content;
+    min-height: 46px;
+    align-items: center;
+    justify-content: center;
+    margin-top: 16px;
+    padding: 0 22px;
+    border-radius: 999px;
+    color: #fff;
+    font-size: 14px;
+    font-weight: 900;
+    background: linear-gradient(135deg, #7fb0ff, #4d7cff);
+  }
+
+  #projekte .shinzo-mobile-before {
+    min-height: 260px;
+    color: inherit;
+    text-decoration: none;
+  }
+
+  #projekte .shinzo-mobile-before-stage {
+    display: grid;
+    min-height: 140px;
+    align-content: end;
+    gap: 8px;
+    padding: 20px;
+    background:
+      linear-gradient(180deg, rgba(5, 8, 22, 0.38), rgba(5, 8, 22, 0.84)),
+      radial-gradient(circle at 18% 18%, rgba(255, 255, 255, 0.16), transparent 28%),
+      linear-gradient(135deg, rgba(247, 241, 232, 0.14), rgba(94, 162, 255, 0.06));
+  }
+
+  #projekte .shinzo-mobile-before-stage strong {
+    max-width: 240px;
+    color: rgba(247, 241, 232, 0.84);
+    font-size: clamp(22px, 6.5vw, 30px);
+    line-height: 1.12;
+  }
+
+  #projekte .shinzo-mobile-before-label {
+    display: grid;
+    gap: 7px;
+    padding: 20px;
+    background: rgba(5, 8, 22, 0.92);
+  }
+
+  #projekte .shinzo-mobile-before-label strong {
+    color: var(--ivory);
+    font-size: 26px;
+    line-height: 1.08;
+  }
+
+  #projekte .shinzo-mobile-before-label small {
+    color: var(--muted);
+    font-size: 17px;
+  }
+
+  #projekte .shinzo-mobile-after {
+    display: grid;
+    min-height: auto;
+    gap: 8px;
+    margin-top: 0;
+    padding: 22px;
+  }
+
+  #projekte .shinzo-mobile-after strong {
+    color: var(--ivory);
+    font-size: clamp(24px, 7vw, 34px);
+    line-height: 1.12;
+  }
+
+  #projekte .shinzo-mobile-button {
+    display: inline-flex;
+    width: 100%;
+    height: 64px;
+    align-items: center;
+    justify-content: center;
+    gap: 12px;
+    margin-top: 0;
+    border-radius: 999px;
+    color: #fff;
+    font-size: 15px;
+    font-weight: 900;
+    letter-spacing: 0.02em;
+    text-decoration: none;
+    text-transform: uppercase;
+    background: linear-gradient(135deg, #7fb0ff, #4d7cff);
+    box-shadow: 0 18px 54px rgba(77, 124, 255, 0.22);
   }
 
   #projekte .project-visual .browser-mockup,

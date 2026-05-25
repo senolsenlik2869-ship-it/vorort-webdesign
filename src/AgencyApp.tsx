@@ -493,12 +493,51 @@ function MotionShowcase() {
 
 function ProjectVisual({ title, label, accent }: { title: string; label: string; accent: string }) {
   const isShinzo = title === "SHINZO";
+  const shinzoDemoUrl = "https://dekbau-premium.vercel.app";
 
   return (
-    <motion.div className="project-visual" whileHover={{ rotateY: -7, rotateX: 4, scale: 1.02 }}>
+    <motion.div className={`project-visual ${isShinzo ? "shinzo-case-visual" : ""}`} whileHover={{ rotateY: -7, rotateX: 4, scale: 1.02 }}>
       <BrowserMockup title={title} label={label} accent={accent} />
       {isShinzo && (
         <>
+          <div className="shinzo-mobile-case">
+            <div className="shinzo-mobile-live">
+              <div className="mobile-browser-top">
+                <span /><span /><span />
+                <small>shinzo.vercel.app</small>
+              </div>
+              <div className="shinzo-mobile-live-stage">
+                <div className="shinzo-mobile-site-copy">
+                  <span>Live Webseite</span>
+                  <strong>SHINZO</strong>
+                </div>
+                <a href={shinzoDemoUrl} target="_blank" rel="noreferrer">Seite öffnen</a>
+              </div>
+            </div>
+            <a className="shinzo-mobile-before" href="https://shinzo.hair/" target="_blank" rel="noreferrer">
+              <div className="mobile-browser-top">
+                <span /><span /><span />
+                <small>shinzo.hair</small>
+              </div>
+              <div className="shinzo-mobile-before-stage">
+                <span>Vorher</span>
+                <strong>Klassische Salon-Webseite</strong>
+              </div>
+              <div className="shinzo-mobile-before-label">
+                <span>Vorher</span>
+                <strong>shinzo.hair</strong>
+                <small>Klassische Salon-Webseite</small>
+              </div>
+            </a>
+            <div className="shinzo-mobile-after">
+              <span>Nachher</span>
+              <strong>Motion Premium Experience</strong>
+            </div>
+            <a className="shinzo-mobile-button" href={shinzoDemoUrl} target="_blank" rel="noreferrer">
+              Neue Webseite öffnen
+              <ArrowUpRight size={18} />
+            </a>
+          </div>
           <motion.a
             className="before-preview-card"
             href="https://shinzo.hair/"
@@ -534,7 +573,7 @@ function ProjectVisual({ title, label, accent }: { title: string; label: string;
           </div>
           <motion.a
             className="after-preview-button"
-            href="https://dekbau-premium.vercel.app"
+            href={shinzoDemoUrl}
             target="_blank"
             rel="noreferrer"
             whileHover={{ y: -3, scale: 1.03 }}
@@ -556,7 +595,7 @@ function Showcase() {
       <div className="showcase-heading"><SectionHeading label="Showcase" title="Digitale Auftritte, die sich nicht wie Standard anfühlen." /></div>
       <div className="project-stack" style={{ perspective: "1000px" }}>
         {projects.map(([title, label, text, accent], index) => (
-          <motion.article className={`project-card ${index % 2 ? "project-card-reverse" : ""}`} key={title} style={{ "--accent": accent, top: `${92 + index * 20}px`, transformOrigin: "top center" } as React.CSSProperties} initial={{ opacity: 0, y: 80, scale: 0.96, rotateX: -15 }} whileInView={{ opacity: 1, y: 0, scale: 1, rotateX: 0 }} viewport={{ once: true, amount: 0.25 }} transition={{ duration: 0.85, delay: index * 0.08, ease: [0.22, 1, 0.36, 1] }}>
+          <motion.article className={`project-card ${title === "SHINZO" ? "project-card-shinzo" : ""} ${index % 2 ? "project-card-reverse" : ""}`} key={title} style={{ "--accent": accent, top: `${92 + index * 20}px`, transformOrigin: "top center" } as React.CSSProperties} initial={{ opacity: 0, y: 80, scale: 0.96, rotateX: -15 }} whileInView={{ opacity: 1, y: 0, scale: 1, rotateX: 0 }} viewport={{ once: true, amount: 0.25 }} transition={{ duration: 0.85, delay: index * 0.08, ease: [0.22, 1, 0.36, 1] }}>
             <div className="project-copy">
               <span>{label}</span><h3>{title}</h3><p>{text}</p>
               {title === "SHINZO" && (
