@@ -2,6 +2,7 @@ import { useEffect, useRef, useState } from "react";
 import { motion, useMotionValue, useSpring, useTransform } from "framer-motion";
 import { ArrowUpRight, Check, Gauge, LayoutDashboard, Mail, MapPin, MousePointer2, Sparkles } from "lucide-react";
 import * as THREE from "three";
+import { ParticleTextEffect } from "./components/ui/particle-text-effect";
 
 const services = [
   ["Webdesign", "Premium Webseiten mit klarer Struktur, starker Typografie und sauberer Conversion-Führung."],
@@ -863,6 +864,9 @@ export default function AgencyApp() {
   return (
     <main className="agency-app">
       <Hero />
+      <section className="particle-text-section" id="particle-text" aria-label="VorOrt Webdesign Leistungsfokus">
+        <ParticleTextEffect />
+      </section>
       <MotionShowcase />
       <Showcase />
       <Services />

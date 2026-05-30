@@ -337,6 +337,74 @@ button, input, textarea { font: inherit; }
   box-shadow: 0 0 24px rgba(215, 255, 63, 0.08);
 }
 
+.particle-text-section {
+  position: relative;
+  z-index: 2;
+  width: min(1000px, calc(100% - 64px));
+  margin: -28px auto 0;
+  padding: clamp(24px, 4vw, 46px) 0 clamp(56px, 7vw, 90px);
+}
+
+.particle-text-shell {
+  position: relative;
+  width: 100%;
+  height: clamp(400px, 36vw, 500px);
+  overflow: hidden;
+  border: 1px solid rgba(212, 175, 55, 0.14);
+  border-radius: 34px;
+  background:
+    radial-gradient(circle at 50% 42%, rgba(212, 175, 55, 0.12), transparent 26rem),
+    radial-gradient(circle at 74% 22%, rgba(255, 255, 255, 0.07), transparent 18rem),
+    linear-gradient(135deg, rgba(255, 255, 255, 0.065), rgba(255, 255, 255, 0.018));
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.08),
+    0 34px 120px rgba(0, 0, 0, 0.28),
+    0 0 80px rgba(212, 175, 55, 0.06);
+  backdrop-filter: blur(14px);
+}
+
+.particle-text-shell::before {
+  position: absolute;
+  inset: 18px;
+  content: "";
+  pointer-events: none;
+  border-radius: 26px;
+  background:
+    linear-gradient(90deg, rgba(255, 255, 255, 0.045), transparent 18%, transparent 82%, rgba(255, 255, 255, 0.035)),
+    radial-gradient(circle at 50% 50%, transparent, rgba(5, 8, 22, 0.18));
+}
+
+.particle-text-canvas {
+  position: relative;
+  z-index: 1;
+  display: block;
+  width: 100%;
+  height: 100%;
+}
+
+.particle-text-static {
+  display: grid;
+  min-height: 320px;
+  place-items: center;
+  gap: 10px;
+  padding: 40px 20px;
+  border: 1px solid rgba(212, 175, 55, 0.14);
+  border-radius: 34px;
+  color: #ffffff;
+  font-family: var(--font-display);
+  font-size: clamp(42px, 8vw, 82px);
+  font-weight: 900;
+  line-height: 0.95;
+  letter-spacing: 0;
+  background:
+    radial-gradient(circle at 50% 42%, rgba(212, 175, 55, 0.11), transparent 26rem),
+    linear-gradient(135deg, rgba(255, 255, 255, 0.055), rgba(255, 255, 255, 0.018));
+}
+
+.particle-text-static span:nth-child(2) {
+  color: #d4af37;
+}
+
 .hero-depth {
   position: relative;
   width: 100%;
@@ -3024,7 +3092,8 @@ button, input, textarea { font: inherit; }
   .legal-section,
   .footer,
   .agency-grid,
-  .glow-feature-section {
+  .glow-feature-section,
+  .particle-text-section {
     width: 100%;
     max-width: 100vw;
     overflow-x: hidden;
@@ -3039,10 +3108,34 @@ button, input, textarea { font: inherit; }
   .legal-section,
   .footer,
   .agency-grid,
-  .glow-feature-section {
+  .glow-feature-section,
+  .particle-text-section {
     width: calc(100vw - 40px);
     margin-right: auto;
     margin-left: auto;
+  }
+
+  .particle-text-section {
+    margin-top: 0;
+    padding-top: 18px;
+    padding-bottom: 56px;
+  }
+
+  .particle-text-shell {
+    height: clamp(260px, 66vw, 340px);
+    border-radius: 26px;
+    backdrop-filter: none;
+  }
+
+  .particle-text-shell::before {
+    inset: 12px;
+    border-radius: 20px;
+  }
+
+  .particle-text-static {
+    min-height: 260px;
+    border-radius: 26px;
+    font-size: clamp(34px, 11vw, 54px);
   }
 
   .nav-glass {
@@ -3321,6 +3414,7 @@ button, input, textarea { font: inherit; }
   .footer,
   .agency-grid,
   .glow-feature-section,
+  .particle-text-section,
   .hero-layout {
     width: calc(100vw - 32px);
     max-width: calc(100vw - 32px);
