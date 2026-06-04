@@ -46,7 +46,7 @@ function shufflePoints(points: Point[]) {
 }
 
 function getResponsiveFontBounds(width: number) {
-  if (width <= MOBILE_BREAKPOINT) return { min: 34, max: 46, step: 10 };
+  if (width <= MOBILE_BREAKPOINT) return { min: 40, max: 56, step: 5 };
   if (width <= TABLET_BREAKPOINT) return { min: 64, max: 78, step: 7 };
   return { min: 90, max: 110, step: 5 };
 }
@@ -87,7 +87,7 @@ function createTextPoints(word: string, width: number, height: number, isMobile:
   context.fillText(word, textCanvas.width / 2, textCanvas.height / 2);
 
   const imageData = context.getImageData(0, 0, textCanvas.width, textCanvas.height).data;
-  const step = isMobile ? 10 : width <= TABLET_BREAKPOINT ? 7 : 5;
+  const step = isMobile ? 5 : width <= TABLET_BREAKPOINT ? 7 : 5;
   const points: Point[] = [];
 
   for (let y = 0; y < textCanvas.height; y += step) {
@@ -138,13 +138,13 @@ function ParticleTextEffectComponent() {
       targetY: point.y,
       vx: 0,
       vy: 0,
-      size: isMobile ? 1.2 : 1.75,
+      size: isMobile ? 1.45 : 1.75,
       alpha: 0.86 + Math.random() * 0.14,
       color: point.color,
     });
 
     const setWord = (wordIndex: number) => {
-      const maxParticles = isMobile ? 330 : width < TABLET_BREAKPOINT ? 620 : 900;
+      const maxParticles = isMobile ? 820 : width < TABLET_BREAKPOINT ? 620 : 900;
       const points = createTextPoints(WORDS[wordIndex], width, height, isMobile).slice(0, maxParticles);
 
       particles = points.map((point, index) => {
@@ -157,7 +157,7 @@ function ParticleTextEffectComponent() {
           targetX: point.x,
           targetY: point.y,
           color: point.color,
-          size: isMobile ? 1.2 : 1.75,
+          size: isMobile ? 1.45 : 1.75,
         };
       });
     };
@@ -249,11 +249,6 @@ function ParticleTextEffectComponent() {
   return (
     <div className="particle-text-shell" aria-label="VorOrt Webdesign Visual">
       <canvas className="particle-text-canvas" ref={canvasRef} aria-hidden="true" />
-      <div className="particle-text-mobile-fallback" aria-hidden="true">
-        <span>VORORT</span>
-        <span>WEBDESIGN</span>
-        <span>SEO</span>
-      </div>
     </div>
   );
 }
