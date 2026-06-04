@@ -249,6 +249,11 @@ function ParticleTextEffectComponent() {
   return (
     <div className="particle-text-shell" aria-label="VorOrt Webdesign Visual">
       <canvas className="particle-text-canvas" ref={canvasRef} aria-hidden="true" />
+      <div className="particle-text-mobile-fallback" aria-hidden="true">
+        <span>VORORT</span>
+        <span>WEBDESIGN</span>
+        <span>SEO</span>
+      </div>
     </div>
   );
 }
