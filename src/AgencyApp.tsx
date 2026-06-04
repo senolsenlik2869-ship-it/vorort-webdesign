@@ -483,6 +483,31 @@ function MotionShowcase() {
 
       <div className="motion-environment" aria-label="Premium Webdesign Showcase">
         <CinematicSceneCanvas />
+        <div className="mobile-showcase-card" aria-hidden="true">
+          <div className="mobile-showcase-browser">
+            <div className="mobile-showcase-top">
+              <span />
+              <span />
+              <span />
+              <small>vorort-webdesign.de</small>
+            </div>
+            <div className="mobile-showcase-body">
+              <span>Premium Webdesign</span>
+              <strong>Webseiten, die Eindruck machen.</strong>
+              <div className="mobile-showcase-line" />
+              <div className="mobile-showcase-ui">
+                <i />
+                <i />
+                <i />
+              </div>
+            </div>
+          </div>
+          <div className="mobile-showcase-phone">
+            <div />
+            <span>Mobil</span>
+            <strong>Motion</strong>
+          </div>
+        </div>
         <div className="webgl-caption">
           <span>3D Webdesign Erlebnis</span>
           <strong>Webseiten, die Eindruck machen.</strong>

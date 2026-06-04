@@ -1001,6 +1001,10 @@ button, input, textarea { font: inherit; }
   letter-spacing: -0.045em;
 }
 
+.mobile-showcase-card {
+  display: none;
+}
+
 .motion-grid {
   position: absolute;
   inset: 0;
@@ -3599,6 +3603,222 @@ button, input, textarea { font: inherit; }
     font-size: 16px;
     line-height: 1.55;
     text-shadow: 0 0 20px rgba(255, 255, 255, 0.15);
+  }
+
+  #branchen.immersive-section {
+    display: grid;
+    gap: 22px;
+    width: calc(100vw - 32px);
+    max-width: 100%;
+    padding-top: 36px;
+    overflow: hidden;
+  }
+
+  #branchen .immersive-heading {
+    margin-bottom: 0;
+    overflow: visible;
+  }
+
+  #branchen .immersive-heading h2 {
+    max-width: 100%;
+    font-size: clamp(30px, 8.2vw, 40px);
+    line-height: 1.05;
+    overflow-wrap: normal;
+  }
+
+  #branchen .immersive-heading span {
+    display: block;
+    max-width: 100%;
+    margin-top: 18px;
+    font-size: 15.5px;
+    line-height: 1.55;
+  }
+
+  #branchen .motion-environment {
+    width: 100%;
+    height: auto;
+    min-height: 0;
+    padding: 16px;
+    border-radius: 28px;
+    overflow: hidden;
+    background:
+      radial-gradient(circle at 76% 12%, rgba(94, 162, 255, 0.2), transparent 16rem),
+      radial-gradient(circle at 12% 88%, rgba(123, 30, 58, 0.2), transparent 17rem),
+      linear-gradient(150deg, rgba(255, 255, 255, 0.085), rgba(255, 255, 255, 0.022)),
+      rgba(5, 8, 22, 0.9);
+    box-shadow:
+      0 28px 82px rgba(0, 0, 0, 0.35),
+      inset 0 1px 0 rgba(255, 255, 255, 0.12);
+  }
+
+  #branchen .cinematic-canvas,
+  #branchen .webgl-caption {
+    display: none !important;
+  }
+
+  #branchen .mobile-showcase-card {
+    position: relative;
+    display: block;
+    width: 100%;
+    min-height: 352px;
+    overflow: hidden;
+    border-radius: 24px;
+    background:
+      radial-gradient(circle at 78% 18%, rgba(94, 162, 255, 0.25), transparent 12rem),
+      radial-gradient(circle at 16% 88%, rgba(123, 30, 58, 0.22), transparent 13rem),
+      linear-gradient(145deg, rgba(15, 23, 42, 0.92), rgba(5, 8, 22, 0.96));
+  }
+
+  #branchen .mobile-showcase-card::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background:
+      linear-gradient(90deg, rgba(94, 162, 255, 0.08) 1px, transparent 1px),
+      linear-gradient(180deg, rgba(94, 162, 255, 0.06) 1px, transparent 1px);
+    background-size: 44px 44px;
+    opacity: 0.45;
+    mask-image: radial-gradient(circle at 55% 35%, black, transparent 78%);
+    pointer-events: none;
+  }
+
+  #branchen .mobile-showcase-browser {
+    position: relative;
+    z-index: 2;
+    width: 100%;
+    overflow: hidden;
+    border: 1px solid rgba(148, 184, 255, 0.24);
+    border-radius: 22px;
+    background: rgba(3, 7, 18, 0.76);
+    box-shadow:
+      0 24px 70px rgba(0, 0, 0, 0.44),
+      0 0 42px rgba(94, 162, 255, 0.13),
+      inset 0 1px 0 rgba(255, 255, 255, 0.08);
+  }
+
+  #branchen .mobile-showcase-top {
+    display: flex;
+    align-items: center;
+    height: 38px;
+    gap: 7px;
+    padding: 0 14px;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+    background: rgba(0, 0, 0, 0.32);
+  }
+
+  #branchen .mobile-showcase-top span {
+    width: 8px;
+    height: 8px;
+    border-radius: 99px;
+    background: rgba(255, 255, 255, 0.36);
+  }
+
+  #branchen .mobile-showcase-top span:first-child {
+    background: #d7ff3f;
+    box-shadow: 0 0 18px rgba(215, 255, 63, 0.3);
+  }
+
+  #branchen .mobile-showcase-top small {
+    margin-left: 8px;
+    color: rgba(255, 255, 255, 0.48);
+    font-size: 11px;
+    font-weight: 700;
+  }
+
+  #branchen .mobile-showcase-body {
+    position: relative;
+    min-height: 260px;
+    padding: 24px 18px 74px;
+    background:
+      radial-gradient(circle at 78% 34%, rgba(94, 162, 255, 0.22), transparent 7rem),
+      linear-gradient(135deg, rgba(255, 255, 255, 0.045), transparent 48%);
+  }
+
+  #branchen .mobile-showcase-body > span {
+    display: block;
+    margin-bottom: 14px;
+    color: rgba(255, 255, 255, 0.66);
+    font-size: 11px;
+    font-weight: 900;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+  }
+
+  #branchen .mobile-showcase-body strong {
+    display: block;
+    max-width: 82%;
+    color: #fffdf5;
+    font-size: clamp(29px, 8.5vw, 40px);
+    font-weight: 900;
+    line-height: 1.04;
+    letter-spacing: -0.055em;
+  }
+
+  #branchen .mobile-showcase-line {
+    width: 76px;
+    height: 3px;
+    margin-top: 20px;
+    border-radius: 99px;
+    background: linear-gradient(90deg, #d7ff3f, #5ea2ff);
+    box-shadow: 0 0 22px rgba(94, 162, 255, 0.28);
+  }
+
+  #branchen .mobile-showcase-ui {
+    position: absolute;
+    right: 18px;
+    bottom: 18px;
+    left: 18px;
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 9px;
+  }
+
+  #branchen .mobile-showcase-ui i {
+    height: 38px;
+    border: 1px solid rgba(255, 255, 255, 0.12);
+    border-radius: 13px;
+    background: rgba(255, 255, 255, 0.07);
+    box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.08);
+  }
+
+  #branchen .mobile-showcase-phone {
+    position: absolute;
+    right: 20px;
+    bottom: 62px;
+    z-index: 3;
+    width: 92px;
+    padding: 12px;
+    border: 1px solid rgba(94, 162, 255, 0.24);
+    border-radius: 20px;
+    background: rgba(5, 8, 22, 0.82);
+    box-shadow: 0 18px 52px rgba(0, 0, 0, 0.38), 0 0 34px rgba(94, 162, 255, 0.15);
+  }
+
+  #branchen .mobile-showcase-phone div {
+    height: 72px;
+    margin-bottom: 12px;
+    border-radius: 15px;
+    background: radial-gradient(circle at 48% 32%, rgba(94, 162, 255, 0.9), rgba(94, 162, 255, 0.22) 30%, rgba(255, 255, 255, 0.07) 64%);
+  }
+
+  #branchen .mobile-showcase-phone span,
+  #branchen .mobile-showcase-phone strong {
+    display: block;
+  }
+
+  #branchen .mobile-showcase-phone span {
+    color: rgba(255, 255, 255, 0.55);
+    font-size: 8px;
+    font-weight: 900;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+  }
+
+  #branchen .mobile-showcase-phone strong {
+    margin-top: 3px;
+    color: rgba(255, 255, 255, 0.92);
+    font-size: 15px;
+    line-height: 1;
   }
 
   #projekte.showcase {
