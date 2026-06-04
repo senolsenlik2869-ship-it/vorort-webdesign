@@ -422,10 +422,10 @@ function CinematicSceneCanvas() {
       renderer.setSize(rect.width, rect.height, false);
       camera.fov = mobileScene ? 40 : 34;
       camera.aspect = rect.width / rect.height || 1;
-      camera.position.set(0, mobileScene ? 0.2 : 0.1, mobileScene ? 12.2 : 11.5);
-      group.scale.setScalar(mobileScene ? 0.88 : 1);
-      browser.position.x = mobileScene ? -0.05 : -0.25;
-      phone.position.x = mobileScene ? 1.45 : 2.28;
+      camera.position.set(0, mobileScene ? 0.05 : 0.1, mobileScene ? 14.2 : 11.5);
+      group.scale.setScalar(mobileScene ? 0.76 : 1);
+      browser.position.x = mobileScene ? -0.02 : -0.25;
+      phone.position.x = mobileScene ? 1.34 : 2.28;
       phone.rotation.y = mobileScene ? -0.18 : -0.3;
       leftGlass.visible = !mobileScene;
       rightGlass.visible = !mobileScene;
@@ -442,8 +442,8 @@ function CinematicSceneCanvas() {
       const targetRotationX = mobileScene ? Math.cos(time * 0.2) * 0.012 : -mouse.y * 0.07;
       group.rotation.y += (targetRotationY - group.rotation.y) * 0.045;
       group.rotation.x += (targetRotationX - group.rotation.x) * 0.045;
-      browser.position.y = (mobileScene ? 0.64 : 0.35) + Math.sin(time * 0.55) * (mobileScene ? 0.04 : 0.08);
-      phone.position.y = (mobileScene ? -0.78 : -1.15) + Math.sin(time * 0.76) * (mobileScene ? 0.06 : 0.14);
+      browser.position.y = (mobileScene ? 0.42 : 0.35) + Math.sin(time * 0.55) * (mobileScene ? 0.025 : 0.08);
+      phone.position.y = (mobileScene ? -0.7 : -1.15) + Math.sin(time * 0.76) * (mobileScene ? 0.035 : 0.14);
       leftGlass.position.y = -0.15 + Math.sin(time * 0.45) * 0.1;
       rightGlass.position.y = 0.05 + Math.cos(time * 0.4) * 0.12;
       points.rotation.y = time * (mobileScene ? 0.01 : 0.025);
