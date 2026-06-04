@@ -41,9 +41,12 @@ const glowFeatures = [
 const projects = [
   ["SHINZO", "SHINZO", "Exklusive Motion-Webseite mit Video-Atmosphäre, weichen Scroll-Übergängen, Glow-Effekten und hochwertiger Bildführung. Für Kunden, die keinen normalen Internetauftritt möchten, sondern ein digitales Erlebnis.", "#4D7CFF"],
   ["DEKBAU", "Bauunternehmen", "Architektonisches Webdesign für ein regionales Unternehmen mit klarer Leistungskommunikation.", "#5EA2FF"],
+  ["REVERIE MOTION EXPERIENCE", "Motion Experience", "Interaktive Webdemo mit Scroll-Animationen, Parallax-Effekten und cineastischer Atmosphäre – entwickelt als Premium-Showcase von VorOrt Webdesign.", "#D7FF3F"],
   ["Restaurant Beispiel", "Gastronomie", "Eine emotionale Seite mit Atmosphäre, Reservierungsfokus und starker mobiler Wirkung.", "#7B1E3A"],
   ["Handwerker Beispiel", "Premium Handwerk", "Modernes Responsive Webdesign für lokale Sichtbarkeit, Vertrauen und qualifizierte Anfragen.", "#8AA8FF"],
 ];
+
+const REVERIE_DEMO_URL = "https://vorort-motion-demo-reverie.vercel.app/";
 
 const pricing = [
   ["Starter", "ab 690 €", "Für einen klaren, modernen Webauftritt mit sauberer mobiler Darstellung."],
@@ -90,12 +93,13 @@ function Logo() {
 function BrowserMockup({ title, label, accent }: { title: string; label: string; accent: string }) {
   const isShinzo = title === "SHINZO";
   const isDekbau = title === "DEKBAU";
+  const isReverie = title === "REVERIE MOTION EXPERIENCE";
   const isHeroInterface = title === "Lokale Marke";
   const liveSiteUrl = isShinzo ? "https://dekbau-premium.vercel.app" : "";
-  const displaySiteUrl = isShinzo ? "shinzo.vercel.app" : isDekbau ? "dekbau.de" : "vorort-webdesign.de";
+  const displaySiteUrl = isShinzo ? "shinzo.vercel.app" : isDekbau ? "dekbau.de" : isReverie ? "vorort-motion-demo-reverie.vercel.app" : "vorort-webdesign.de";
 
   return (
-    <div className={`browser-mockup ${isShinzo ? "shinzo-mockup live-site-mockup" : ""}`} style={{ "--accent": accent } as React.CSSProperties}>
+    <div className={`browser-mockup ${isShinzo ? "shinzo-mockup live-site-mockup" : ""} ${isReverie ? "reverie-mockup" : ""}`} style={{ "--accent": accent } as React.CSSProperties}>
       <div className="browser-top">
         <span /><span /><span />
         <small>{displaySiteUrl}</small>
@@ -129,6 +133,19 @@ function BrowserMockup({ title, label, accent }: { title: string; label: string;
               <br />
               VorOrt.
             </h3>
+          </div>
+        </div>
+      ) : isReverie ? (
+        <div className="reverie-preview-stage">
+          <img
+            src="/projects/reverie-motion-experience.png"
+            alt="Reverie Motion Experience Demo von VorOrt Webdesign"
+            loading="lazy"
+          />
+          <div className="reverie-preview-overlay">
+            <span>Motion Experience</span>
+            <strong>Interaktive Webdemo</strong>
+            <em>Scroll Motion · Parallax · Cinematic</em>
           </div>
         </div>
       ) : (
@@ -519,7 +536,25 @@ function MotionShowcase() {
 
 function ProjectVisual({ title, label, accent }: { title: string; label: string; accent: string }) {
   const isShinzo = title === "SHINZO";
+  const isReverie = title === "REVERIE MOTION EXPERIENCE";
   const shinzoDemoUrl = "https://dekbau-premium.vercel.app";
+
+  if (isReverie) {
+    return (
+      <motion.a
+        className="project-visual reverie-case-visual"
+        href={REVERIE_DEMO_URL}
+        target="_blank"
+        rel="noopener noreferrer"
+        aria-label="Reverie Motion Experience Demo von VorOrt Webdesign ansehen"
+        whileHover={{ rotateY: -7, rotateX: 4, scale: 1.02 }}
+        whileTap={{ scale: 0.985 }}
+      >
+        <BrowserMockup title={title} label={label} accent={accent} />
+        <div className="floating-mini"><MousePointer2 size={15} /><span>Motion aktiv</span></div>
+      </motion.a>
+    );
+  }
 
   return (
     <motion.div className={`project-visual ${isShinzo ? "shinzo-case-visual" : ""}`} whileHover={{ rotateY: -7, rotateX: 4, scale: 1.02 }}>
@@ -621,7 +656,7 @@ function Showcase() {
       <div className="showcase-heading"><SectionHeading label="Showcase" title="Digitale Auftritte, die sich nicht wie Standard anfühlen." /></div>
       <div className="project-stack" style={{ perspective: "1000px" }}>
         {projects.map(([title, label, text, accent], index) => (
-          <motion.article className={`project-card ${title === "SHINZO" ? "project-card-shinzo" : ""} ${index % 2 ? "project-card-reverse" : ""}`} key={title} style={{ "--accent": accent, top: `${92 + index * 20}px`, transformOrigin: "top center" } as React.CSSProperties} initial={{ opacity: 0, y: 80, scale: 0.96, rotateX: -15 }} whileInView={{ opacity: 1, y: 0, scale: 1, rotateX: 0 }} viewport={{ once: true, amount: 0.25 }} transition={{ duration: 0.85, delay: index * 0.08, ease: [0.22, 1, 0.36, 1] }}>
+          <motion.article className={`project-card ${title === "SHINZO" ? "project-card-shinzo" : ""} ${title === "REVERIE MOTION EXPERIENCE" ? "project-card-reverie" : ""} ${index % 2 ? "project-card-reverse" : ""}`} key={title} style={{ "--accent": accent, top: `${92 + index * 20}px`, transformOrigin: "top center" } as React.CSSProperties} initial={{ opacity: 0, y: 80, scale: 0.96, rotateX: -15 }} whileInView={{ opacity: 1, y: 0, scale: 1, rotateX: 0 }} viewport={{ once: true, amount: 0.25 }} transition={{ duration: 0.85, delay: index * 0.08, ease: [0.22, 1, 0.36, 1] }}>
             <div className="project-copy">
               <span>{label}</span><h3>{title}</h3><p>{text}</p>
               {title === "SHINZO" && (
@@ -632,7 +667,13 @@ function Showcase() {
                   <em>Exklusiver Aufbau</em>
                 </div>
               )}
-              <a href="#kontakt">{title === "SHINZO" ? "So eine Webseite anfragen" : "Ähnliches Projekt anfragen"}<ArrowUpRight size={16} /></a>
+              <a
+                href={title === "REVERIE MOTION EXPERIENCE" ? REVERIE_DEMO_URL : "#kontakt"}
+                target={title === "REVERIE MOTION EXPERIENCE" ? "_blank" : undefined}
+                rel={title === "REVERIE MOTION EXPERIENCE" ? "noopener noreferrer" : undefined}
+              >
+                {title === "SHINZO" ? "So eine Webseite anfragen" : title === "REVERIE MOTION EXPERIENCE" ? "Demo ansehen" : "Ähnliches Projekt anfragen"}<ArrowUpRight size={16} />
+              </a>
             </div>
             <ProjectVisual title={title} label={label} accent={accent} />
           </motion.article>

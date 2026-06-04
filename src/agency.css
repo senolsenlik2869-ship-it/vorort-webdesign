@@ -1764,6 +1764,106 @@ button, input, textarea { font: inherit; }
   perspective: 1200px;
 }
 
+.project-visual.reverie-case-visual {
+  display: block;
+  color: inherit;
+  cursor: pointer;
+  text-decoration: none;
+}
+
+.project-visual.reverie-case-visual:focus-visible {
+  outline: 2px solid rgba(215, 255, 63, 0.8);
+  outline-offset: 8px;
+  border-radius: 30px;
+}
+
+.reverie-mockup {
+  border-color: rgba(215, 255, 63, 0.22);
+  background:
+    radial-gradient(circle at 58% 18%, rgba(215, 255, 63, 0.12), transparent 22rem),
+    rgba(5, 8, 22, 0.82);
+}
+
+.reverie-preview-stage {
+  position: relative;
+  min-height: 360px;
+  overflow: hidden;
+  background:
+    radial-gradient(circle at 68% 20%, rgba(215, 255, 63, 0.18), transparent 24%),
+    radial-gradient(circle at 22% 78%, rgba(94, 162, 255, 0.14), transparent 34%),
+    #050816;
+}
+
+.reverie-preview-stage img {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center;
+  opacity: 0.72;
+  filter: brightness(0.78) saturate(0.95) contrast(1.05);
+  transform: scale(1.02);
+  transition: transform 520ms ease, opacity 520ms ease, filter 520ms ease;
+}
+
+.reverie-preview-stage::after {
+  position: absolute;
+  inset: 0;
+  content: "";
+  background:
+    linear-gradient(90deg, rgba(5, 8, 22, 0.76), transparent 52%),
+    linear-gradient(180deg, transparent 38%, rgba(5, 8, 22, 0.82));
+  pointer-events: none;
+}
+
+.reverie-preview-overlay {
+  position: absolute;
+  right: 24px;
+  bottom: 24px;
+  left: 24px;
+  z-index: 2;
+  display: grid;
+  gap: 7px;
+  max-width: 360px;
+  padding: 18px 20px;
+  border: 1px solid rgba(215, 255, 63, 0.18);
+  border-radius: 22px;
+  background:
+    linear-gradient(145deg, rgba(255, 255, 255, 0.095), rgba(255, 255, 255, 0.025)),
+    rgba(5, 8, 22, 0.72);
+  box-shadow: 0 24px 80px rgba(0, 0, 0, 0.42), 0 0 38px rgba(215, 255, 63, 0.08);
+  backdrop-filter: blur(18px);
+}
+
+.reverie-preview-overlay span {
+  color: rgba(215, 255, 63, 0.82);
+  font-size: 10px;
+  font-weight: 900;
+  letter-spacing: 0.13em;
+  text-transform: uppercase;
+}
+
+.reverie-preview-overlay strong {
+  color: var(--ivory);
+  font-size: clamp(22px, 2.1vw, 30px);
+  line-height: 1.02;
+  letter-spacing: -0.045em;
+}
+
+.reverie-preview-overlay em {
+  color: rgba(247, 241, 232, 0.62);
+  font-size: 12px;
+  font-style: normal;
+  font-weight: 800;
+}
+
+.reverie-case-visual:hover .reverie-preview-stage img {
+  opacity: 0.86;
+  filter: brightness(0.86) saturate(1.05) contrast(1.08);
+  transform: scale(1.07);
+}
+
 .before-preview-card {
   position: absolute;
   left: -22px;
@@ -3871,6 +3971,32 @@ button, input, textarea { font: inherit; }
     gap: 26px;
     perspective: none;
     transform-style: flat;
+  }
+
+  #projekte .reverie-case-visual {
+    display: block;
+  }
+
+  #projekte .reverie-preview-stage {
+    min-height: clamp(250px, 68vw, 340px);
+  }
+
+  #projekte .reverie-preview-stage img {
+    transform: none !important;
+  }
+
+  #projekte .reverie-preview-overlay {
+    right: 16px;
+    bottom: 16px;
+    left: 16px;
+    max-width: none;
+    padding: 14px 15px;
+    border-radius: 18px;
+    backdrop-filter: none;
+  }
+
+  #projekte .reverie-preview-overlay strong {
+    font-size: clamp(21px, 6.2vw, 27px);
   }
 
   #projekte .shinzo-case-visual {
