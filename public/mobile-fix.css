@@ -1,0 +1,62 @@
+.particle-text-mobile-fallback {
+  display: none;
+}
+
+@media (max-width: 768px) {
+  html,
+  body,
+  #root {
+    max-width: 100%;
+    overflow-x: hidden;
+  }
+
+  .particle-text-shell {
+    width: 100% !important;
+    max-width: 100% !important;
+    height: auto !important;
+    min-height: 240px !important;
+    border-radius: 26px !important;
+    backdrop-filter: none !important;
+  }
+
+  .particle-text-canvas {
+    display: none !important;
+  }
+
+  .particle-text-mobile-fallback {
+    position: relative;
+    z-index: 2;
+    display: grid !important;
+    min-height: 240px;
+    align-content: center;
+    gap: 8px;
+    padding: 30px 24px;
+    color: #ffffff;
+    font-family: var(--font-display);
+    font-size: clamp(34px, 10.6vw, 48px);
+    font-weight: 900;
+    line-height: 0.96;
+    letter-spacing: 0;
+    text-align: left;
+  }
+
+  .particle-text-mobile-fallback span {
+    display: block;
+    max-width: 100%;
+    overflow-wrap: normal;
+    text-shadow: 0 0 28px rgba(255, 255, 255, 0.14);
+  }
+
+  .particle-text-mobile-fallback span:nth-child(2) {
+    color: #d4af37;
+  }
+
+  .particle-text-mobile-fallback span:nth-child(3) {
+    color: #c9c9c9;
+  }
+
+  #branchen .immersive-heading h2 {
+    font-size: clamp(36px, 9.2vw, 46px) !important;
+    line-height: 1.02 !important;
+  }
+}
