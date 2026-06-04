@@ -24,6 +24,6 @@ echo.
 echo 3/3 Fertig.
 echo Wenn oben kein Fehler steht, baut Vercel jetzt automatisch neu.
 echo Link:
-echo https://vorort-webdesign.vercel.app/?v=mobilefix
+echo https://vorort-webdesign.vercel.app/?v=mobile-showcase
 echo.
 pause
