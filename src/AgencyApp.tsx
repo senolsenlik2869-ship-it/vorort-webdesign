@@ -658,7 +658,19 @@ function Showcase() {
         {projects.map(([title, label, text, accent], index) => (
           <motion.article className={`project-card ${title === "SHINZO" ? "project-card-shinzo" : ""} ${title === "REVERIE MOTION EXPERIENCE" ? "project-card-reverie" : ""} ${index % 2 ? "project-card-reverse" : ""}`} key={title} style={{ "--accent": accent, top: `${92 + index * 20}px`, transformOrigin: "top center" } as React.CSSProperties} initial={{ opacity: 0, y: 80, scale: 0.96, rotateX: -15 }} whileInView={{ opacity: 1, y: 0, scale: 1, rotateX: 0 }} viewport={{ once: true, amount: 0.25 }} transition={{ duration: 0.85, delay: index * 0.08, ease: [0.22, 1, 0.36, 1] }}>
             <div className="project-copy">
-              <span>{label}</span><h3>{title}</h3><p>{text}</p>
+              <span>{label}</span>
+              <h3>
+                {title === "REVERIE MOTION EXPERIENCE" ? (
+                  <>
+                    REVERIE
+                    <br />
+                    MOTION
+                    <br />
+                    EXPERIENCE
+                  </>
+                ) : title}
+              </h3>
+              <p>{text}</p>
               {title === "SHINZO" && (
                 <div className="project-highlights">
                   <em>Video-Hero</em>
