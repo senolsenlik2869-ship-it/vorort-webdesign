@@ -17,11 +17,22 @@ gsap.registerPlugin(ScrollTrigger);
  * Video – Weiß lässt das Video durch, Schwarz deckt ab. Skaliert wird nur per transform.
  */
 
+/**
+ * Pin als Buchstabe „O“: weiße Kontur (Video sichtbar), schwarzes Inneres,
+ * der Kreis in der Mitte ist das LOCH – auch weiß, also Video sichtbar.
+ * Durch dieses Loch fliegt die Kamera.
+ */
 function PinGlyph() {
   return (
     <svg className="fly-pin" viewBox="0 0 24 32" aria-hidden="true">
-      <path d="M12 0.6C5.6 0.6 0.6 5.6 0.6 12c0 8.4 9.8 18.6 10.6 19.4.4.4 1.2.4 1.6 0 .8-.8 10.6-11 10.6-19.4C23.4 5.6 18.4.6 12 .6Z" fill="#fff" />
-      <circle cx="12" cy="11.6" r="4.3" fill="#4d7cff" />
+      <path
+        d="M12 1.9C6.3 1.9 1.9 6.3 1.9 12c0 7.6 8.9 16.9 9.6 17.6.3.3.7.3 1 0 .7-.7 9.6-10 9.6-17.6 0-5.7-4.4-10.1-10.1-10.1Z"
+        fill="none"
+        stroke="#fff"
+        strokeWidth="3.6"
+        strokeLinejoin="round"
+      />
+      <circle className="fly-hole" cx="12" cy="12" r="4.6" fill="#fff" />
     </svg>
   );
 }
@@ -39,19 +50,28 @@ export function FlyHero() {
     if (mode === "static" || !root.current) return;
     const el = root.current;
     const ctx = gsap.context(() => {
-      const pin = el.querySelector<SVGElement>(".fly-pin")!;
+      const hole = el.querySelector<SVGCircleElement>(".fly-hole")!;
       const type = el.querySelector<HTMLElement>(".fly-type")!;
+      const zoom = { p: 0 };
+      let target = 50;
 
-      // Ursprung der Skalierung: unterer Teil des Pin-Körpers (unter dem Punkt),
-      // damit die Kamera „in“ den Pin fliegt und das Video den Screen füllt.
-      const setOrigin = () => {
+      // transform-origin exakt auf den Mittelpunkt des Lochs; Zielskalierung so groß,
+      // dass der Kreis auch die entfernteste Bildschirmecke abdeckt.
+      const measure = () => {
+        gsap.set(type, { scale: 1 });
         const t = type.getBoundingClientRect();
-        const p = pin.getBoundingClientRect();
-        const ox = p.left + p.width / 2 - t.left;
-        const oy = p.top + p.height * 0.66 - t.top;
-        gsap.set(type, { transformOrigin: `${ox}px ${oy}px` });
+        const h = hole.getBoundingClientRect();
+        const cx = h.left + h.width / 2;
+        const cy = h.top + h.height / 2;
+        const r = h.width / 2;
+        gsap.set(type, { transformOrigin: `${cx - t.left}px ${cy - t.top}px` });
+        const w = window.innerWidth;
+        const vh = window.innerHeight;
+        const far = Math.max(Math.hypot(cx, cy), Math.hypot(w - cx, cy), Math.hypot(cx, vh - cy), Math.hypot(w - cx, vh - cy));
+        target = Math.max(20, (far / r) * 1.08);
+        gsap.set(type, { scale: Math.pow(target, zoom.p) });
       };
-      setOrigin();
+      measure();
 
       const tl = gsap.timeline({
         defaults: { ease: "none" },
@@ -59,22 +79,20 @@ export function FlyHero() {
           trigger: el,
           start: "top top",
           end: "bottom bottom",
-          scrub: mode === "full" ? 0.6 : 0.3,
+          scrub: 1,
           invalidateOnRefresh: true,
-          onRefreshInit: () => {
-            gsap.set(type, { scale: 1 });
-            setOrigin();
-          },
+          onRefresh: measure,
         },
       });
 
-      tl.to(".fly-hint", { opacity: 0, duration: 0.08 }, 0)
-        .to(".fly-media", { scale: 1, duration: 0.6 }, 0)
-        .to(type, { scale: mode === "full" ? 46 : 36, duration: 0.6, ease: "power3.in" }, 0)
-        .to(".fly-mask", { opacity: 0, duration: 0.1 }, 0.5)
-        .to(".fly-dim", { opacity: 1, duration: 0.25 }, 0.55)
-        .to(".fly-copy > *", { opacity: 1, y: 0, duration: 0.22, stagger: 0.05, ease: "power2.out" }, 0.62)
-        .to({}, { duration: 0.1 });
+      // Exponentielle Skalierung = gleichmäßiger „Flug“ statt Ruck am Ende.
+      tl.to(".fly-hint", { opacity: 0, duration: 0.06 }, 0)
+        .to(".fly-media", { scale: 1, duration: 0.62 }, 0)
+        .to(zoom, { p: 1, duration: 0.62, ease: "power1.in", onUpdate: () => gsap.set(type, { scale: Math.pow(target, zoom.p) }) }, 0)
+        .to(".fly-mask", { opacity: 0, duration: 0.05 }, 0.62)
+        .to(".fly-dim", { opacity: 1, duration: 0.18 }, 0.64)
+        .to(".fly-copy > *", { opacity: 1, y: 0, duration: 0.18, stagger: 0.04, ease: "power2.out" }, 0.7)
+        .to({}, { duration: 0.08 });
     }, el);
 
     // Schriften können die Breite noch ändern → danach neu messen.

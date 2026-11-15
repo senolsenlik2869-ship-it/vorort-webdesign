@@ -67,7 +67,7 @@
   --radius: 20px;
   --radius-lg: 28px;
   --gutter: clamp(20px, 5vw, 56px);
-  --section-y: clamp(112px, 14vw, 200px);
+  --section-y: clamp(64px, 7vw, 112px);
   --ease: cubic-bezier(0.22, 1, 0.36, 1);
   color-scheme: dark;
 }
@@ -170,7 +170,7 @@ p {
   color: var(--blue);
 }
 .dim {
-  color: var(--dim);
+  color: #a3acbf;
 }
 .muted {
   color: var(--muted);
@@ -541,7 +541,7 @@ p {
 }
 .head-row {
   max-width: 64rem;
-  margin-bottom: clamp(56px, 7vw, 104px);
+  margin-bottom: clamp(40px, 5vw, 72px);
 }
 .head-row-split {
   display: grid;
@@ -566,7 +566,7 @@ p {
   max-width: 30rem;
 }
 .offer {
-  padding-top: clamp(120px, 16vw, 220px);
+  padding-top: clamp(80px, 9vw, 140px);
 }
 
 /* Branchen: Bento */
@@ -796,13 +796,13 @@ p {
   gap: 24px;
 }
 .big-number {
-  color: transparent;
+  color: rgba(127, 162, 255, 0.07);
   font-family: var(--font-display);
   font-size: clamp(7rem, 22vw, 20rem);
   font-weight: 600;
   line-height: 0.8;
   letter-spacing: -0.06em;
-  -webkit-text-stroke: 1.5px rgba(127, 162, 255, 0.7);
+  -webkit-text-stroke: 1.5px #9db6ff;
 }
 .service-list {
   margin: clamp(40px, 5vw, 64px) 0 0;
@@ -1016,7 +1016,7 @@ p {
 .contact-buttons {
   display: grid;
   gap: 12px;
-  margin-top: clamp(56px, 7vw, 96px);
+  margin-top: clamp(40px, 5vw, 64px);
 }
 .contact-tile {
   position: relative;
