@@ -400,51 +400,28 @@ p {
   position: relative;
   min-height: 100svh;
 }
+/* Ebene 1: Video/Standbild – fester Vollbild-Layer, wird nie skaliert */
 .fly-media {
   position: absolute;
   inset: 0;
-  transform: scale(1.12);
-}
-.fly-media picture,
-.fly-media img,
-.fly-media video {
   width: 100%;
   height: 100%;
   object-fit: cover;
   object-position: 50% 62%;
 }
-/* Schwarze Fläche, weiße Schrift, multipliziert: nur die Buchstaben zeigen das Video */
-.fly-mask {
+/* Ebene 2: schwarze Vollbild-SVG, „VOR ORT“ per Maske ausgeschnitten */
+.fly-svg {
   position: absolute;
   inset: 0;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  background: #000;
-  mix-blend-mode: multiply;
+  width: 100%;
+  height: 100%;
+  overflow: visible;
   pointer-events: none;
 }
-.fly-type {
-  display: flex;
-  align-items: center;
-  margin-top: 8vh;
-  color: #fff;
+.fly-letters {
   font-family: var(--font-display);
-  font-size: 23.5vw;
   font-weight: 700;
-  line-height: 0.8;
   letter-spacing: -0.055em;
-  white-space: nowrap;
-  will-change: transform;
-}
-.fly-gap {
-  width: 0.2em;
-}
-.fly-pin {
-  width: 0.56em;
-  height: 0.745em;
-  margin: 0 0.035em 0 -0.01em;
-  flex: none;
 }
 .fly-dim {
   position: absolute;
@@ -1234,13 +1211,6 @@ p {
   }
   .contact-form .btn {
     justify-self: start;
-  }
-}
-
-@media (max-width: 767px) {
-  .fly-type {
-    font-size: 24vw;
-    margin-top: 0;
   }
 }
 

@@ -9,33 +9,22 @@ gsap.registerPlugin(ScrollTrigger);
 
 /**
  * Fly-through-Hero (Grundlage: Motionsites „Freight Scroll Hero“ – gepinnte Bühne,
- * scroll-gesteuert). Riesiges „VOR ORT“ als Maske über dem Erde-Video, das „O“ von
- * „ORT“ ist der VorOrt-Pin. Beim Scrollen fliegt die Kamera durch den Pin, das Video
- * füllt den Screen, dann erscheint die Headline.
+ * scroll-gesteuert).
  *
- * Technik: Schwarze Ebene mit weißer Schrift und mix-blend-mode: multiply über dem
- * Video – Weiß lässt das Video durch, Schwarz deckt ab. Skaliert wird nur per transform.
+ * Aufbau in drei Ebenen:
+ *  1. Video (bzw. Standbild am Handy) als fester Vollbild-Layer – wird nie skaliert.
+ *  2. Schwarze Vollbild-SVG. Ihre Maske schneidet „VOR ORT“ aus: Buchstaben, die
+ *     Pin-Kontur und das Pin-Loch sind Löcher im Schwarz, durch die man das Video sieht.
+ *  3. Headline.
+ *
+ * Beim Scrollen skaliert nur die Gruppe in der Maske um den Mittelpunkt des Pin-Lochs,
+ * bis das Loch den ganzen Screen füllt. Dann wird die schwarze Ebene ausgeblendet.
+ * Die Maske ist immer exakt so groß wie der Viewport – es gibt keine Kanten.
  */
 
-/**
- * Pin als Buchstabe „O“: weiße Kontur (Video sichtbar), schwarzes Inneres,
- * der Kreis in der Mitte ist das LOCH – auch weiß, also Video sichtbar.
- * Durch dieses Loch fliegt die Kamera.
- */
-function PinGlyph() {
-  return (
-    <svg className="fly-pin" viewBox="0 0 24 32" aria-hidden="true">
-      <path
-        d="M12 1.9C6.3 1.9 1.9 6.3 1.9 12c0 7.6 8.9 16.9 9.6 17.6.3.3.7.3 1 0 .7-.7 9.6-10 9.6-17.6 0-5.7-4.4-10.1-10.1-10.1Z"
-        fill="none"
-        stroke="#fff"
-        strokeWidth="3.6"
-        strokeLinejoin="round"
-      />
-      <circle className="fly-hole" cx="12" cy="12" r="4.6" fill="#fff" />
-    </svg>
-  );
-}
+const PIN_PATH = "M12 1.9C6.3 1.9 1.9 6.3 1.9 12c0 7.6 8.9 16.9 9.6 17.6.3.3.7.3 1 0 .7-.7 9.6-10 9.6-17.6 0-5.7-4.4-10.1-10.1-10.1Z";
+
+type Geo = { cx: number; cy: number; target: number };
 
 export function FlyHero() {
   const root = useRef<HTMLElement>(null);
@@ -49,30 +38,69 @@ export function FlyHero() {
   useLayoutEffect(() => {
     if (mode === "static" || !root.current) return;
     const el = root.current;
+    const svg = el.querySelector<SVGSVGElement>(".fly-svg")!;
+    const group = svg.querySelector<SVGGElement>(".fly-group")!;
+    const textVor = svg.querySelector<SVGTextElement>(".fly-vor")!;
+    const textRt = svg.querySelector<SVGTextElement>(".fly-rt")!;
+    const pinG = svg.querySelector<SVGGElement>(".fly-pin")!;
+    const stage = el.querySelector<HTMLElement>(".fly-stage")!;
+
+    const zoom = { p: 0 };
+    const geo: Geo = { cx: 0, cy: 0, target: 40 };
+
+    const applyZoom = () => {
+      const s = Math.pow(geo.target, zoom.p);
+      group.setAttribute("transform", `translate(${geo.cx} ${geo.cy}) scale(${s}) translate(${-geo.cx} ${-geo.cy})`);
+    };
+
+    // Schriftzug im Viewport-Koordinatensystem setzen und Loch-Mittelpunkt bestimmen.
+    const layout = () => {
+      const W = stage.clientWidth;
+      const H = stage.clientHeight;
+      svg.setAttribute("viewBox", `0 0 ${W} ${H}`);
+      svg.querySelectorAll<SVGRectElement>(".fly-full").forEach((r) => {
+        r.setAttribute("width", String(W));
+        r.setAttribute("height", String(H));
+      });
+
+      const F = W * (W >= 768 ? 0.235 : 0.24); // Schriftgröße
+      const pinW = F * 0.56;
+      const pinH = pinW * (32 / 24);
+      const k = pinW / 24;
+      const gap = F * 0.2;
+      const after = F * 0.025;
+
+      textVor.setAttribute("font-size", String(F));
+      textRt.setAttribute("font-size", String(F));
+      const wVor = textVor.getComputedTextLength();
+      const wRt = textRt.getComputedTextLength();
+      const total = wVor + gap + pinW + after + wRt;
+      const x0 = (W - total) / 2;
+
+      const midY = H * (W >= 768 ? 0.56 : 0.5); // Mitte des Schriftzugs (Desktop: auf dem Horizont)
+      const capH = F * 0.7; // Versalhöhe Clash Display
+      const baseline = midY + capH / 2;
+
+      textVor.setAttribute("x", String(x0));
+      textVor.setAttribute("y", String(baseline));
+      const pinX = x0 + wVor + gap;
+      const pinY = midY - pinH * 0.48;
+      pinG.setAttribute("transform", `translate(${pinX} ${pinY}) scale(${k})`);
+      textRt.setAttribute("x", String(pinX + pinW + after));
+      textRt.setAttribute("y", String(baseline));
+
+      // Loch-Mittelpunkt (Kreis cx=12, cy=12, r=4.6 im Pin-Koordinatensystem)
+      geo.cx = pinX + 12 * k;
+      geo.cy = pinY + 12 * k;
+      const r = 4.6 * k;
+      const far = Math.max(Math.hypot(geo.cx, geo.cy), Math.hypot(W - geo.cx, geo.cy), Math.hypot(geo.cx, H - geo.cy), Math.hypot(W - geo.cx, H - geo.cy));
+      geo.target = Math.max(20, (far / r) * 1.06);
+      applyZoom();
+    };
+
+    layout();
+
     const ctx = gsap.context(() => {
-      const hole = el.querySelector<SVGCircleElement>(".fly-hole")!;
-      const type = el.querySelector<HTMLElement>(".fly-type")!;
-      const zoom = { p: 0 };
-      let target = 50;
-
-      // transform-origin exakt auf den Mittelpunkt des Lochs; Zielskalierung so groß,
-      // dass der Kreis auch die entfernteste Bildschirmecke abdeckt.
-      const measure = () => {
-        gsap.set(type, { scale: 1 });
-        const t = type.getBoundingClientRect();
-        const h = hole.getBoundingClientRect();
-        const cx = h.left + h.width / 2;
-        const cy = h.top + h.height / 2;
-        const r = h.width / 2;
-        gsap.set(type, { transformOrigin: `${cx - t.left}px ${cy - t.top}px` });
-        const w = window.innerWidth;
-        const vh = window.innerHeight;
-        const far = Math.max(Math.hypot(cx, cy), Math.hypot(w - cx, cy), Math.hypot(cx, vh - cy), Math.hypot(w - cx, vh - cy));
-        target = Math.max(20, (far / r) * 1.08);
-        gsap.set(type, { scale: Math.pow(target, zoom.p) });
-      };
-      measure();
-
       const tl = gsap.timeline({
         defaults: { ease: "none" },
         scrollTrigger: {
@@ -81,23 +109,30 @@ export function FlyHero() {
           end: "bottom bottom",
           scrub: 1,
           invalidateOnRefresh: true,
-          onRefresh: measure,
+          onRefresh: layout,
         },
       });
 
-      // Exponentielle Skalierung = gleichmäßiger „Flug“ statt Ruck am Ende.
+      // Exponentielle Skalierung = gleichmäßiger Flug. Läuft vorwärts wie rückwärts,
+      // weil jeder Frame nur aus dem Fortschritt berechnet wird.
       tl.to(".fly-hint", { opacity: 0, duration: 0.06 }, 0)
-        .to(".fly-media", { scale: 1, duration: 0.62 }, 0)
-        .to(zoom, { p: 1, duration: 0.62, ease: "power1.in", onUpdate: () => gsap.set(type, { scale: Math.pow(target, zoom.p) }) }, 0)
-        .to(".fly-mask", { opacity: 0, duration: 0.05 }, 0.62)
+        .to(zoom, { p: 1, duration: 0.62, ease: "power1.in", onUpdate: applyZoom }, 0)
+        .to(".fly-svg", { opacity: 0, duration: 0.05 }, 0.62)
         .to(".fly-dim", { opacity: 1, duration: 0.18 }, 0.64)
         .to(".fly-copy > *", { opacity: 1, y: 0, duration: 0.18, stagger: 0.04, ease: "power2.out" }, 0.7)
         .to({}, { duration: 0.08 });
     }, el);
 
-    // Schriften können die Breite noch ändern → danach neu messen.
-    document.fonts?.ready.then(() => ScrollTrigger.refresh());
-    return () => ctx.revert();
+    const onResize = () => layout();
+    window.addEventListener("resize", onResize);
+    document.fonts?.ready.then(() => {
+      layout();
+      ScrollTrigger.refresh();
+    });
+    return () => {
+      window.removeEventListener("resize", onResize);
+      ctx.revert();
+    };
   }, [mode]);
 
   // Video nur abspielen, solange der Hero sichtbar ist.
@@ -113,26 +148,37 @@ export function FlyHero() {
   return (
     <section ref={root} className={`fly fly-${mode}`} id="start" aria-label="VorOrt Webdesign">
       <div className="fly-stage">
-        <div className="fly-media" aria-hidden="true">
-          {useVideo ? (
-            <video src={HERO_VIDEO} poster={HERO_POSTER} muted loop playsInline preload="auto" autoPlay />
-          ) : (
-            <picture>
-              <source media="(min-width: 768px)" srcSet={HERO_POSTER} />
-              <img src={HERO_POSTER_MOBILE} alt="" fetchPriority="high" />
-            </picture>
-          )}
-        </div>
+        {useVideo ? (
+          <video className="fly-media" src={HERO_VIDEO} poster={HERO_POSTER} muted loop playsInline preload="auto" autoPlay aria-hidden="true" />
+        ) : (
+          <picture>
+            <source media="(min-width: 768px)" srcSet={HERO_POSTER} />
+            <img className="fly-media" src={HERO_POSTER_MOBILE} alt="" fetchPriority="high" />
+          </picture>
+        )}
 
         {mode !== "static" && (
-          <div className="fly-mask" aria-hidden="true">
-            <div className="fly-type">
-              <span>VOR</span>
-              <span className="fly-gap" />
-              <PinGlyph />
-              <span>RT</span>
-            </div>
-          </div>
+          <svg className="fly-svg" aria-hidden="true" preserveAspectRatio="none">
+            <defs>
+              <mask id="fly-mask" maskUnits="userSpaceOnUse" maskContentUnits="userSpaceOnUse">
+                {/* Weiß = schwarze Ebene sichtbar, Schwarz = ausgeschnitten (Video sichtbar) */}
+                <rect className="fly-full" x="0" y="0" fill="#fff" />
+                <g className="fly-group">
+                  <text className="fly-vor fly-letters" fill="#000">
+                    VOR
+                  </text>
+                  <g className="fly-pin">
+                    <path d={PIN_PATH} fill="none" stroke="#000" strokeWidth="3.6" strokeLinejoin="round" />
+                    <circle cx="12" cy="12" r="4.6" fill="#000" />
+                  </g>
+                  <text className="fly-rt fly-letters" fill="#000">
+                    RT
+                  </text>
+                </g>
+              </mask>
+            </defs>
+            <rect className="fly-full" x="0" y="0" fill="#000" mask="url(#fly-mask)" />
+          </svg>
         )}
 
         <div className="fly-dim" aria-hidden="true" />
