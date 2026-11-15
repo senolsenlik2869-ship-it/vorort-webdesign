@@ -2,46 +2,66 @@
 <html lang="de">
   <head>
     <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <link rel="stylesheet" href="/mobile-fix.css" />
-    <link rel="preconnect" href="https://fonts.googleapis.com" />
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-    <title>VorOrt Webdesign | Premium Webdesign Agentur für lokale Unternehmen in NRW</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+    <title>VorOrt Webdesign | Webdesign Duisburg & NRW für lokale Unternehmen</title>
     <meta
       name="description"
-      content="VorOrt Webdesign entwickelt Premium Webseiten, Motion Webdesign, Branding und lokale SEO für moderne Unternehmen in Duisburg, Düsseldorf, Köln, Essen und NRW."
-    />
-    <meta
-      name="keywords"
-      content="Webdesign Agentur, Webdesigner NRW, Premium Webdesign, Webdesign Duisburg, Webdesign Düsseldorf, Webdesign Köln, Lokale SEO, Responsive Webdesign, Motion Webdesign, Digitale Markenauftritte"
+      content="Premium-Webdesign aus Duisburg für lokale Unternehmen in NRW – Transport & Logistik, Friseure, Gastronomie, Handwerk und Shops. Kostenlose Demo vorab, Festpreis, lokale SEO."
     />
     <meta name="robots" content="index, follow" />
-    <meta name="theme-color" content="#050506" />
-    <meta property="og:title" content="VorOrt Webdesign | Premium Webseiten für moderne Unternehmen" />
-    <meta
-      property="og:description"
-      content="Hochwertiges Webdesign, Motion Design und lokale SEO für Premium-Unternehmen in NRW."
-    />
+    <meta name="theme-color" content="#04060d" />
+    <link rel="canonical" href="https://vorort-webdesign.vercel.app/" />
+    <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+    <link rel="preload" as="font" type="font/woff2" href="/fonts/clash-display-700.woff2" crossorigin />
+    <link rel="preload" as="font" type="font/woff2" href="/fonts/satoshi-400.woff2" crossorigin />
+    <link rel="preload" as="image" href="/hero-poster-mobile.webp" media="(max-width: 767px)" />
+    <link rel="preload" as="image" href="/hero-poster.webp" media="(min-width: 768px)" />
+
     <meta property="og:type" content="website" />
     <meta property="og:locale" content="de_DE" />
+    <meta property="og:site_name" content="VorOrt Webdesign" />
+    <meta property="og:url" content="https://vorort-webdesign.vercel.app/" />
+    <meta property="og:title" content="VorOrt Webdesign | Webdesign Duisburg & NRW für lokale Unternehmen" />
+    <meta property="og:description" content="Mehr Anfragen aus Ihrer Region: Premium-Webdesign für lokale Unternehmen. Erst sehen, dann entscheiden – mit kostenloser Demo." />
+    <meta property="og:image" content="https://vorort-webdesign.vercel.app/og-image.jpg" />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
+    <meta name="twitter:card" content="summary_large_image" />
+
     <script type="application/ld+json">
       {
         "@context": "https://schema.org",
-        "@type": "ProfessionalService",
+        "@type": "LocalBusiness",
+        "@id": "https://vorort-webdesign.vercel.app/#business",
         "name": "VorOrt Webdesign",
-        "description": "Premium Webdesign Agentur für lokale Unternehmen in NRW.",
+        "description": "Premium-Webdesign für lokale Unternehmen in Duisburg, am Niederrhein und in NRW.",
+        "url": "https://vorort-webdesign.vercel.app/",
+        "image": "https://vorort-webdesign.vercel.app/og-image.jpg",
+        "telephone": "+49 177 9339780",
+        "email": "vorort.webdesign@gmail.com",
         "address": {
           "@type": "PostalAddress",
+          "streetAddress": "Moerser Str. 288",
+          "postalCode": "47228",
+          "addressLocality": "Duisburg",
           "addressRegion": "NRW",
           "addressCountry": "DE"
         },
-        "areaServed": ["Duisburg", "Düsseldorf", "Köln", "Oberhausen", "Essen", "NRW", "Deutschland"],
-        "makesOffer": ["Webdesign", "SEO", "Motion Design", "Branding"]
+        "areaServed": ["Duisburg", "Niederrhein", "Nordrhein-Westfalen"],
+        "knowsAbout": ["Webdesign", "Lokale SEO", "Google-Unternehmensprofil", "Hosting"],
+        "contactPoint": {
+          "@type": "ContactPoint",
+          "telephone": "+49 177 9339780",
+          "email": "vorort.webdesign@gmail.com",
+          "contactType": "customer service",
+          "availableLanguage": ["de"]
+        }
       }
     </script>
   </head>
   <body>
     <div id="root"></div>
+    <noscript>VorOrt Webdesign – Webdesign für lokale Unternehmen in Duisburg und NRW. WhatsApp/Telefon: 0177 933 97 80, E-Mail: vorort.webdesign@gmail.com</noscript>
     <script type="module" src="/src/main.tsx"></script>
   </body>
 </html>

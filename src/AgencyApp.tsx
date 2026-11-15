@@ -1,990 +1,561 @@
-import { useEffect, useRef, useState } from "react";
-import { motion, useMotionValue, useSpring, useTransform } from "framer-motion";
-import { ArrowUpRight, Check, Gauge, LayoutDashboard, Mail, MapPin, MousePointer2, Sparkles } from "lucide-react";
-import * as THREE from "three";
-import { ParticleTextEffect } from "./components/ui/particle-text-effect";
+import { useEffect, useRef, useState, type FormEvent, type ReactNode } from "react";
+import { AnimatePresence, motion, useReducedMotion, useScroll } from "framer-motion";
+import { ArrowUpRight, Hammer, Mail, Menu, Phone, Scissors, Store, Truck, UtensilsCrossed, X } from "lucide-react";
+import { FlyHero } from "./FlyHero";
+import { BlurUp, EASE, GlowCard, Logo, PinMark, WhatsAppIcon, WordReveal } from "./ui";
+import { DEMOS, EMAIL, EMAIL_HREF, PHONE_DISPLAY, PHONE_HREF, WHATSAPP_HREF } from "./site";
 
-const services = [
-  ["Webdesign", "Premium Webseiten mit klarer Struktur, starker Typografie und sauberer Conversion-Führung."],
-  ["SEO", "Lokale Sichtbarkeit für Duisburg, Düsseldorf, Köln, Essen und Unternehmen in NRW."],
-  ["Motion", "Cinematische Scroll-Erlebnisse, Mikrointeraktionen und ruhige Premium-Bewegung."],
-  ["Branding", "Digitale Markenauftritte, die hochwertig wirken und Vertrauen vor Ort aufbauen."],
+const NAV = [
+  ["Leistungen", "#leistungen"],
+  ["Demos", "#demos"],
+  ["Ablauf", "#ablauf"],
+  ["FAQ", "#faq"],
+  ["Kontakt", "#kontakt"],
+] as const;
+
+const BRANCHES = [
+  { icon: Scissors, title: "Friseure & Kosmetik", text: "Gepflegt wie Ihr Salon – mit direktem Weg zum Termin." },
+  { icon: UtensilsCrossed, title: "Gastronomie", text: "Appetit machen. Karte zeigen. Tisch reservieren." },
+  { icon: Hammer, title: "Handwerk", text: "Referenzen zeigen und Anfragen aus der Umgebung gewinnen." },
+  { icon: Store, title: "Lokale Shops", text: "Sortiment und Öffnungszeiten, die zum Vorbeikommen einladen." },
 ];
 
-const glowFeatures = [
-  {
-    title: "Strategie & Struktur",
-    description: "Wir planen Seiten so, dass Besucher schnell verstehen, warum sie genau bei Ihnen anfragen sollen.",
-    gradient: "linear-gradient(137deg, #FF8A3D 0%, #FFD6A5 45%, #F97316 100%)",
-    icon: LayoutDashboard,
-  },
-  {
-    title: "Premium Design",
-    description: "Moderne Layouts, starke Typografie und visuelle Führung statt austauschbarer Baukasten-Optik.",
-    gradient: "linear-gradient(137deg, #FFFFFF 0%, #93C5FD 45%, #2563EB 100%)",
-    icon: Sparkles,
-  },
-  {
-    title: "Lokale Sichtbarkeit",
-    description: "SEO-Struktur für Städte, Leistungen und regionale Suchbegriffe - damit Kunden Sie online finden.",
-    gradient: "linear-gradient(137deg, #22C55E 0%, #BBF7D0 45%, #14B8A6 100%)",
-    icon: MapPin,
-  },
-  {
-    title: "Performance & Technik",
-    description: "Schnelle Ladezeiten, saubere Struktur und responsive Umsetzung für Desktop, Tablet und Smartphone.",
-    gradient: "linear-gradient(137deg, #A855F7 0%, #F0ABFC 45%, #EC4899 100%)",
-    icon: Gauge,
-  },
+const MARQUEE = ["Speditionen", "Kurierdienste", "Umzugsfirmen", "Friseursalons", "Kosmetikstudios", "Restaurants", "Cafés", "Elektriker", "Dachdecker", "Werkstätten", "Boutiquen", "Bäckereien"];
+
+const SERVICES = [
+  ["Strategie & Struktur", "Klare Seiten, die in Sekunden zeigen, warum man bei Ihnen anfragen sollte."],
+  ["Premium Design", "Ein eigener Look für Ihren Betrieb – kein Baukasten."],
+  ["Lokale SEO & Google", "Gefunden werden in Duisburg und Umgebung, inklusive Unternehmensprofil."],
+  ["Performance & Technik", "Schnell, sicher und auf dem Handy so gut wie am Computer."],
+  ["Hosting & Pflege", "Domain, Hosting und Updates übernehme ich."],
 ];
 
-const projects = [
-  ["SHINZO", "SHINZO", "Exklusive Motion-Webseite mit Video-Atmosphäre, weichen Scroll-Übergängen, Glow-Effekten und hochwertiger Bildführung. Für Kunden, die keinen normalen Internetauftritt möchten, sondern ein digitales Erlebnis.", "#4D7CFF"],
-  ["DEKBAU", "Bauunternehmen", "Architektonisches Webdesign für ein regionales Unternehmen mit klarer Leistungskommunikation.", "#5EA2FF"],
-  ["REVERIE MOTION EXPERIENCE", "Motion Experience", "Interaktive Webdemo mit Scroll-Animationen, Parallax-Effekten und cineastischer Atmosphäre – entwickelt als Premium-Showcase von VorOrt Webdesign.", "#D7FF3F"],
-  ["IRIS ESTATES", "Premium Real Estate Demo", "Interaktive Premium-Immobilien-Demo mit Scroll-Animationen, Parallax-Tiefe und hochwertiger visueller Markeninszenierung – entwickelt als Motion-Showcase von VorOrt Webdesign.", "#B7D7E8"],
-  ["Restaurant Beispiel", "Gastronomie", "Eine emotionale Seite mit Atmosphäre, Reservierungsfokus und starker mobiler Wirkung.", "#7B1E3A"],
-  ["Handwerker Beispiel", "Premium Handwerk", "Modernes Responsive Webdesign für lokale Sichtbarkeit, Vertrauen und qualifizierte Anfragen.", "#8AA8FF"],
+const STEPS = [
+  ["Kostenlose Demo", "Ich entwerfe vorab Ihre Startseite – unverbindlich."],
+  ["Besprechung", "Wir gehen die Demo durch. Sie bekommen einen Festpreis."],
+  ["Umsetzung", "Ich baue die Seite, Sie geben Feedback."],
+  ["Launch & Google", "Online gehen, bei Google anmelden, Profil einrichten."],
 ];
 
-const REVERIE_DEMO_URL = "https://vorort-motion-demo-reverie.vercel.app/";
-const IRIS_DEMO_URL = "https://reverie-motion-demo.vercel.app/";
-
-const pricing = [
-  ["Starter", "ab 690 €", "Für einen klaren, modernen Webauftritt mit sauberer mobiler Darstellung."],
-  ["Business", "ab 1.290 €", "Für Unternehmen, die mehr Wirkung, Struktur und lokale Sichtbarkeit möchten."],
-  ["Individuell", "Projektpreis nach Umfang", "Für besondere Seiten mit Motion, Video, Branding oder erweitertem Aufbau."],
+const FAQS = [
+  ["Für wen arbeiten Sie?", "Für lokale Unternehmen in Duisburg, am Niederrhein und in ganz NRW – vor allem Transport und Logistik, aber auch Friseure, Gastronomie, Handwerk und lokale Shops."],
+  ["Ist SEO enthalten?", "Ja. Jede Seite bekommt eine saubere technische Grundlage, lokale Suchbegriffe und strukturierte Daten für Google. Auf Wunsch richte ich auch Ihr Google-Unternehmensprofil ein."],
+  ["Ist die Seite mobil optimiert?", "Immer. Die meisten Ihrer Kunden kommen über das Handy – deshalb entwerfe ich zuerst für kleine Bildschirme."],
+  ["Was kostet eine Website?", "Das hängt vom Umfang ab – nach der kostenlosen Demo bekommen Sie ein klares Festpreis-Angebot."],
+  ["Wie schnell ist die Seite online?", "Die Demo meist innerhalb weniger Tage, die fertige Seite in zwei bis vier Wochen – je nachdem, wie schnell Inhalte und Feedback da sind."],
+  ["Kümmern Sie sich um Hosting und Domain?", "Ja. Domain, Hosting, E-Mail-Weiterleitung und Sicherheit übernehme ich, auf Wunsch auch die laufende Pflege."],
 ];
 
-const faqs = [
-  ["Für welche Unternehmen arbeitet VorOrt Webdesign?", "Für Unternehmen, die online professionell wirken und lokal sichtbar werden wollen."],
-  ["Ist SEO enthalten?", "Ja. Jede Seite erhält eine saubere technische Struktur, lokale SEO-Grundlagen und klare Inhalte für bessere Sichtbarkeit."],
-  ["Werden die Seiten mobil optimiert?", "Ja. Mobile, Tablet und Desktop werden von Anfang an mitgedacht."],
-  ["Wie startet ein Projekt?", "Mit einem kurzen Gespräch über Zielgruppe, Stil, Inhalte und gewünschte Wirkung."],
-];
+function useMedia(query: string) {
+  const [match, setMatch] = useState(() => typeof window !== "undefined" && window.matchMedia(query).matches);
+  useEffect(() => {
+    const mq = window.matchMedia(query);
+    const on = () => setMatch(mq.matches);
+    mq.addEventListener("change", on);
+    return () => mq.removeEventListener("change", on);
+  }, [query]);
+  return match;
+}
 
-const processSteps = [
-  ["01", "Analyse", "Ziel, Markt und Wirkung werden klar definiert."],
-  ["02", "Design", "Eine moderne visuelle Richtung entsteht als starkes Raster."],
-  ["03", "Umsetzung", "Webdesign, Motion, SEO und mobile Details werden aufgebaut."],
-  ["04", "Launch", "Die Seite geht sauber live und bleibt regional auffindbar."],
-];
-
-function Button({ children, href, ghost = false }: { children: React.ReactNode; href: string; ghost?: boolean }) {
+function WhatsAppButton({ children = "Per WhatsApp anfragen", className = "" }: { children?: string; className?: string }) {
   return (
-    <motion.a className={`magnetic-button ${ghost ? "ghost" : ""}`} href={href} whileHover={{ scale: 1.035, y: -2 }} whileTap={{ scale: 0.98 }}>
+    <a className={`btn btn-whatsapp ${className}`} href={WHATSAPP_HREF} target="_blank" rel="noopener noreferrer">
+      <WhatsAppIcon />
       <span>{children}</span>
-      <ArrowUpRight size={17} strokeWidth={1.8} />
-    </motion.a>
+    </a>
   );
 }
 
-function Logo() {
-  return (
-    <span className="brand-logo" aria-label="VorOrt Webdesign">
-      <span className="brand-pin">
-        <span />
-      </span>
-      <span className="brand-word">
-        Vor<span>Ort</span> Webdesign
-      </span>
-    </span>
-  );
+/** Spielt ein Video nur, solange es sichtbar ist (spart Akku und CPU). */
+function InViewVideo({ src, poster, className }: { src: string; poster: string; className?: string }) {
+  const ref = useRef<HTMLVideoElement>(null);
+  useEffect(() => {
+    const v = ref.current;
+    if (!v) return;
+    const io = new IntersectionObserver(([e]) => (e.isIntersecting ? v.play().catch(() => {}) : v.pause()), { threshold: 0.1 });
+    io.observe(v);
+    return () => io.disconnect();
+  }, []);
+  return <video ref={ref} className={className} src={src} poster={poster} muted loop playsInline preload="none" />;
 }
 
-function BrowserMockup({ title, label, accent }: { title: string; label: string; accent: string }) {
-  const isShinzo = title === "SHINZO";
-  const isDekbau = title === "DEKBAU";
-  const isReverie = title === "REVERIE MOTION EXPERIENCE";
-  const isIris = title === "IRIS ESTATES";
-  const isHeroInterface = title === "Lokale Marke";
-  const liveSiteUrl = isShinzo ? "https://dekbau-premium.vercel.app" : "";
-  const displaySiteUrl = isShinzo ? "shinzo.vercel.app" : isDekbau ? "dekbau.de" : isReverie ? "vorort-motion-demo-reverie.vercel.app" : isIris ? "iris-estates.demo" : "vorort-webdesign.de";
+/* ---------------- Navigation ---------------- */
 
-  return (
-    <div className={`browser-mockup ${isShinzo ? "shinzo-mockup live-site-mockup" : ""} ${isReverie ? "reverie-mockup" : ""} ${isIris ? "iris-mockup" : ""}`} style={{ "--accent": accent } as React.CSSProperties}>
-      <div className="browser-top">
-        <span /><span /><span />
-        <small>{displaySiteUrl}</small>
-      </div>
-      {isShinzo ? (
-        <div className="live-site-stage">
-          <div className="live-site-frame-wrap">
-            <iframe
-              title="SHINZO Live-Vorschau"
-              src={liveSiteUrl}
-              loading="lazy"
-            />
-          </div>
-          <div className="live-site-overlay">
-            <span>Live Webseite</span>
-            <strong>SHINZO</strong>
-            <a href={liveSiteUrl} target="_blank" rel="noreferrer">
-              Seite öffnen
-            </a>
-          </div>
-        </div>
-      ) : isHeroInterface ? (
-        <div className="interface-stage">
-          <div className="interface-orbit" />
-          <div className="interface-copy">
-            <span>Digitale Präsenz</span>
-            <h3>
-              Sichtbar.
-              <br />
-              Modern.
-              <br />
-              VorOrt.
-            </h3>
-          </div>
-        </div>
-      ) : isReverie ? (
-        <div className="reverie-preview-stage">
-          <img
-            src="/projects/reverie-motion-experience.png"
-            alt="Reverie Motion Experience Demo von VorOrt Webdesign"
-            loading="lazy"
-          />
-          <div className="reverie-preview-overlay">
-            <span>Motion Experience</span>
-            <strong>Interaktive Webdemo</strong>
-            <em>Scroll Motion · Parallax · Cinematic</em>
-          </div>
-        </div>
-      ) : isIris ? (
-        <div className="iris-preview-stage">
-          <img
-            src="/projects/iris-estates-demo.png"
-            alt="Iris Estates Premium Real Estate Demo von VorOrt Webdesign"
-            loading="lazy"
-          />
-          <div className="iris-preview-overlay">
-            <span>Premium Real Estate Demo</span>
-            <strong>Iris Estates</strong>
-            <em>Scroll Motion · Parallax · Real Estate</em>
-          </div>
-        </div>
-      ) : (
-        <div className="browser-stage">
-          <div className="browser-hero-line" />
-          <p>{label}</p>
-          <h3>{title}</h3>
-          <div className="browser-grid"><i /><i /><i /></div>
-        </div>
-      )}
-    </div>
-  );
-}
-
-function Hero() {
-  const spotlight = useRef<HTMLDivElement>(null);
-  const x = useMotionValue(0);
-  const y = useMotionValue(0);
-  const smoothX = useSpring(x, { stiffness: 80, damping: 22 });
-  const smoothY = useSpring(y, { stiffness: 80, damping: 22 });
-  const rotateY = useTransform(smoothX, [-400, 400], [-9, 9]);
-  const rotateX = useTransform(smoothY, [-300, 300], [7, -7]);
+function Navigation() {
+  const [open, setOpen] = useState(false);
+  const [scrolled, setScrolled] = useState(false);
+  const [pastHero, setPastHero] = useState(false);
 
   useEffect(() => {
-    const el = spotlight.current;
-    if (!el) return;
-    let cx = 0, cy = 0;
-    const onMove = (event: MouseEvent) => {
-      x.set(event.clientX - window.innerWidth / 2);
-      y.set(event.clientY - window.innerHeight / 2);
-      cx += (event.clientX - 240 - cx) * 0.12;
-      cy += (event.clientY - 240 - cy) * 0.12;
-      el.style.transform = `translate(${cx}px, ${cy}px)`;
+    const onScroll = () => {
+      setScrolled(window.scrollY > 24);
+      const hero = document.getElementById("start");
+      setPastHero(hero ? window.scrollY > hero.offsetHeight - window.innerHeight * 0.6 : window.scrollY > 600);
     };
-    window.addEventListener("mousemove", onMove);
-    return () => window.removeEventListener("mousemove", onMove);
-  }, [x, y]);
-
-  return (
-    <section className="hero" id="start">
-      <div className="spotlight" ref={spotlight} />
-      <video className="hero-video" src="/videos/agency-hero.mp4" autoPlay muted loop playsInline />
-      <div className="hero-shade" />
-      <motion.nav className="nav-glass" initial={{ y: -30, opacity: 0 }} animate={{ y: 0, opacity: 1 }} transition={{ duration: 0.9 }}>
-        <a className="brand" href="#start"><Logo /></a>
-        <div className="nav-links">
-          <a href="#branchen">Branchen</a><a href="#projekte">Projekte</a><a href="#leistungen">Leistungen</a><a href="#preise">Preise</a><a href="#kontakt">Kontakt</a>
-        </div>
-      </motion.nav>
-
-      <div className="hero-layout">
-        <div className="hero-copy hero-copy-animate">
-          <div className="eyebrow"><Sparkles size={15} />Premium Webdesign Agentur aus NRW</div>
-          <h1>Webseiten,<br />die auffallen.<span>Für Marken vor Ort.</span></h1>
-          <p>VorOrt Webdesign entwickelt moderne Webseiten mit Cinematic Motion, starker Markenwirkung und lokaler Sichtbarkeit für Unternehmen in Deutschland.</p>
-          <div className="hero-actions">
-            <Button href="#kontakt">Kostenlos beraten lassen</Button>
-            <Button href="#projekte" ghost>Projekte ansehen</Button>
-          </div>
-          <div className="trust-row"><span>Modernes Webdesign</span><span>Lokale SEO</span><span>Motion Design</span></div>
-        </div>
-
-        <motion.div className="hero-depth" style={{ rotateX, rotateY }}>
-          <motion.div className="float-card review-card" animate={{ y: [0, -14, 0] }} transition={{ duration: 6, repeat: Infinity }}>
-            <span>Kundenwirkung</span><strong>klarer, moderner, sichtbarer</strong>
-          </motion.div>
-          <motion.div className="float-card seo-card" animate={{ y: [0, 18, 0] }} transition={{ duration: 7, repeat: Infinity }}>
-            <MapPin size={17} /><span>Webdesign Duisburg · Düsseldorf · Köln</span>
-          </motion.div>
-          <motion.div className="hero-browser" animate={{ y: [0, -18, 0] }} transition={{ duration: 8, repeat: Infinity, ease: "easeInOut" }}>
-            <BrowserMockup title="Lokale Marke" label="Premium Auftritt" accent="#4D7CFF" />
-          </motion.div>
-        </motion.div>
-      </div>
-    </section>
-  );
-}
-
-function SectionHeading({ label, title }: { label: string; title: string }) {
-  return <div className="section-heading"><p>{label}</p><h2>{title}</h2></div>;
-}
-
-function CinematicSceneCanvas() {
-  const canvasRef = useRef<HTMLCanvasElement>(null);
-
-  useEffect(() => {
-    const canvas = canvasRef.current;
-    if (!canvas) return;
-
-    const renderer = new THREE.WebGLRenderer({ canvas, antialias: true, alpha: true });
-    renderer.setPixelRatio(Math.min(window.devicePixelRatio || 1, 2));
-    renderer.outputColorSpace = THREE.SRGBColorSpace;
-
-    const scene = new THREE.Scene();
-    scene.fog = new THREE.FogExp2(0x050816, 0.08);
-
-    const camera = new THREE.PerspectiveCamera(34, 1, 0.1, 100);
-    camera.position.set(0, 0.1, 11.5);
-
-    const group = new THREE.Group();
-    scene.add(group);
-
-    scene.add(new THREE.AmbientLight(0x88aaff, 0.6));
-    const blueLight = new THREE.PointLight(0x5ea2ff, 6.5, 18);
-    blueLight.position.set(3.5, 3, 4);
-    scene.add(blueLight);
-    const bordeauxLight = new THREE.PointLight(0x7b1e3a, 4.5, 16);
-    bordeauxLight.position.set(-4, -2.5, 3);
-    scene.add(bordeauxLight);
-    const acidLight = new THREE.PointLight(0xd7ff3f, 1.2, 9);
-    acidLight.position.set(-2.8, 2.2, 3);
-    scene.add(acidLight);
-
-    const rounded = (ctx: CanvasRenderingContext2D, xPos: number, yPos: number, width: number, height: number, radius: number) => {
-      ctx.beginPath();
-      ctx.moveTo(xPos + radius, yPos);
-      ctx.arcTo(xPos + width, yPos, xPos + width, yPos + height, radius);
-      ctx.arcTo(xPos + width, yPos + height, xPos, yPos + height, radius);
-      ctx.arcTo(xPos, yPos + height, xPos, yPos, radius);
-      ctx.arcTo(xPos, yPos, xPos + width, yPos, radius);
-      ctx.closePath();
-    };
-
-    const makeBrowserTexture = () => {
-      const textureCanvas = document.createElement("canvas");
-      textureCanvas.width = 1400;
-      textureCanvas.height = 860;
-      const ctx = textureCanvas.getContext("2d")!;
-      const bg = ctx.createLinearGradient(0, 0, 1400, 860);
-      bg.addColorStop(0, "#070b19");
-      bg.addColorStop(0.5, "#0c1228");
-      bg.addColorStop(1, "#050816");
-      ctx.fillStyle = bg;
-      ctx.fillRect(0, 0, 1400, 860);
-      const glow = ctx.createRadialGradient(1080, 210, 0, 1080, 210, 520);
-      glow.addColorStop(0, "rgba(94,162,255,0.42)");
-      glow.addColorStop(0.42, "rgba(77,124,255,0.1)");
-      glow.addColorStop(1, "transparent");
-      ctx.fillStyle = glow;
-      ctx.fillRect(0, 0, 1400, 860);
-
-      ctx.fillStyle = "rgba(255,255,255,0.045)";
-      for (let xLine = 0; xLine < 1400; xLine += 72) ctx.fillRect(xLine, 96, 1, 764);
-      for (let yLine = 96; yLine < 860; yLine += 72) ctx.fillRect(0, yLine, 1400, 1);
-
-      ctx.fillStyle = "rgba(255,255,255,0.06)";
-      ctx.fillRect(0, 0, 1400, 96);
-      ["#d7ff3f", "#5ea2ff", "#ffffff66"].forEach((color, index) => {
-        ctx.fillStyle = color;
-        ctx.beginPath();
-        ctx.arc(46 + index * 28, 48, 9, 0, Math.PI * 2);
-        ctx.fill();
-      });
-      ctx.fillStyle = "rgba(247,241,232,0.48)";
-      ctx.font = "600 24px Manrope, sans-serif";
-      ctx.fillText("motion-webdesign.studio", 140, 56);
-
-      ctx.fillStyle = "#f7f1e8";
-      ctx.font = "900 92px Geist, Manrope, sans-serif";
-      ctx.fillText("Webseiten,", 80, 270);
-      ctx.fillText("die Eindruck", 80, 382);
-      ctx.fillText("machen.", 80, 494);
-
-      ctx.fillStyle = "rgba(247,241,232,0.5)";
-      ctx.font = "800 22px Manrope, sans-serif";
-      ctx.fillText("Premium Webdesign · Motion · lokale Sichtbarkeit", 84, 590);
-
-      rounded(ctx, 900, 392, 380, 250, 34);
-      ctx.fillStyle = "rgba(255,255,255,0.08)";
-      ctx.fill();
-      ctx.strokeStyle = "rgba(94,162,255,0.32)";
-      ctx.lineWidth = 2;
-      ctx.stroke();
-      ctx.fillStyle = "rgba(94,162,255,0.5)";
-      rounded(ctx, 934, 426, 312, 118, 26);
-      ctx.fill();
-      ctx.fillStyle = "#f7f1e8";
-      ctx.font = "900 42px Geist, sans-serif";
-      ctx.fillText("Modern", 934, 608);
-
-      const texture = new THREE.CanvasTexture(textureCanvas);
-      texture.colorSpace = THREE.SRGBColorSpace;
-      texture.anisotropy = 8;
-      return texture;
-    };
-
-    const makePhoneTexture = () => {
-      const textureCanvas = document.createElement("canvas");
-      textureCanvas.width = 420;
-      textureCanvas.height = 820;
-      const ctx = textureCanvas.getContext("2d")!;
-      ctx.fillStyle = "#060a18";
-      ctx.fillRect(0, 0, 420, 820);
-      const glow = ctx.createRadialGradient(210, 210, 0, 210, 210, 260);
-      glow.addColorStop(0, "rgba(94,162,255,0.72)");
-      glow.addColorStop(0.45, "rgba(77,124,255,0.18)");
-      glow.addColorStop(1, "transparent");
-      ctx.fillStyle = glow;
-      ctx.fillRect(0, 0, 420, 520);
-      rounded(ctx, 48, 52, 324, 360, 52);
-      ctx.fillStyle = "rgba(255,255,255,0.1)";
-      ctx.fill();
-      ctx.fillStyle = "rgba(247,241,232,0.46)";
-      ctx.font = "800 28px Manrope, sans-serif";
-      ctx.fillText("Mobile", 54, 560);
-      ctx.fillStyle = "#f7f1e8";
-      ctx.font = "900 58px Geist, sans-serif";
-      ctx.fillText("Motion", 54, 636);
-      ctx.fillStyle = "#d7ff3f";
-      ctx.beginPath();
-      ctx.arc(340, 712, 12, 0, Math.PI * 2);
-      ctx.fill();
-      const texture = new THREE.CanvasTexture(textureCanvas);
-      texture.colorSpace = THREE.SRGBColorSpace;
-      return texture;
-    };
-
-    const browser = new THREE.Mesh(
-      new THREE.PlaneGeometry(5.55, 3.42),
-      new THREE.MeshPhysicalMaterial({
-        map: makeBrowserTexture(),
-        transparent: true,
-        roughness: 0.38,
-        metalness: 0.05,
-        clearcoat: 0.8,
-        clearcoatRoughness: 0.18,
-      }),
-    );
-    browser.position.set(-0.25, 0.35, 0);
-    browser.rotation.set(-0.055, -0.1, 0.006);
-    group.add(browser);
-
-    const phone = new THREE.Mesh(
-      new THREE.PlaneGeometry(1.08, 2.14),
-      new THREE.MeshPhysicalMaterial({
-        map: makePhoneTexture(),
-        transparent: true,
-        roughness: 0.32,
-        metalness: 0.08,
-        clearcoat: 1,
-      }),
-    );
-    phone.position.set(2.28, -1.02, 1.15);
-    phone.rotation.set(-0.05, -0.3, 0.075);
-    group.add(phone);
-
-    const glassMaterial = new THREE.MeshPhysicalMaterial({
-      color: 0x5ea2ff,
-      transparent: true,
-      opacity: 0.11,
-      roughness: 0.18,
-      metalness: 0.08,
-      side: THREE.DoubleSide,
-    });
-    const leftGlass = new THREE.Mesh(new THREE.PlaneGeometry(2.6, 4.2), glassMaterial);
-    leftGlass.position.set(-2.85, -0.05, -1.2);
-    leftGlass.rotation.set(0.03, 0.48, -0.08);
-    group.add(leftGlass);
-    const rightGlass = new THREE.Mesh(new THREE.PlaneGeometry(2.8, 4.6), glassMaterial.clone());
-    rightGlass.position.set(2.9, 0.12, -1.35);
-    rightGlass.rotation.set(-0.02, -0.46, 0.08);
-    group.add(rightGlass);
-
-    const particleCount = 380;
-    const positions = new Float32Array(particleCount * 3);
-    for (let index = 0; index < particleCount; index += 1) {
-      positions[index * 3] = (Math.random() - 0.5) * 10;
-      positions[index * 3 + 1] = (Math.random() - 0.5) * 6;
-      positions[index * 3 + 2] = (Math.random() - 0.5) * 6;
-    }
-    const particleGeometry = new THREE.BufferGeometry();
-    particleGeometry.setAttribute("position", new THREE.BufferAttribute(positions, 3));
-    const points = new THREE.Points(
-      particleGeometry,
-      new THREE.PointsMaterial({ color: 0x5ea2ff, size: 0.025, transparent: true, opacity: 0.62 }),
-    );
-    scene.add(points);
-
-    const mouse = { x: 0, y: 0 };
-    const onPointerMove = (event: PointerEvent) => {
-      const rect = canvas.getBoundingClientRect();
-      mouse.x = ((event.clientX - rect.left) / rect.width - 0.5) * 2;
-      mouse.y = ((event.clientY - rect.top) / rect.height - 0.5) * 2;
-    };
-    window.addEventListener("pointermove", onPointerMove);
-
-    let mobileScene = false;
-    const resize = () => {
-      const rect = canvas.getBoundingClientRect();
-      mobileScene = rect.width <= 768;
-      renderer.setSize(rect.width, rect.height, false);
-      camera.fov = mobileScene ? 40 : 34;
-      camera.aspect = rect.width / rect.height || 1;
-      camera.position.set(0, mobileScene ? 0.05 : 0.1, mobileScene ? 14.2 : 11.5);
-      group.scale.setScalar(mobileScene ? 0.76 : 1);
-      browser.position.x = mobileScene ? -0.02 : -0.25;
-      phone.position.x = mobileScene ? 1.34 : 2.28;
-      phone.rotation.y = mobileScene ? -0.18 : -0.3;
-      leftGlass.visible = !mobileScene;
-      rightGlass.visible = !mobileScene;
-      camera.updateProjectionMatrix();
-    };
-    resize();
-    window.addEventListener("resize", resize);
-
-    let raf = 0;
-    const clock = new THREE.Clock();
-    const animate = () => {
-      const time = clock.getElapsedTime();
-      const targetRotationY = mobileScene ? Math.sin(time * 0.22) * 0.025 : mouse.x * 0.12;
-      const targetRotationX = mobileScene ? Math.cos(time * 0.2) * 0.012 : -mouse.y * 0.07;
-      group.rotation.y += (targetRotationY - group.rotation.y) * 0.045;
-      group.rotation.x += (targetRotationX - group.rotation.x) * 0.045;
-      browser.position.y = (mobileScene ? 0.42 : 0.35) + Math.sin(time * 0.55) * (mobileScene ? 0.025 : 0.08);
-      phone.position.y = (mobileScene ? -0.7 : -1.15) + Math.sin(time * 0.76) * (mobileScene ? 0.035 : 0.14);
-      leftGlass.position.y = -0.15 + Math.sin(time * 0.45) * 0.1;
-      rightGlass.position.y = 0.05 + Math.cos(time * 0.4) * 0.12;
-      points.rotation.y = time * (mobileScene ? 0.01 : 0.025);
-      blueLight.intensity = 5.8 + Math.sin(time * 0.9) * (mobileScene ? 0.32 : 0.9);
-      renderer.render(scene, camera);
-      raf = requestAnimationFrame(animate);
-    };
-
-    animate();
-    return () => {
-      cancelAnimationFrame(raf);
-      window.removeEventListener("pointermove", onPointerMove);
-      window.removeEventListener("resize", resize);
-      renderer.dispose();
-      browser.geometry.dispose();
-      phone.geometry.dispose();
-      leftGlass.geometry.dispose();
-      rightGlass.geometry.dispose();
-      particleGeometry.dispose();
-    };
+    onScroll();
+    window.addEventListener("scroll", onScroll, { passive: true });
+    return () => window.removeEventListener("scroll", onScroll);
   }, []);
 
-  return <canvas className="cinematic-canvas" ref={canvasRef} aria-hidden="true" />;
-}
+  useEffect(() => {
+    document.documentElement.classList.toggle("menu-open", open);
+    const onKey = (e: KeyboardEvent) => e.key === "Escape" && setOpen(false);
+    window.addEventListener("keydown", onKey);
+    return () => window.removeEventListener("keydown", onKey);
+  }, [open]);
 
-function MotionShowcase() {
   return (
-    <section
-      className="immersive-section agency-grid"
-      id="branchen"
-    >
-      <div className="immersive-heading">
-        <p>Branchen</p>
-        <h2>Für Unternehmen,<br />die online hochwertig wirken wollen.</h2>
-        <span>Friseure, Restaurants, Handwerk, Architektur und lokale Marken mit Anspruch.</span>
-      </div>
-
-      <div className="motion-environment" aria-label="Premium Webdesign Showcase">
-        <CinematicSceneCanvas />
-        <div className="mobile-showcase-card" aria-hidden="true">
-          <div className="mobile-showcase-browser">
-            <div className="mobile-showcase-top">
-              <span />
-              <span />
-              <span />
-              <small>vorort-webdesign.de</small>
-            </div>
-            <div className="mobile-showcase-body">
-              <span>Premium Webdesign</span>
-              <strong>Webseiten, die Eindruck machen.</strong>
-              <div className="mobile-showcase-line" />
-              <div className="mobile-showcase-ui">
-                <i />
-                <i />
-                <i />
-              </div>
-            </div>
-          </div>
-          <div className="mobile-showcase-phone">
-            <div />
-            <span>Mobil</span>
-            <strong>Motion</strong>
-          </div>
+    <>
+      <header className={`site-nav ${scrolled ? "is-scrolled" : ""}`}>
+        <div className="container nav-inner">
+          <a href="#start" className="nav-logo" aria-label="VorOrt Webdesign – zum Seitenanfang">
+            <Logo />
+          </a>
+          <nav className="nav-links" aria-label="Hauptnavigation">
+            {NAV.map(([label, href]) => (
+              <a key={href} href={href}>
+                {label}
+              </a>
+            ))}
+          </nav>
+          <WhatsAppButton className="nav-cta">WhatsApp</WhatsAppButton>
+          <button className="burger" type="button" aria-label={open ? "Menü schließen" : "Menü öffnen"} aria-expanded={open} aria-controls="mobile-menu" onClick={() => setOpen((v) => !v)}>
+            {open ? <X size={24} /> : <Menu size={24} />}
+          </button>
         </div>
-        <div className="webgl-caption">
-          <span>3D Webdesign Erlebnis</span>
-          <strong>Webseiten, die Eindruck machen.</strong>
-        </div>
-      </div>
-    </section>
-  );
-}
+      </header>
 
-function ProjectVisual({ title, label, accent }: { title: string; label: string; accent: string }) {
-  const isShinzo = title === "SHINZO";
-  const isReverie = title === "REVERIE MOTION EXPERIENCE";
-  const isIris = title === "IRIS ESTATES";
-  const shinzoDemoUrl = "https://dekbau-premium.vercel.app";
-
-  if (isReverie || isIris) {
-    const demoUrl = isIris ? IRIS_DEMO_URL : REVERIE_DEMO_URL;
-    const ariaLabel = isIris ? "Iris Estates Premium Real Estate Demo von VorOrt Webdesign ansehen" : "Reverie Motion Experience Demo von VorOrt Webdesign ansehen";
-
-    return (
-      <motion.a
-        className={`project-visual demo-case-visual ${isReverie ? "reverie-case-visual" : "iris-case-visual"}`}
-        href={demoUrl}
-        target="_blank"
-        rel="noopener noreferrer"
-        aria-label={ariaLabel}
-        whileHover={{ rotateY: -7, rotateX: 4, scale: 1.02 }}
-        whileTap={{ scale: 0.985 }}
-      >
-        <BrowserMockup title={title} label={label} accent={accent} />
-        <div className="floating-mini"><MousePointer2 size={15} /><span>Motion aktiv</span></div>
-      </motion.a>
-    );
-  }
-
-  return (
-    <motion.div className={`project-visual ${isShinzo ? "shinzo-case-visual" : ""}`} whileHover={{ rotateY: -7, rotateX: 4, scale: 1.02 }}>
-      <BrowserMockup title={title} label={label} accent={accent} />
-      {isShinzo && (
-        <>
-          <div className="shinzo-mobile-case">
-            <div className="shinzo-mobile-live">
-              <div className="mobile-browser-top">
-                <span /><span /><span />
-                <small>shinzo.vercel.app</small>
-              </div>
-              <div className="shinzo-mobile-live-stage">
-                <div className="shinzo-mobile-site-copy">
-                  <span>Live Webseite</span>
-                  <strong>SHINZO</strong>
-                </div>
-                <a href={shinzoDemoUrl} target="_blank" rel="noreferrer">Seite öffnen</a>
-              </div>
-            </div>
-            <a className="shinzo-mobile-before" href="https://shinzo.hair/" target="_blank" rel="noreferrer">
-              <div className="mobile-browser-top">
-                <span /><span /><span />
-                <small>shinzo.hair</small>
-              </div>
-              <div className="shinzo-mobile-before-stage">
-                <span>Vorher</span>
-                <strong>Klassische Salon-Webseite</strong>
-              </div>
-              <div className="shinzo-mobile-before-label">
-                <span>Vorher</span>
-                <strong>shinzo.hair</strong>
-                <small>Klassische Salon-Webseite</small>
-              </div>
-            </a>
-            <div className="shinzo-mobile-after">
-              <span>Nachher</span>
-              <strong>Motion Premium Experience</strong>
-            </div>
-            <a className="shinzo-mobile-button" href={shinzoDemoUrl} target="_blank" rel="noreferrer">
-              Neue Webseite öffnen
-              <ArrowUpRight size={18} />
-            </a>
-          </div>
-          <motion.a
-            className="before-preview-card"
-            href="https://shinzo.hair/"
-            target="_blank"
-            rel="noreferrer"
-            whileHover={{ y: -5, scale: 1.025 }}
-            transition={{ duration: 0.28, ease: "easeOut" }}
-          >
-            <div className="before-preview-top">
-              <span /><span /><span />
-              <small>shinzo.hair</small>
-            </div>
-            <div className="before-preview-frame">
-              <iframe
-                title="SHINZO Vorher Vorschau"
-                src="https://shinzo.hair/"
-                loading="lazy"
-              />
-              <div className="before-preview-fallback">
-                <strong>Vorher</strong>
-                <p>Klassische Salon-Webseite</p>
-              </div>
-            </div>
-            <div className="before-preview-label">
-              <span>Vorher</span>
-              <strong>shinzo.hair</strong>
-              <small>Klassische Salon-Webseite</small>
-            </div>
-          </motion.a>
-          <div className="after-badge">
-            <span>Nachher</span>
-            <strong>Motion Premium Experience</strong>
-          </div>
-          <motion.a
-            className="after-preview-button"
-            href={shinzoDemoUrl}
-            target="_blank"
-            rel="noreferrer"
-            whileHover={{ y: -3, scale: 1.03 }}
-            transition={{ duration: 0.25, ease: "easeOut" }}
-          >
-            Neue Webseite öffnen
-            <ArrowUpRight size={14} />
-          </motion.a>
-        </>
-      )}
-      <div className="floating-mini"><MousePointer2 size={15} /><span>Motion aktiv</span></div>
-    </motion.div>
-  );
-}
-
-function Showcase() {
-  const isDemoProject = (title: string) => title === "REVERIE MOTION EXPERIENCE" || title === "IRIS ESTATES";
-  const demoProjectUrl = (title: string) => title === "IRIS ESTATES" ? IRIS_DEMO_URL : REVERIE_DEMO_URL;
-
-  return (
-    <section className="showcase agency-grid" id="projekte">
-      <div className="showcase-heading"><SectionHeading label="Showcase" title="Digitale Auftritte, die sich nicht wie Standard anfühlen." /></div>
-      <div className="project-stack" style={{ perspective: "1000px" }}>
-        {projects.map(([title, label, text, accent], index) => (
-          <motion.article className={`project-card ${title === "SHINZO" ? "project-card-shinzo" : ""} ${title === "REVERIE MOTION EXPERIENCE" ? "project-card-reverie" : ""} ${title === "IRIS ESTATES" ? "project-card-iris" : ""} ${index % 2 ? "project-card-reverse" : ""}`} key={title} style={{ "--accent": accent, top: `${92 + index * 20}px`, transformOrigin: "top center" } as React.CSSProperties} initial={{ opacity: 0, y: 80, scale: 0.96, rotateX: -15 }} whileInView={{ opacity: 1, y: 0, scale: 1, rotateX: 0 }} viewport={{ once: true, amount: 0.25 }} transition={{ duration: 0.85, delay: index * 0.08, ease: [0.22, 1, 0.36, 1] }}>
-            <div className="project-copy">
-              <span>{label}</span>
-              <h3>
-                {title === "REVERIE MOTION EXPERIENCE" ? (
-                  <>
-                    REVERIE
-                    <br />
-                    MOTION
-                    <br />
-                    EXPERIENCE
-                  </>
-                ) : title}
-              </h3>
-              <p>{text}</p>
-              {title === "SHINZO" && (
-                <div className="project-highlights">
-                  <em>Video-Hero</em>
-                  <em>Scroll Motion</em>
-                  <em>Premium Effekte</em>
-                  <em>Exklusiver Aufbau</em>
-                </div>
-              )}
-              <a
-                href={isDemoProject(title) ? demoProjectUrl(title) : "#kontakt"}
-                target={isDemoProject(title) ? "_blank" : undefined}
-                rel={isDemoProject(title) ? "noopener noreferrer" : undefined}
-              >
-                {title === "SHINZO" ? "So eine Webseite anfragen" : isDemoProject(title) ? "Demo ansehen" : "Ähnliches Projekt anfragen"}<ArrowUpRight size={16} />
+      <AnimatePresence>
+        {open && (
+          <motion.div id="mobile-menu" className="mobile-menu" initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} transition={{ duration: 0.25 }}>
+            <nav aria-label="Mobile Navigation">
+              {NAV.map(([label, href], i) => (
+                <motion.a key={href} href={href} onClick={() => setOpen(false)} initial={{ opacity: 0, y: 16 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.05 + i * 0.05, duration: 0.4, ease: EASE }}>
+                  {label}
+                </motion.a>
+              ))}
+            </nav>
+            <div className="mobile-menu-actions">
+              <WhatsAppButton />
+              <a className="btn btn-ghost" href={PHONE_HREF}>
+                <Phone size={18} />
+                <span>{PHONE_DISPLAY}</span>
               </a>
             </div>
-            <ProjectVisual title={title} label={label} accent={accent} />
-          </motion.article>
-        ))}
+          </motion.div>
+        )}
+      </AnimatePresence>
+
+      <a className={`fab-whatsapp ${pastHero && !open ? "is-visible" : ""}`} href={WHATSAPP_HREF} target="_blank" rel="noopener noreferrer" aria-label="Per WhatsApp anfragen">
+        <WhatsAppIcon size={28} />
+      </a>
+    </>
+  );
+}
+
+/* ---------------- Angebot: Links/Rechts, ohne Eyebrow ---------------- */
+
+function Offer() {
+  return (
+    <section className="section offer" id="angebot">
+      <div className="container split">
+        <WordReveal className="display display-xl" text="Erst sehen, dann entscheiden." />
+        <BlurUp className="split-aside" delay={0.2}>
+          <p className="lead">Ich zeige Ihnen vorab kostenlos und unverbindlich, wie Ihre neue Startseite aussehen könnte. Gefällt sie Ihnen, besprechen wir den Rest.</p>
+          <WhatsAppButton>Kostenlose Demo anfragen</WhatsAppButton>
+        </BlurUp>
       </div>
     </section>
   );
 }
 
-function GlowFeatureCard({
-  title,
-  description,
-  gradient,
-  icon: Icon,
-  delay = 0,
-}: {
-  title: string;
-  description: string;
-  gradient: string;
-  icon: typeof LayoutDashboard;
-  delay?: number;
-}) {
+/* ---------------- Branchen: Bento (Motionsites „Capabilities Overview“) ---------------- */
+
+function Branches() {
+  const desktop = useMedia("(min-width: 768px)");
+  const reduce = useReducedMotion();
   return (
-    <motion.div
-      className="glow-feature-card group"
-      initial={{ opacity: 0, y: 30 }}
-      whileInView={{ opacity: 1, y: 0 }}
-      viewport={{ once: true, amount: 0.25 }}
-      transition={{ duration: 0.8, ease: "easeOut", delay }}
-    >
-      <div className="glow-feature-card__glow" style={{ background: gradient }} />
-      <motion.article
-        className="glow-feature-card__surface"
-        style={{ background: `linear-gradient(#111113, #111113) padding-box, ${gradient} border-box` }}
-        whileHover={{ y: -4 }}
-        transition={{ duration: 0.3, ease: "easeOut" }}
-      >
-        <div className="glow-feature-card__inner">
-          <Icon size={32} strokeWidth={2.4} className="glow-feature-card__icon" />
-          <div>
-            <h3>{title}</h3>
-            <p>{description}</p>
+    <section className="section" id="branchen">
+      <div className="container">
+        <div className="head-row">
+          <BlurUp>
+            <h2 className="display">
+              Für Betriebe,
+              <br />
+              <span className="dim">die vor Ort gefunden werden wollen.</span>
+            </h2>
+          </BlurUp>
+        </div>
+
+        <div className="bento">
+          <BlurUp className="bento-feature">
+            <article className="bento-card bento-media">
+              {desktop && !reduce ? (
+                <InViewVideo className="bento-video" src="/videos/branche-logistik.mp4" poster="/branche-logistik.webp" />
+              ) : (
+                <img className="bento-video" src="/branche-logistik.webp" alt="" loading="lazy" decoding="async" />
+              )}
+              <div className="bento-shade" />
+              <span className="bento-label">Schwerpunkt</span>
+              <div className="bento-feature-copy">
+                <Truck size={30} strokeWidth={1.5} />
+                <h3>Transport & Logistik</h3>
+                <p>Mehr Aufträge und bessere Bewerbungen: Leistungen, Fuhrpark und Einsatzgebiet auf einen Blick.</p>
+              </div>
+            </article>
+          </BlurUp>
+          {BRANCHES.map((b, i) => (
+            <BlurUp key={b.title} delay={0.08 * (i + 1)}>
+              <GlowCard className="bento-card bento-small">
+                <b.icon size={24} strokeWidth={1.5} />
+                <h3>{b.title}</h3>
+                <p>{b.text}</p>
+              </GlowCard>
+            </BlurUp>
+          ))}
+        </div>
+
+        <div className="marquee" aria-hidden="true">
+          <div className="marquee-row">
+            {[...MARQUEE, ...MARQUEE].map((m, i) => (
+              <span key={i}>{m}</span>
+            ))}
           </div>
         </div>
-      </motion.article>
-    </motion.div>
+      </div>
+    </section>
   );
 }
+
+/* ---------------- Demos: große Karten, nur kurzer Titel ---------------- */
+
+function Demos() {
+  return (
+    <section className="section" id="demos">
+      <div className="container">
+        <div className="head-row head-row-split">
+          <BlurUp>
+            <h2 className="display">Konzept-Demos</h2>
+          </BlurUp>
+          <BlurUp delay={0.15}>
+            <p className="muted">Zwei eigene Entwürfe von VorOrt Webdesign. Echte Kundenprojekte folgen in Kürze.</p>
+          </BlurUp>
+        </div>
+        <div className="demo-grid">
+          {DEMOS.map((d, i) => {
+            const body = (
+              <>
+                <div className="demo-media">
+                  <img src={d.image} alt={`Vorschau: ${d.title} – Konzept-Demo von VorOrt Webdesign`} loading="lazy" decoding="async" width={1400} height={740} />
+                </div>
+                <div className="demo-body">
+                  <span className="tag">Konzept-Demo von VorOrt Webdesign</span>
+                  <div className="demo-title-row">
+                    <h3>{d.title}</h3>
+                    {d.url ? (
+                      <span className="round-btn" aria-hidden="true">
+                        <ArrowUpRight size={20} />
+                      </span>
+                    ) : (
+                      <span className="soon">Link folgt</span>
+                    )}
+                  </div>
+                  <p>{d.kind}</p>
+                </div>
+              </>
+            );
+            return (
+              <BlurUp key={d.title} delay={i * 0.12}>
+                {d.url ? (
+                  <a className="demo-card" href={d.url} target="_blank" rel="noopener noreferrer" aria-label={`${d.title} ansehen (öffnet in neuem Tab)`}>
+                    {body}
+                  </a>
+                ) : (
+                  <div className="demo-card is-disabled" aria-disabled="true">
+                    {body}
+                  </div>
+                )}
+              </BlurUp>
+            );
+          })}
+        </div>
+      </div>
+    </section>
+  );
+}
+
+/* ---------------- Leistungen: große Zahl + nummerierte Liste (Motionsites „Vexa Studio“) ---------------- */
 
 function Services() {
   return (
-    <section className="glow-feature-section" id="leistungen">
-      <div className="glow-feature-head">
-        <p>Leistungen</p>
-        <h2>Webdesign, das nicht nur gut aussieht - sondern verkauft.</h2>
-        <span>Strategie, Design, Technik und lokale Sichtbarkeit in einem modernen System für Unternehmen aus NRW.</span>
-      </div>
-      <div className="glow-feature-grid">
-        {glowFeatures.map((feature, index) => (
-          <GlowFeatureCard
-            key={feature.title}
-            title={feature.title}
-            description={feature.description}
-            gradient={feature.gradient}
-            icon={feature.icon}
-            delay={index * 0.08}
-          />
-        ))}
+    <section className="section" id="leistungen">
+      <div className="container services">
+        <div className="big-number" aria-hidden="true">
+          05
+        </div>
+        <div>
+          <BlurUp>
+            <h2 className="display display-sm">Leistungen aus einer Hand.</h2>
+          </BlurUp>
+          <ol className="service-list">
+            {SERVICES.map(([title, text], i) => (
+              <BlurUp as="li" key={title} delay={i * 0.06} className="service-row">
+                <span className="service-num">({String(i + 1).padStart(2, "0")})</span>
+                <h3>{title}</h3>
+                <p>{text}</p>
+              </BlurUp>
+            ))}
+          </ol>
+        </div>
       </div>
     </section>
   );
 }
+
+/* ---------------- Ablauf: Fortschrittslinie wächst beim Scrollen ---------------- */
 
 function Process() {
+  const ref = useRef<HTMLDivElement>(null);
+  const { scrollYProgress } = useScroll({ target: ref, offset: ["start 80%", "end 60%"] });
   return (
-    <section className="process-section agency-grid">
-      <div className="section-aside">
-        <SectionHeading label="Ablauf" title="Vom ersten Eindruck bis zum Launch." />
-      </div>
-      <div className="process-timeline">
-        {processSteps.map(([number, title, text], index) => (
-          <motion.article
-            className="process-step"
-            key={number}
-            initial={{ opacity: 0, x: index % 2 ? 38 : -38 }}
-            whileInView={{ opacity: 1, x: 0 }}
-            viewport={{ once: true, amount: 0.35 }}
-            transition={{ duration: 0.7, delay: index * 0.08, ease: [0.22, 1, 0.36, 1] }}
-          >
-            <span>{number}</span>
-            <h3>{title}</h3>
-            <p>{text}</p>
-          </motion.article>
-        ))}
+    <section className="section" id="ablauf">
+      <div className="container">
+        <div className="head-row">
+          <BlurUp>
+            <h2 className="display">Vier Schritte bis online.</h2>
+          </BlurUp>
+        </div>
+        <div className="steps" ref={ref}>
+          <div className="steps-track" aria-hidden="true">
+            <motion.div className="steps-fill" style={{ scaleX: scrollYProgress }} />
+          </div>
+          <ol>
+            {STEPS.map(([title, text], i) => (
+              <BlurUp as="li" key={title} delay={i * 0.1} className="step">
+                <span className="step-dot" />
+                <span className="step-num">0{i + 1}</span>
+                <h3>{title}</h3>
+                <p>{text}</p>
+              </BlurUp>
+            ))}
+          </ol>
+        </div>
       </div>
     </section>
   );
 }
 
-function Pricing() {
+/* ---------------- Über mich ---------------- */
+
+function About() {
   return (
-    <section className="minimal-section pricing-section agency-grid" id="preise">
-      <div className="section-aside">
-      <SectionHeading label="Preise" title="Passende Lösungen für Unternehmen vor Ort." />
-      </div>
-      <div className="pricing-grid" style={{ perspective: "1000px" }}>
-        {pricing.map(([title, price, text], index) => (
-          <motion.article
-            className={`price-card ${index === 1 ? "featured" : ""}`}
-            key={title}
-            initial={{ opacity: 0, y: 50, scale: 0.95 }}
-            whileInView={{ opacity: 1, y: 0, scale: 1 }}
-            viewport={{ once: true, amount: 0.2 }}
-            transition={{ duration: 0.8, delay: index * 0.15, ease: [0.22, 1, 0.36, 1] }}
-          >
-            <h3>{title}</h3><strong>{price}</strong><p>{text}</p><div className="price-check"><Check size={16} />Persönliche Beratung inklusive</div>
-          </motion.article>
-        ))}
+    <section className="section" id="ueber-mich">
+      <div className="container about">
+        <BlurUp className="about-mark">
+          <div className="glow-ring">
+            <PinMark className="about-pin" />
+          </div>
+          <p className="about-name">
+            <strong>Şenol Şenlik</strong>
+            <span>Inhaber · Duisburg</span>
+          </p>
+        </BlurUp>
+        <div className="about-copy">
+          <BlurUp>
+            <h2 className="display display-sm">
+              Ein Ansprechpartner.
+              <br />
+              <span className="dim">Kein Callcenter.</span>
+            </h2>
+          </BlurUp>
+          <BlurUp delay={0.15}>
+            <p className="lead">
+              Sie sprechen direkt mit mir – persönlich, am Telefon oder per WhatsApp. Ich bin selbst Unternehmer in Duisburg und weiß, was ein Betrieb braucht: eine Website, die Anfragen bringt und keine Arbeit macht.
+            </p>
+          </BlurUp>
+        </div>
       </div>
     </section>
   );
 }
+
+/* ---------------- FAQ: Links Titel, rechts Liste ---------------- */
 
 function FAQ() {
   return (
-    <section className="faq-section agency-grid" id="faq">
-      <div className="section-aside">
-      <SectionHeading label="FAQ" title="Häufige Fragen. Klar beantwortet." />
-      </div>
-      <div className="faq-list">
-        {faqs.map(([q, a]) => <details key={q}><summary>{q}</summary><p>{a}</p></details>)}
+    <section className="section" id="faq">
+      <div className="container faq">
+        <div className="faq-title">
+          <BlurUp>
+            <h2 className="display">Fragen?</h2>
+            <p className="muted">
+              Nicht dabei? Schreiben Sie mir einfach{" "}
+              <a href={WHATSAPP_HREF} target="_blank" rel="noopener noreferrer">
+                per WhatsApp
+              </a>
+              .
+            </p>
+          </BlurUp>
+        </div>
+        <div className="faq-list">
+          {FAQS.map(([q, a], i) => (
+            <BlurUp key={q} delay={i * 0.04}>
+              <details>
+                <summary>
+                  <span>{q}</span>
+                  <i aria-hidden="true" />
+                </summary>
+                <p>{a}</p>
+              </details>
+            </BlurUp>
+          ))}
+        </div>
       </div>
     </section>
+  );
+}
+
+/* ---------------- Kontakt (Motionsites „Editorial Collection CTA“) ---------------- */
+
+function ContactTile({ href, icon, title, sub, external, green }: { href: string; icon: ReactNode; title: string; sub: string; external?: boolean; green?: boolean }) {
+  return (
+    <a className={`contact-tile ${green ? "is-green" : ""}`} href={href} {...(external ? { target: "_blank", rel: "noopener noreferrer" } : {})}>
+      <span className="contact-icon">{icon}</span>
+      <strong>{title}</strong>
+      <span className="contact-sub">{sub}</span>
+      <ArrowUpRight className="contact-arrow" size={20} />
+    </a>
   );
 }
 
 function Contact() {
-  return (
-    <section className="contact-section agency-grid" id="kontakt">
-      <motion.div className="contact-panel" initial={{ opacity: 0, y: 50 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true, amount: 0.35 }} transition={{ duration: 0.9 }}>
-        <span>Projektstart</span>
-        <h2>Bereit für einen Auftritt, der hochwertig wirkt?</h2>
-        <p>Erzählen Sie kurz, welches Unternehmen sichtbar werden soll. VorOrt Webdesign meldet sich mit einer klaren Einschätzung für Design, SEO und Umsetzung.</p>
-        <div className="contact-actions">
-          <Button href="mailto:vorort.webdesign@gmail.com"><Mail size={16} />Projekt anfragen</Button>
-          <Button href="tel:+491779339780" ghost>Kostenlos beraten lassen</Button>
-        </div>
-      </motion.div>
-    </section>
-  );
-}
-
-function LegalNotice() {
-  return (
-    <section className="legal-section" id="impressum">
-      <div className="legal-panel">
-        <div>
-          <span>Impressum</span>
-          <h2>Angaben gemäß § 5 TMG</h2>
-        </div>
-        <div className="legal-grid">
-          <p>
-            <strong>VorOrt Webdesign</strong>
-            <br />Senol Senlik
-            <br />Moerser Str. 288
-            <br />47228 Duisburg
-            <br />Deutschland
-          </p>
-          <p>
-            <strong>Kontakt</strong>
-            <br />Telefon: <a href="tel:+491779339780">0177 9339780</a>
-            <br />E-Mail: <a href="mailto:vorort.webdesign@gmail.com">vorort.webdesign@gmail.com</a>
-          </p>
-          <p>
-            <strong>Verantwortlich für den Inhalt nach § 55 Abs. 2 RStV:</strong>
-            <br />Senol Senlik
-            <br />Moerser Str. 288
-            <br />47228 Duisburg
-          </p>
-        </div>
-      </div>
-    </section>
-  );
-}
-
-function PrivacyNotice() {
-  return (
-    <section className="legal-section" id="datenschutz">
-      <div className="legal-panel privacy-panel">
-        <div>
-          <span>Datenschutz</span>
-          <h2>Datenschutzerklärung</h2>
-        </div>
-        <iframe
-          className="privacy-frame"
-          title="Datenschutzerklärung VorOrt Webdesign"
-          src="/datenschutzerklaerung-vorort-webdesign.pdf#toolbar=0&navpanes=0&view=FitH"
-        />
-      </div>
-    </section>
-  );
-}
-
-function LegalModal({ view, onClose }: { view: "impressum" | "datenschutz" | null; onClose: () => void }) {
-  if (!view) return null;
-
-  return (
-    <motion.div className="legal-modal" initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ duration: 0.25 }}>
-      <button className="legal-backdrop" type="button" aria-label="Fenster schließen" onClick={onClose} />
-      <motion.div className="legal-dialog" initial={{ opacity: 0, y: 28, scale: 0.98 }} animate={{ opacity: 1, y: 0, scale: 1 }} transition={{ duration: 0.42, ease: [0.22, 1, 0.36, 1] }}>
-        <button className="legal-close" type="button" aria-label="Schließen" onClick={onClose}>×</button>
-        {view === "impressum" ? <LegalNotice /> : <PrivacyNotice />}
-      </motion.div>
-    </motion.div>
-  );
-}
-
-function CookieBanner({ onPrivacyClick }: { onPrivacyClick: () => void }) {
-  const [visible, setVisible] = useState(() => {
-    if (typeof window === "undefined") return false;
-    return window.localStorage.getItem("vorort-cookie-consent") !== "accepted";
-  });
-
-  if (!visible) return null;
-
-  const acceptCookies = () => {
-    window.localStorage.setItem("vorort-cookie-consent", "accepted");
-    setVisible(false);
+  const onSubmit = (e: FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    const data = new FormData(e.currentTarget);
+    const name = String(data.get("name") || "").trim();
+    const company = String(data.get("company") || "").trim();
+    const phone = String(data.get("phone") || "").trim();
+    const message = String(data.get("message") || "").trim();
+    const subject = `Website-Anfrage${company ? ` – ${company}` : ""}`;
+    const lines = [`Name: ${name}`];
+    if (company) lines.push(`Betrieb: ${company}`);
+    if (phone) lines.push(`Telefon: ${phone}`);
+    const body = `${lines.join("\n")}\n\n${message}`;
+    window.location.href = `${EMAIL_HREF}?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
   };
 
   return (
-    <motion.div
-      className="cookie-banner"
-      initial={{ opacity: 0, y: 26, scale: 0.98 }}
-      animate={{ opacity: 1, y: 0, scale: 1 }}
-      exit={{ opacity: 0, y: 20 }}
-      transition={{ duration: 0.55, ease: [0.22, 1, 0.36, 1] }}
-    >
-      <div>
-        <span>Datenschutz</span>
-        <p>Wir verwenden nur technisch notwendige Funktionen und speichern Ihre Auswahl lokal im Browser.</p>
+    <section className="section contact" id="kontakt">
+      <div className="container">
+        <BlurUp>
+          <h2 className="display display-hero">
+            Lassen Sie uns
+            <br />
+            <span className="accent">sprechen.</span>
+          </h2>
+        </BlurUp>
+        <div className="contact-buttons">
+          <BlurUp delay={0.1}>
+            <ContactTile href={WHATSAPP_HREF} external green icon={<WhatsAppIcon size={26} />} title="WhatsApp" sub="Schnellste Antwort" />
+          </BlurUp>
+          <BlurUp delay={0.18}>
+            <ContactTile href={PHONE_HREF} icon={<Phone size={24} strokeWidth={1.6} />} title="Anrufen" sub={PHONE_DISPLAY} />
+          </BlurUp>
+          <BlurUp delay={0.26}>
+            <ContactTile href={EMAIL_HREF} icon={<Mail size={24} strokeWidth={1.6} />} title="E-Mail" sub={EMAIL} />
+          </BlurUp>
+        </div>
+
+        <BlurUp>
+          <form className="contact-form" onSubmit={onSubmit}>
+            <p className="form-intro">Lieber schreiben? Ihr E-Mail-Programm öffnet sich mit der fertigen Nachricht.</p>
+            <div className="form-grid">
+              <label>
+                <span>Name *</span>
+                <input name="name" required autoComplete="name" />
+              </label>
+              <label>
+                <span>Betrieb</span>
+                <input name="company" autoComplete="organization" />
+              </label>
+              <label className="span-2">
+                <span>Telefon (für Rückruf)</span>
+                <input name="phone" type="tel" autoComplete="tel" inputMode="tel" />
+              </label>
+              <label className="span-2">
+                <span>Nachricht *</span>
+                <textarea name="message" required rows={4} placeholder="Was machen Sie, und was soll die neue Website können?" />
+              </label>
+            </div>
+            <button className="btn btn-primary" type="submit">
+              <Mail size={18} />
+              <span>Nachricht per E-Mail senden</span>
+            </button>
+          </form>
+        </BlurUp>
       </div>
-      <div className="cookie-actions">
-        <button className="cookie-ghost" type="button" onClick={onPrivacyClick}>Datenschutz</button>
-        <button type="button" onClick={acceptCookies}>Verstanden</button>
+    </section>
+  );
+}
+
+/* ---------------- Footer ---------------- */
+
+export function Footer() {
+  return (
+    <footer className="footer">
+      <div className="container footer-inner">
+        <div className="footer-brand">
+          <Logo />
+          <p>Webdesign für lokale Unternehmen in Duisburg, am Niederrhein und in NRW.</p>
+        </div>
+        <ul className="footer-contact">
+          <li>
+            <a href={WHATSAPP_HREF} target="_blank" rel="noopener noreferrer">
+              <WhatsAppIcon size={16} /> WhatsApp
+            </a>
+          </li>
+          <li>
+            <a href={PHONE_HREF}>
+              <Phone size={16} /> {PHONE_DISPLAY}
+            </a>
+          </li>
+          <li>
+            <a href={EMAIL_HREF}>
+              <Mail size={16} /> {EMAIL}
+            </a>
+          </li>
+        </ul>
+        <nav className="footer-legal" aria-label="Rechtliches">
+          <a href="/impressum">Impressum</a>
+          <a href="/datenschutz">Datenschutz</a>
+        </nav>
       </div>
-    </motion.div>
+      <div className="container footer-bottom">
+        <p>© {new Date().getFullYear()} VorOrt Webdesign</p>
+      </div>
+    </footer>
   );
 }
 
 export default function AgencyApp() {
-  const [legalView, setLegalView] = useState<"impressum" | "datenschutz" | null>(null);
-
   return (
-    <main className="agency-app">
-      <Hero />
-      <section className="particle-text-section" id="particle-text" aria-label="VorOrt Webdesign Leistungsfokus">
-        <ParticleTextEffect />
-      </section>
-      <MotionShowcase />
-      <Showcase />
-      <Services />
-      <Process />
-      <Pricing />
-      <FAQ />
-      <Contact />
-      <CookieBanner onPrivacyClick={() => setLegalView("datenschutz")} />
-      <LegalModal view={legalView} onClose={() => setLegalView(null)} />
-      <footer className="footer">
-        <Logo />
-        <nav className="footer-links" aria-label="Rechtliche Links">
-          <button type="button" onClick={() => setLegalView("impressum")}>Impressum</button>
-          <button type="button" onClick={() => setLegalView("datenschutz")}>Datenschutz</button>
-        </nav>
-        <p>Premium Webdesign, Motion und lokale SEO für moderne Unternehmen in NRW. Stand: Portfolio 25.05.</p>
-      </footer>
-    </main>
+    <>
+      <a className="skip-link" href="#angebot">
+        Zum Inhalt springen
+      </a>
+      <Navigation />
+      <main>
+        <FlyHero />
+        <Offer />
+        <Branches />
+        <Demos />
+        <Services />
+        <Process />
+        <About />
+        <FAQ />
+        <Contact />
+      </main>
+      <Footer />
+    </>
   );
 }
