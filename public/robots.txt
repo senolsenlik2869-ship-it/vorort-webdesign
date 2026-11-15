@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://vorort-webdesign.vercel.app/sitemap.xml

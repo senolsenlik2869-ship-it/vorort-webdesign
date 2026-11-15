@@ -1,38 +1,9 @@
-import { useEffect, useState, type FormEvent } from "react";
-import { AnimatePresence, motion, useReducedMotion, useScroll, useTransform } from "framer-motion";
-import {
-  ArrowRight,
-  ArrowUpRight,
-  Camera,
-  Gauge,
-  Hammer,
-  LayoutGrid,
-  Mail,
-  MapPin,
-  Menu,
-  Phone,
-  Scissors,
-  Search,
-  ServerCog,
-  Sparkles,
-  Store,
-  Truck,
-  UtensilsCrossed,
-  X,
-} from "lucide-react";
-import { CountUp, EASE, GlowCard, Logo, Reveal, WhatsAppIcon, WordReveal } from "./ui";
-import {
-  ABOUT_PHOTO,
-  DEMOS,
-  EMAIL,
-  EMAIL_HREF,
-  HERO_POSTER,
-  HERO_POSTER_MOBILE,
-  HERO_VIDEO,
-  PHONE_DISPLAY,
-  PHONE_HREF,
-  WHATSAPP_HREF,
-} from "./site";
+import { useEffect, useRef, useState, type FormEvent, type ReactNode } from "react";
+import { AnimatePresence, motion, useReducedMotion, useScroll } from "framer-motion";
+import { ArrowUpRight, Hammer, Mail, Menu, Phone, Scissors, Store, Truck, UtensilsCrossed, X } from "lucide-react";
+import { FlyHero } from "./FlyHero";
+import { BlurUp, EASE, GlowCard, Logo, PinMark, WhatsAppIcon, WordReveal } from "./ui";
+import { DEMOS, EMAIL, EMAIL_HREF, PHONE_DISPLAY, PHONE_HREF, WHATSAPP_HREF } from "./site";
 
 const NAV = [
   ["Leistungen", "#leistungen"],
@@ -43,59 +14,47 @@ const NAV = [
 ] as const;
 
 const BRANCHES = [
-  {
-    icon: Truck,
-    title: "Transport & Logistik",
-    text: "Mehr Aufträge und bessere Fahrer-Bewerbungen: Leistungen, Fuhrpark und Einsatzgebiet auf einen Blick, Anfrage mit einem Klick.",
-    tags: ["Speditionen", "Kurierdienste", "Umzüge"],
-    featured: true,
-  },
-  { icon: Scissors, title: "Friseure & Kosmetik", text: "Ein Auftritt, der so gepflegt wirkt wie Ihr Salon und neue Kunden direkt zum Termin führt." },
-  { icon: UtensilsCrossed, title: "Gastronomie", text: "Appetit machen, Speisekarte zeigen, Reservierungen per Telefon oder WhatsApp bekommen." },
-  { icon: Hammer, title: "Handwerk", text: "Referenzen zeigen, Vertrauen aufbauen und Anfragen aus der Umgebung gewinnen statt über Portale." },
-  { icon: Store, title: "Lokale Shops", text: "Öffnungszeiten, Sortiment und Anfahrt so präsentiert, dass Kunden vorbeikommen wollen." },
+  { icon: Scissors, title: "Friseure & Kosmetik", text: "Gepflegt wie Ihr Salon – mit direktem Weg zum Termin." },
+  { icon: UtensilsCrossed, title: "Gastronomie", text: "Appetit machen. Karte zeigen. Tisch reservieren." },
+  { icon: Hammer, title: "Handwerk", text: "Referenzen zeigen und Anfragen aus der Umgebung gewinnen." },
+  { icon: Store, title: "Lokale Shops", text: "Sortiment und Öffnungszeiten, die zum Vorbeikommen einladen." },
 ];
 
+const MARQUEE = ["Speditionen", "Kurierdienste", "Umzugsfirmen", "Friseursalons", "Kosmetikstudios", "Restaurants", "Cafés", "Elektriker", "Dachdecker", "Werkstätten", "Boutiquen", "Bäckereien"];
+
 const SERVICES = [
-  { icon: LayoutGrid, title: "Strategie & Struktur", text: "Wir klären, was Ihre Kunden wissen wollen, und bauen die Seite so, dass sie schnell verstehen, warum sie bei Ihnen anfragen sollten." },
-  { icon: Sparkles, title: "Premium Design", text: "Ein eigener, hochwertiger Look statt Baukasten-Optik. Passend zu Ihrem Betrieb und auf jedem Bildschirm stark." },
-  { icon: Search, title: "Lokale SEO & Google-Sichtbarkeit", text: "Damit Sie gefunden werden, wenn jemand in Duisburg und Umgebung nach Ihrer Leistung sucht, inklusive Google-Unternehmensprofil." },
-  { icon: Gauge, title: "Performance & Technik", text: "Schnelle Ladezeiten, sauber programmiert, sicher und auf dem Handy genauso gut wie am Computer." },
-  { icon: ServerCog, title: "Hosting & Pflege", text: "Domain, Hosting, Updates und kleine Änderungen übernehme ich. Sie kümmern sich um Ihr Geschäft." },
+  ["Strategie & Struktur", "Klare Seiten, die in Sekunden zeigen, warum man bei Ihnen anfragen sollte."],
+  ["Premium Design", "Ein eigener Look für Ihren Betrieb – kein Baukasten."],
+  ["Lokale SEO & Google", "Gefunden werden in Duisburg und Umgebung, inklusive Unternehmensprofil."],
+  ["Performance & Technik", "Schnell, sicher und auf dem Handy so gut wie am Computer."],
+  ["Hosting & Pflege", "Domain, Hosting und Updates übernehme ich."],
 ];
 
 const STEPS = [
-  { title: "Kostenlose Demo", text: "Sie schreiben mir kurz, was Sie machen. Ich gestalte vorab einen Entwurf Ihrer Startseite – kostenlos und unverbindlich." },
-  { title: "Besprechung", text: "Wir schauen uns die Demo gemeinsam an, klären Wünsche und Inhalte. Danach bekommen Sie ein klares Festpreis-Angebot." },
-  { title: "Umsetzung", text: "Ich baue die komplette Seite, Sie geben Feedback. Texte, Bilder und Technik kommen aus einer Hand." },
-  { title: "Launch & Google", text: "Die Seite geht online, wird bei Google angemeldet und Ihr Unternehmensprofil eingerichtet." },
+  ["Kostenlose Demo", "Ich entwerfe vorab Ihre Startseite – unverbindlich."],
+  ["Besprechung", "Wir gehen die Demo durch. Sie bekommen einen Festpreis."],
+  ["Umsetzung", "Ich baue die Seite, Sie geben Feedback."],
+  ["Launch & Google", "Online gehen, bei Google anmelden, Profil einrichten."],
 ];
 
 const FAQS = [
-  ["Für wen arbeiten Sie?", "Für lokale Unternehmen in Duisburg, am Niederrhein und in ganz NRW – vor allem Transport- und Logistikbetriebe, aber auch Friseure, Gastronomie, Handwerk und lokale Shops."],
-  ["Ist SEO enthalten?", "Ja. Jede Seite bekommt eine saubere technische Grundlage, lokale Suchbegriffe, Meta-Daten und strukturierte Daten für Google. Auf Wunsch richte ich auch Ihr Google-Unternehmensprofil ein."],
-  ["Ist die Seite mobil optimiert?", "Ja, immer. Die meisten Ihrer Kunden kommen über das Handy – deshalb entwerfe ich zuerst für kleine Bildschirme und dann für Desktop."],
+  ["Für wen arbeiten Sie?", "Für lokale Unternehmen in Duisburg, am Niederrhein und in ganz NRW – vor allem Transport und Logistik, aber auch Friseure, Gastronomie, Handwerk und lokale Shops."],
+  ["Ist SEO enthalten?", "Ja. Jede Seite bekommt eine saubere technische Grundlage, lokale Suchbegriffe und strukturierte Daten für Google. Auf Wunsch richte ich auch Ihr Google-Unternehmensprofil ein."],
+  ["Ist die Seite mobil optimiert?", "Immer. Die meisten Ihrer Kunden kommen über das Handy – deshalb entwerfe ich zuerst für kleine Bildschirme."],
   ["Was kostet eine Website?", "Das hängt vom Umfang ab – nach der kostenlosen Demo bekommen Sie ein klares Festpreis-Angebot."],
-  ["Wie schnell ist die Seite online?", "Die Demo bekommen Sie meist innerhalb weniger Tage. Eine typische Seite ist in zwei bis vier Wochen online – je nachdem, wie schnell Inhalte und Feedback da sind."],
-  ["Kümmern Sie sich um Hosting und Domain?", "Ja. Ich kümmere mich um Domain, Hosting, E-Mail-Weiterleitung und Sicherheit. Auf Wunsch übernehme ich auch die laufende Pflege."],
+  ["Wie schnell ist die Seite online?", "Die Demo meist innerhalb weniger Tage, die fertige Seite in zwei bis vier Wochen – je nachdem, wie schnell Inhalte und Feedback da sind."],
+  ["Kümmern Sie sich um Hosting und Domain?", "Ja. Domain, Hosting, E-Mail-Weiterleitung und Sicherheit übernehme ich, auf Wunsch auch die laufende Pflege."],
 ];
 
-const STATS = [
-  { to: 0, suffix: " €", label: "für Ihre Demo" },
-  { to: 1, suffix: "", label: "fester Ansprechpartner" },
-  { to: 100, suffix: " %", label: "mobil optimiert" },
-  { to: 4, suffix: "", label: "klare Schritte bis online" },
-];
-
-function useIsDesktop() {
-  const [desktop, setDesktop] = useState(() => typeof window !== "undefined" && window.matchMedia("(min-width: 768px)").matches);
+function useMedia(query: string) {
+  const [match, setMatch] = useState(() => typeof window !== "undefined" && window.matchMedia(query).matches);
   useEffect(() => {
-    const mq = window.matchMedia("(min-width: 768px)");
-    const on = () => setDesktop(mq.matches);
+    const mq = window.matchMedia(query);
+    const on = () => setMatch(mq.matches);
     mq.addEventListener("change", on);
     return () => mq.removeEventListener("change", on);
-  }, []);
-  return desktop;
+  }, [query]);
+  return match;
 }
 
 function WhatsAppButton({ children = "Per WhatsApp anfragen", className = "" }: { children?: string; className?: string }) {
@@ -107,8 +66,17 @@ function WhatsAppButton({ children = "Per WhatsApp anfragen", className = "" }: 
   );
 }
 
-function SectionLabel({ children }: { children: string }) {
-  return <p className="section-label">{children}</p>;
+/** Spielt ein Video nur, solange es sichtbar ist (spart Akku und CPU). */
+function InViewVideo({ src, poster, className }: { src: string; poster: string; className?: string }) {
+  const ref = useRef<HTMLVideoElement>(null);
+  useEffect(() => {
+    const v = ref.current;
+    if (!v) return;
+    const io = new IntersectionObserver(([e]) => (e.isIntersecting ? v.play().catch(() => {}) : v.pause()), { threshold: 0.1 });
+    io.observe(v);
+    return () => io.disconnect();
+  }, []);
+  return <video ref={ref} className={className} src={src} poster={poster} muted loop playsInline preload="none" />;
 }
 
 /* ---------------- Navigation ---------------- */
@@ -121,7 +89,8 @@ function Navigation() {
   useEffect(() => {
     const onScroll = () => {
       setScrolled(window.scrollY > 24);
-      setPastHero(window.scrollY > window.innerHeight * 0.7);
+      const hero = document.getElementById("start");
+      setPastHero(hero ? window.scrollY > hero.offsetHeight - window.innerHeight * 0.6 : window.scrollY > 600);
     };
     onScroll();
     window.addEventListener("scroll", onScroll, { passive: true });
@@ -184,222 +153,193 @@ function Navigation() {
   );
 }
 
-/* ---------------- Hero ---------------- */
-
-function Hero() {
-  const reduce = useReducedMotion();
-  const desktop = useIsDesktop();
-  const { scrollY } = useScroll();
-  const yContent = useTransform(scrollY, [0, 700], [0, reduce ? 0 : 120]);
-  const opacity = useTransform(scrollY, [0, 600], [1, reduce ? 1 : 0.2]);
-  const yMedia = useTransform(scrollY, [0, 700], [0, reduce ? 0 : 80]);
-  const showVideo = desktop && !reduce;
-
-  return (
-    <section className="hero" id="start">
-      <motion.div className="hero-media" style={{ y: yMedia }} aria-hidden="true">
-        {showVideo ? (
-          <video className="hero-video" src={HERO_VIDEO} poster={HERO_POSTER} autoPlay muted loop playsInline preload="auto" />
-        ) : (
-          <picture>
-            <source media="(min-width: 768px)" srcSet={HERO_POSTER} />
-            <img className="hero-video" src={HERO_POSTER_MOBILE} alt="" fetchPriority="high" />
-          </picture>
-        )}
-      </motion.div>
-      <div className="hero-shade" />
-
-      <motion.div className="container hero-content" style={{ y: yContent, opacity }}>
-        <motion.p className="eyebrow" initial={reduce ? false : { opacity: 0, y: 12 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.7, ease: EASE }}>
-          <MapPin size={15} /> Webdesign aus Duisburg für ganz NRW
-        </motion.p>
-        <WordReveal
-          as="h1"
-          immediate
-          delay={0.15}
-          className="hero-title"
-          text="Mehr Anfragen aus Ihrer _Region_ – mit einer Website, die Ihre Konkurrenz *alt* *aussehen* lässt."
-        />
-        <motion.p className="hero-sub" initial={reduce ? false : { opacity: 0, y: 16 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.8, delay: 0.9, ease: EASE }}>
-          Premium-Webdesign für lokale Unternehmen in Duisburg und NRW.
-        </motion.p>
-        <motion.div className="hero-actions" initial={reduce ? false : { opacity: 0, y: 16 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.8, delay: 1.05, ease: EASE }}>
-          <WhatsAppButton />
-          <a className="btn btn-ghost" href="#demos">
-            <span>Demos ansehen</span>
-            <ArrowRight size={18} />
-          </a>
-        </motion.div>
-      </motion.div>
-      <a className="scroll-hint" href="#angebot" aria-label="Weiter zum Angebot">
-        <span />
-      </a>
-    </section>
-  );
-}
-
-/* ---------------- Angebot ---------------- */
+/* ---------------- Angebot: Links/Rechts, ohne Eyebrow ---------------- */
 
 function Offer() {
   return (
     <section className="section offer" id="angebot">
-      <div className="container offer-inner">
-        <div className="offer-glow" aria-hidden="true" />
-        <SectionLabel>Das Angebot</SectionLabel>
-        <WordReveal className="display" text="Erst *sehen,* dann _entscheiden._" />
-        <Reveal delay={0.2}>
-          <p className="lead">
-            Ich zeige Ihnen vorab kostenlos und unverbindlich, wie Ihre neue Startseite aussehen könnte. Gefällt sie Ihnen, besprechen wir den Rest.
-          </p>
-        </Reveal>
-        <Reveal delay={0.3}>
+      <div className="container split">
+        <WordReveal className="display display-xl" text="Erst sehen, dann entscheiden." />
+        <BlurUp className="split-aside" delay={0.2}>
+          <p className="lead">Ich zeige Ihnen vorab kostenlos und unverbindlich, wie Ihre neue Startseite aussehen könnte. Gefällt sie Ihnen, besprechen wir den Rest.</p>
           <WhatsAppButton>Kostenlose Demo anfragen</WhatsAppButton>
-        </Reveal>
-        <div className="stats">
-          {STATS.map((s, i) => (
-            <Reveal key={s.label} delay={0.1 * i} className="stat">
-              <strong>
-                <CountUp to={s.to} suffix={s.suffix} />
-              </strong>
-              <span>{s.label}</span>
-            </Reveal>
-          ))}
-        </div>
+        </BlurUp>
       </div>
     </section>
   );
 }
 
-/* ---------------- Branchen ---------------- */
+/* ---------------- Branchen: Bento (Motionsites „Capabilities Overview“) ---------------- */
 
 function Branches() {
+  const desktop = useMedia("(min-width: 768px)");
+  const reduce = useReducedMotion();
   return (
     <section className="section" id="branchen">
       <div className="container">
-        <div className="section-head">
-          <SectionLabel>Branchen</SectionLabel>
-          <WordReveal className="display" text="Gemacht für Betriebe, die _vor_ _Ort_ gefunden werden wollen." />
+        <div className="head-row">
+          <BlurUp>
+            <h2 className="display">
+              Für Betriebe,
+              <br />
+              <span className="dim">die vor Ort gefunden werden wollen.</span>
+            </h2>
+          </BlurUp>
         </div>
-        <div className="branch-grid">
+
+        <div className="bento">
+          <BlurUp className="bento-feature">
+            <article className="bento-card bento-media">
+              {desktop && !reduce ? (
+                <InViewVideo className="bento-video" src="/videos/branche-logistik.mp4" poster="/branche-logistik.webp" />
+              ) : (
+                <img className="bento-video" src="/branche-logistik.webp" alt="" loading="lazy" decoding="async" />
+              )}
+              <div className="bento-shade" />
+              <span className="bento-label">Schwerpunkt</span>
+              <div className="bento-feature-copy">
+                <Truck size={30} strokeWidth={1.5} />
+                <h3>Transport & Logistik</h3>
+                <p>Mehr Aufträge und bessere Bewerbungen: Leistungen, Fuhrpark und Einsatzgebiet auf einen Blick.</p>
+              </div>
+            </article>
+          </BlurUp>
           {BRANCHES.map((b, i) => (
-            <Reveal key={b.title} delay={i * 0.07} className={b.featured ? "branch-featured" : ""}>
-              <GlowCard featured={b.featured} className="branch-card">
-                <span className="card-icon">
-                  <b.icon size={b.featured ? 30 : 24} strokeWidth={1.6} />
-                </span>
-                {b.featured && <span className="pill">Schwerpunkt</span>}
+            <BlurUp key={b.title} delay={0.08 * (i + 1)}>
+              <GlowCard className="bento-card bento-small">
+                <b.icon size={24} strokeWidth={1.5} />
                 <h3>{b.title}</h3>
                 <p>{b.text}</p>
-                {b.tags && (
-                  <ul className="tag-list">
-                    {b.tags.map((t) => (
-                      <li key={t}>{t}</li>
-                    ))}
-                  </ul>
-                )}
               </GlowCard>
-            </Reveal>
+            </BlurUp>
           ))}
+        </div>
+
+        <div className="marquee" aria-hidden="true">
+          <div className="marquee-row">
+            {[...MARQUEE, ...MARQUEE].map((m, i) => (
+              <span key={i}>{m}</span>
+            ))}
+          </div>
         </div>
       </div>
     </section>
   );
 }
 
-/* ---------------- Demos ---------------- */
+/* ---------------- Demos: große Karten, nur kurzer Titel ---------------- */
 
 function Demos() {
   return (
     <section className="section" id="demos">
       <div className="container">
-        <div className="section-head">
-          <SectionLabel>Konzept-Demos</SectionLabel>
-          <WordReveal className="display" text="So kann sich Ihre Website *anfühlen.*" />
+        <div className="head-row head-row-split">
+          <BlurUp>
+            <h2 className="display">Konzept-Demos</h2>
+          </BlurUp>
+          <BlurUp delay={0.15}>
+            <p className="muted">Zwei eigene Entwürfe von VorOrt Webdesign. Echte Kundenprojekte folgen in Kürze.</p>
+          </BlurUp>
         </div>
         <div className="demo-grid">
-          {DEMOS.map((d, i) => (
-            <Reveal key={d.title} delay={i * 0.1}>
-              <GlowCard className="demo-card">
+          {DEMOS.map((d, i) => {
+            const body = (
+              <>
                 <div className="demo-media">
                   <img src={d.image} alt={`Vorschau: ${d.title} – Konzept-Demo von VorOrt Webdesign`} loading="lazy" decoding="async" width={1400} height={740} />
                 </div>
                 <div className="demo-body">
-                  <span className="pill pill-quiet">Konzept-Demo von VorOrt Webdesign</span>
-                  <h3>{d.title}</h3>
-                  <p className="demo-kind">{d.kind}</p>
-                  <p>{d.text}</p>
-                  {d.url ? (
-                    <a className="btn btn-ghost btn-sm" href={d.url} target="_blank" rel="noopener noreferrer">
-                      <span>Demo ansehen</span>
-                      <ArrowUpRight size={17} />
-                    </a>
-                  ) : (
-                    <span className="btn btn-ghost btn-sm is-disabled" aria-disabled="true">
-                      <span>Demo-Link folgt</span>
-                    </span>
-                  )}
+                  <span className="tag">Konzept-Demo von VorOrt Webdesign</span>
+                  <div className="demo-title-row">
+                    <h3>{d.title}</h3>
+                    {d.url ? (
+                      <span className="round-btn" aria-hidden="true">
+                        <ArrowUpRight size={20} />
+                      </span>
+                    ) : (
+                      <span className="soon">Link folgt</span>
+                    )}
+                  </div>
+                  <p>{d.kind}</p>
                 </div>
-              </GlowCard>
-            </Reveal>
-          ))}
+              </>
+            );
+            return (
+              <BlurUp key={d.title} delay={i * 0.12}>
+                {d.url ? (
+                  <a className="demo-card" href={d.url} target="_blank" rel="noopener noreferrer" aria-label={`${d.title} ansehen (öffnet in neuem Tab)`}>
+                    {body}
+                  </a>
+                ) : (
+                  <div className="demo-card is-disabled" aria-disabled="true">
+                    {body}
+                  </div>
+                )}
+              </BlurUp>
+            );
+          })}
         </div>
-        <Reveal>
-          <p className="demo-note">Echte Kundenprojekte folgen in Kürze.</p>
-        </Reveal>
       </div>
     </section>
   );
 }
 
-/* ---------------- Leistungen ---------------- */
+/* ---------------- Leistungen: große Zahl + nummerierte Liste (Motionsites „Vexa Studio“) ---------------- */
 
 function Services() {
   return (
     <section className="section" id="leistungen">
-      <div className="container">
-        <div className="section-head">
-          <SectionLabel>Leistungen</SectionLabel>
-          <WordReveal className="display" text="Alles aus einer Hand. _Verständlich_ erklärt." />
+      <div className="container services">
+        <div className="big-number" aria-hidden="true">
+          05
         </div>
-        <ol className="service-list">
-          {SERVICES.map((s, i) => (
-            <Reveal as="li" key={s.title} delay={i * 0.06} className="service-row">
-              <span className="service-num">{String(i + 1).padStart(2, "0")}</span>
-              <div className="service-title">
-                <s.icon size={22} strokeWidth={1.6} />
-                <h3>{s.title}</h3>
-              </div>
-              <p>{s.text}</p>
-            </Reveal>
-          ))}
-        </ol>
+        <div>
+          <BlurUp>
+            <h2 className="display display-sm">Leistungen aus einer Hand.</h2>
+          </BlurUp>
+          <ol className="service-list">
+            {SERVICES.map(([title, text], i) => (
+              <BlurUp as="li" key={title} delay={i * 0.06} className="service-row">
+                <span className="service-num">({String(i + 1).padStart(2, "0")})</span>
+                <h3>{title}</h3>
+                <p>{text}</p>
+              </BlurUp>
+            ))}
+          </ol>
+        </div>
       </div>
     </section>
   );
 }
 
-/* ---------------- Ablauf ---------------- */
+/* ---------------- Ablauf: Fortschrittslinie wächst beim Scrollen ---------------- */
 
 function Process() {
+  const ref = useRef<HTMLDivElement>(null);
+  const { scrollYProgress } = useScroll({ target: ref, offset: ["start 80%", "end 60%"] });
   return (
     <section className="section" id="ablauf">
       <div className="container">
-        <div className="section-head">
-          <SectionLabel>Ablauf</SectionLabel>
-          <WordReveal className="display" text="In *vier* Schritten zur neuen Website." />
+        <div className="head-row">
+          <BlurUp>
+            <h2 className="display">Vier Schritte bis online.</h2>
+          </BlurUp>
         </div>
-        <ol className="steps">
-          {STEPS.map((s, i) => (
-            <Reveal as="li" key={s.title} delay={i * 0.1} className="step">
-              <span className="step-num">
-                <CountUp to={i + 1} prefix="0" />
-              </span>
-              <motion.span className="step-line" initial={{ scaleX: 0 }} whileInView={{ scaleX: 1 }} viewport={{ once: true }} transition={{ duration: 1, delay: 0.2 + i * 0.15, ease: EASE }} />
-              <h3>{s.title}</h3>
-              <p>{s.text}</p>
-            </Reveal>
-          ))}
-        </ol>
+        <div className="steps" ref={ref}>
+          <div className="steps-track" aria-hidden="true">
+            <motion.div className="steps-fill" style={{ scaleX: scrollYProgress }} />
+          </div>
+          <ol>
+            {STEPS.map(([title, text], i) => (
+              <BlurUp as="li" key={title} delay={i * 0.1} className="step">
+                <span className="step-dot" />
+                <span className="step-num">0{i + 1}</span>
+                <h3>{title}</h3>
+                <p>{text}</p>
+              </BlurUp>
+            ))}
+          </ol>
+        </div>
       </div>
     </section>
   );
@@ -411,51 +351,55 @@ function About() {
   return (
     <section className="section" id="ueber-mich">
       <div className="container about">
-        <Reveal className="about-photo">
-          {ABOUT_PHOTO ? (
-            <img src={ABOUT_PHOTO} alt="Ihr Ansprechpartner bei VorOrt Webdesign" loading="lazy" decoding="async" />
-          ) : (
-            <div className="photo-placeholder" role="img" aria-label="Platzhalter für Foto">
-              <Camera size={34} strokeWidth={1.4} />
-              <span>Foto einsetzen</span>
-            </div>
-          )}
-        </Reveal>
+        <BlurUp className="about-mark">
+          <div className="glow-ring">
+            <PinMark className="about-pin" />
+          </div>
+          <p className="about-name">
+            <strong>Şenol Şenlik</strong>
+            <span>Inhaber · Duisburg</span>
+          </p>
+        </BlurUp>
         <div className="about-copy">
-          <SectionLabel>Über mich</SectionLabel>
-          <WordReveal className="display display-sm" text="Ihr Ansprechpartner aus _Duisburg._" />
-          <Reveal delay={0.15}>
+          <BlurUp>
+            <h2 className="display display-sm">
+              Ein Ansprechpartner.
+              <br />
+              <span className="dim">Kein Callcenter.</span>
+            </h2>
+          </BlurUp>
+          <BlurUp delay={0.15}>
             <p className="lead">
-              Bei VorOrt Webdesign sprechen Sie direkt mit mir – persönlich, telefonisch oder per WhatsApp. Kein anonymes Callcenter, keine Warteschleife.
+              Sie sprechen direkt mit mir – persönlich, am Telefon oder per WhatsApp. Ich bin selbst Unternehmer in Duisburg und weiß, was ein Betrieb braucht: eine Website, die Anfragen bringt und keine Arbeit macht.
             </p>
-            <p>
-              Ich bin selbst Unternehmer und weiß, was ein Betrieb braucht: eine Website, die Vertrauen schafft, Anfragen bringt und keine Arbeit macht. Genau das baue ich für Sie.
-            </p>
-            <ul className="check-list">
-              <li>Persönlich erreichbar</li>
-              <li>Aus der Region, für die Region</li>
-              <li>Klare Festpreise statt Überraschungen</li>
-            </ul>
-          </Reveal>
+          </BlurUp>
         </div>
       </div>
     </section>
   );
 }
 
-/* ---------------- FAQ ---------------- */
+/* ---------------- FAQ: Links Titel, rechts Liste ---------------- */
 
 function FAQ() {
   return (
     <section className="section" id="faq">
       <div className="container faq">
-        <div className="section-head">
-          <SectionLabel>FAQ</SectionLabel>
-          <WordReveal className="display display-sm" text="Häufige Fragen, *klar* beantwortet." />
+        <div className="faq-title">
+          <BlurUp>
+            <h2 className="display">Fragen?</h2>
+            <p className="muted">
+              Nicht dabei? Schreiben Sie mir einfach{" "}
+              <a href={WHATSAPP_HREF} target="_blank" rel="noopener noreferrer">
+                per WhatsApp
+              </a>
+              .
+            </p>
+          </BlurUp>
         </div>
         <div className="faq-list">
           {FAQS.map(([q, a], i) => (
-            <Reveal key={q} delay={i * 0.04}>
+            <BlurUp key={q} delay={i * 0.04}>
               <details>
                 <summary>
                   <span>{q}</span>
@@ -463,7 +407,7 @@ function FAQ() {
                 </summary>
                 <p>{a}</p>
               </details>
-            </Reveal>
+            </BlurUp>
           ))}
         </div>
       </div>
@@ -471,7 +415,18 @@ function FAQ() {
   );
 }
 
-/* ---------------- Kontakt ---------------- */
+/* ---------------- Kontakt (Motionsites „Editorial Collection CTA“) ---------------- */
+
+function ContactTile({ href, icon, title, sub, external, green }: { href: string; icon: ReactNode; title: string; sub: string; external?: boolean; green?: boolean }) {
+  return (
+    <a className={`contact-tile ${green ? "is-green" : ""}`} href={href} {...(external ? { target: "_blank", rel: "noopener noreferrer" } : {})}>
+      <span className="contact-icon">{icon}</span>
+      <strong>{title}</strong>
+      <span className="contact-sub">{sub}</span>
+      <ArrowUpRight className="contact-arrow" size={20} />
+    </a>
+  );
+}
 
 function Contact() {
   const onSubmit = (e: FormEvent<HTMLFormElement>) => {
@@ -492,40 +447,31 @@ function Contact() {
   return (
     <section className="section contact" id="kontakt">
       <div className="container">
-        <div className="contact-head">
-          <SectionLabel>Kontakt</SectionLabel>
-          <WordReveal className="display display-xl" text="Lassen Sie uns über Ihre neue Website _sprechen._" />
-        </div>
+        <BlurUp>
+          <h2 className="display display-hero">
+            Lassen Sie uns
+            <br />
+            <span className="accent">sprechen.</span>
+          </h2>
+        </BlurUp>
         <div className="contact-buttons">
-          <Reveal delay={0}>
-            <a className="contact-tile tile-whatsapp" href={WHATSAPP_HREF} target="_blank" rel="noopener noreferrer">
-              <WhatsAppIcon size={30} />
-              <strong>WhatsApp</strong>
-              <span>Schnellste Antwort</span>
-            </a>
-          </Reveal>
-          <Reveal delay={0.08}>
-            <a className="contact-tile" href={PHONE_HREF}>
-              <Phone size={28} strokeWidth={1.6} />
-              <strong>Anrufen</strong>
-              <span>{PHONE_DISPLAY}</span>
-            </a>
-          </Reveal>
-          <Reveal delay={0.16}>
-            <a className="contact-tile" href={EMAIL_HREF}>
-              <Mail size={28} strokeWidth={1.6} />
-              <strong>E-Mail</strong>
-              <span>{EMAIL}</span>
-            </a>
-          </Reveal>
+          <BlurUp delay={0.1}>
+            <ContactTile href={WHATSAPP_HREF} external green icon={<WhatsAppIcon size={26} />} title="WhatsApp" sub="Schnellste Antwort" />
+          </BlurUp>
+          <BlurUp delay={0.18}>
+            <ContactTile href={PHONE_HREF} icon={<Phone size={24} strokeWidth={1.6} />} title="Anrufen" sub={PHONE_DISPLAY} />
+          </BlurUp>
+          <BlurUp delay={0.26}>
+            <ContactTile href={EMAIL_HREF} icon={<Mail size={24} strokeWidth={1.6} />} title="E-Mail" sub={EMAIL} />
+          </BlurUp>
         </div>
 
-        <Reveal>
+        <BlurUp>
           <form className="contact-form" onSubmit={onSubmit}>
-            <p className="form-intro">Lieber schreiben? Kurz ausfüllen – Ihr E-Mail-Programm öffnet sich mit der fertigen Nachricht.</p>
+            <p className="form-intro">Lieber schreiben? Ihr E-Mail-Programm öffnet sich mit der fertigen Nachricht.</p>
             <div className="form-grid">
               <label>
-                <span>Ihr Name *</span>
+                <span>Name *</span>
                 <input name="name" required autoComplete="name" />
               </label>
               <label>
@@ -537,7 +483,7 @@ function Contact() {
                 <input name="phone" type="tel" autoComplete="tel" inputMode="tel" />
               </label>
               <label className="span-2">
-                <span>Ihre Nachricht *</span>
+                <span>Nachricht *</span>
                 <textarea name="message" required rows={4} placeholder="Was machen Sie, und was soll die neue Website können?" />
               </label>
             </div>
@@ -546,7 +492,7 @@ function Contact() {
               <span>Nachricht per E-Mail senden</span>
             </button>
           </form>
-        </Reveal>
+        </BlurUp>
       </div>
     </section>
   );
@@ -560,7 +506,7 @@ export function Footer() {
       <div className="container footer-inner">
         <div className="footer-brand">
           <Logo />
-          <p>Premium-Webdesign für lokale Unternehmen in Duisburg, am Niederrhein und in NRW.</p>
+          <p>Webdesign für lokale Unternehmen in Duisburg, am Niederrhein und in NRW.</p>
         </div>
         <ul className="footer-contact">
           <li>
@@ -599,7 +545,7 @@ export default function AgencyApp() {
       </a>
       <Navigation />
       <main>
-        <Hero />
+        <FlyHero />
         <Offer />
         <Branches />
         <Demos />

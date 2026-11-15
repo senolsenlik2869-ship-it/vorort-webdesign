@@ -1,9 +1,6 @@
 import { createRoot } from "react-dom/client";
 import Lenis from "lenis";
-import "@fontsource-variable/space-grotesk";
-import "@fontsource-variable/inter";
-import "@fontsource/instrument-serif/latin-400.css";
-import "@fontsource/instrument-serif/latin-400-italic.css";
+import { ScrollTrigger } from "gsap/ScrollTrigger";
 import "./agency.css";
 import AgencyApp from "./AgencyApp";
 import LegalPage from "./legal";
@@ -18,6 +15,7 @@ const reduce = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
 const finePointer = window.matchMedia("(pointer: fine)").matches;
 if (!reduce && finePointer) {
   const lenis = new Lenis({ duration: 1.1, anchors: { offset: -80 } });
+  lenis.on("scroll", ScrollTrigger.update);
   const raf = (time: number) => {
     lenis.raf(time);
     requestAnimationFrame(raf);

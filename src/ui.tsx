@@ -1,16 +1,21 @@
-import { Fragment, useEffect, useRef, useState, type ReactNode, type PointerEvent as ReactPointerEvent } from "react";
+import { Fragment, useRef, type ReactNode, type PointerEvent as ReactPointerEvent } from "react";
 import { motion, useInView, useReducedMotion } from "framer-motion";
-import gsap from "gsap";
 
 export const EASE = [0.22, 1, 0.36, 1] as const;
+
+export function PinMark({ className = "" }: { className?: string }) {
+  return (
+    <svg className={className} viewBox="0 0 24 32" aria-hidden="true">
+      <path d="M12 1.5C6.2 1.5 1.5 6.1 1.5 11.9c0 7.6 9 17.3 9.9 18.3.3.3.9.3 1.2 0 .9-1 9.9-10.7 9.9-18.3C22.5 6.1 17.8 1.5 12 1.5Z" fill="none" stroke="currentColor" strokeWidth="2.2" />
+      <circle cx="12" cy="12" r="4.4" fill="var(--blue)" />
+    </svg>
+  );
+}
 
 export function Logo({ className = "" }: { className?: string }) {
   return (
     <span className={`logo ${className}`}>
-      <svg className="logo-pin" viewBox="0 0 24 32" aria-hidden="true">
-        <path d="M12 1.5C6.2 1.5 1.5 6.1 1.5 11.9c0 7.6 9 17.3 9.9 18.3.3.3.9.3 1.2 0 .9-1 9.9-10.7 9.9-18.3C22.5 6.1 17.8 1.5 12 1.5Z" fill="none" stroke="currentColor" strokeWidth="2.2" />
-        <circle cx="12" cy="12" r="4.4" fill="var(--blue)" />
-      </svg>
+      <PinMark className="logo-pin" />
       <span className="logo-word">
         Vor<span>Ort</span> <small>Webdesign</small>
       </span>
@@ -21,56 +26,56 @@ export function Logo({ className = "" }: { className?: string }) {
 export function WhatsAppIcon({ size = 20 }: { size?: number }) {
   return (
     <svg width={size} height={size} viewBox="0 0 24 24" aria-hidden="true" fill="currentColor">
-      <path d="M12.04 2C6.58 2 2.13 6.45 2.13 11.91c0 1.75.46 3.45 1.32 4.95L2.05 22l5.25-1.38a9.9 9.9 0 0 0 4.74 1.21h.01c5.46 0 9.91-4.45 9.91-9.91A9.85 9.85 0 0 0 12.04 2Zm0 18.15h-.01a8.23 8.23 0 0 1-4.2-1.15l-.3-.18-3.12.82.83-3.04-.2-.31a8.2 8.2 0 0 1-1.26-4.38c0-4.54 3.7-8.24 8.25-8.24a8.2 8.2 0 0 1 8.24 8.25c0 4.54-3.7 8.23-8.23 8.23Zm4.52-6.16c-.25-.12-1.47-.72-1.69-.81-.23-.08-.39-.12-.56.13-.16.25-.64.81-.79.97-.14.17-.29.19-.54.06-.25-.12-1.05-.39-1.99-1.23-.74-.66-1.23-1.47-1.38-1.72-.14-.25-.01-.38.11-.51.11-.11.25-.29.37-.43.13-.15.17-.25.25-.42.08-.16.04-.31-.02-.43-.06-.13-.56-1.34-.76-1.84-.2-.48-.41-.42-.56-.42h-.48a.92.92 0 0 0-.66.31c-.23.25-.87.85-.87 2.07 0 1.22.89 2.4 1.01 2.56.12.17 1.75 2.67 4.23 3.74.59.26 1.05.41 1.41.52.59.19 1.13.16 1.56.1.48-.07 1.47-.6 1.67-1.18.21-.58.21-1.07.15-1.18-.06-.1-.22-.16-.47-.29Z" />
+      <path d="M12.04 2C6.58 2 2.13 6.45 2.13 11.91c0 1.75.46 3.45 1.32 4.95L2.05 22l5.25-1.38a9.9 9.9 0 0 0 4.74 1.21h.01c5.46 0 9.91-4.45 9.91-9.91A9.85 9.85 0 0 0 12.04 2Zm0 18.150h-.01a8.230 8.230 0 0 1-4.2-1.15l-.3-.18-3.12.82.83-3.04-.2-.31a8.200 8.200 0 0 1-1.26-4.38c0-4.54 3.7-8.24 8.25-8.24a8.200 8.200 0 0 1 8.24 8.25c0 4.54-3.7 8.23-8.23 8.23Zm4.52-6.16c-.25-.12-1.47-.72-1.69-.81-.23-.08-.39-.12-.56.13-.16.25-.64.81-.79.97-.14.17-.29.19-.54.06-.25-.12-1.05-.39-1.99-1.23-.74-.66-1.23-1.47-1.38-1.720-.14-.25-.01-.38.11-.51.11-.11.25-.29.37-.43.13-.15.17-.25.25-.42.08-.16.04-.31-.02-.43-.06-.13-.56-1.34-.76-1.84-.2-.48-.41-.42-.56-.42h-.48a.92.92 0 0 0-.66.31c-.23.25-.87.85-.87 2.07 0 1.22.89 2.4 1.01 2.56.12.17 1.75 2.67 4.23 3.74.59.26 1.05.41 1.41.52.59.19 1.13.16 1.56.1.48-.07 1.47-.6 1.67-1.18.21-.58.21-1.07.15-1.18-.06-.1-.22-.16-.47-.29Z" />
     </svg>
   );
 }
 
-/** Abschnitt fährt sanft von unten ein. */
-export function Reveal({ children, delay = 0, y = 32, className, as = "div" }: { children: ReactNode; delay?: number; y?: number; className?: string; as?: "div" | "li" | "article" }) {
+/**
+ * Einblenden mit Unschärfe (Motionsites „Editorial Collection CTA“: blur-up).
+ * Auf dem Handy ohne Blur-Filter, damit nichts ruckelt.
+ */
+export function BlurUp({ children, delay = 0, className, as = "div" }: { children: ReactNode; delay?: number; className?: string; as?: "div" | "li" }) {
   const reduce = useReducedMotion();
   const Comp = motion[as];
+  const blur = typeof window !== "undefined" && window.matchMedia("(min-width: 768px)").matches;
   return (
     <Comp
       className={className}
-      initial={reduce ? false : { opacity: 0, y }}
-      whileInView={{ opacity: 1, y: 0 }}
-      viewport={{ once: true, amount: 0.2 }}
-      transition={{ duration: 0.8, delay, ease: EASE }}
+      initial={reduce ? false : { opacity: 0, y: 36, filter: blur ? "blur(14px)" : "blur(0px)" }}
+      whileInView={{ opacity: 1, y: 0, filter: "blur(0px)" }}
+      viewport={{ once: true, amount: 0.25 }}
+      transition={{ duration: 0.9, delay, ease: EASE }}
     >
       {children}
     </Comp>
   );
 }
 
-/**
- * Text, der Wort für Wort einblendet. Wörter in *Sternchen* werden kursiv (Serif),
- * Wörter in _Unterstrichen_ blau hervorgehoben.
- */
-export function WordReveal({ text, as: Tag = "h2", className, delay = 0, immediate = false }: { text: string; as?: "h1" | "h2" | "p"; className?: string; delay?: number; immediate?: boolean }) {
+/** Text, der Wort für Wort einblendet. Wörter in _Unterstrichen_ werden blau. */
+export function WordReveal({ text, as: Tag = "h2", className, delay = 0 }: { text: string; as?: "h1" | "h2" | "p"; className?: string; delay?: number }) {
   const reduce = useReducedMotion();
   const ref = useRef<HTMLHeadingElement>(null);
   const inView = useInView(ref, { once: true, amount: 0.4 });
-  const show = immediate || inView;
   const words = text.split(" ");
   return (
     <Tag ref={ref} className={className}>
       {words.map((raw, i) => {
-        const accent = raw.startsWith("*") ? "is-serif" : raw.startsWith("_") ? "is-blue" : "";
-        const word = raw.replace(/[*_]/g, "");
+        const blue = raw.startsWith("_");
+        const word = raw.replace(/_/g, "");
         return (
           <Fragment key={i}>
-          <span className="word">
-            <motion.span
-              className={`word-inner ${accent}`}
-              initial={reduce ? false : { y: "110%", opacity: 0 }}
-              animate={show ? { y: "0%", opacity: 1 } : undefined}
-              transition={{ duration: 0.8, delay: delay + i * 0.055, ease: EASE }}
-            >
-              {word}
-            </motion.span>
-          </span>
-          {i < words.length - 1 ? " " : null}
+            <span className="word">
+              <motion.span
+                className={`word-inner ${blue ? "accent" : ""}`}
+                initial={reduce ? false : { y: "110%" }}
+                animate={inView ? { y: "0%" } : undefined}
+                transition={{ duration: 0.9, delay: delay + i * 0.05, ease: EASE }}
+              >
+                {word}
+              </motion.span>
+            </span>
+            {i < words.length - 1 ? " " : null}
           </Fragment>
         );
       })}
@@ -79,7 +84,7 @@ export function WordReveal({ text, as: Tag = "h2", className, delay = 0, immedia
 }
 
 /** Karte mit weichem Glow, der dem Mauszeiger folgt (nur bei echter Maus). */
-export function GlowCard({ children, className = "", featured = false }: { children: ReactNode; className?: string; featured?: boolean }) {
+export function GlowCard({ children, className = "" }: { children: ReactNode; className?: string }) {
   const onMove = (e: ReactPointerEvent<HTMLDivElement>) => {
     if (e.pointerType !== "mouse") return;
     const r = e.currentTarget.getBoundingClientRect();
@@ -87,31 +92,8 @@ export function GlowCard({ children, className = "", featured = false }: { child
     e.currentTarget.style.setProperty("--my", `${e.clientY - r.top}px`);
   };
   return (
-    <div className={`glow-card ${featured ? "is-featured" : ""} ${className}`} onPointerMove={onMove}>
+    <div className={`glow-card ${className}`} onPointerMove={onMove}>
       {children}
     </div>
-  );
-}
-
-/** Zählt beim Sichtbarwerden hoch (GSAP). */
-export function CountUp({ to, prefix = "", suffix = "" }: { to: number; prefix?: string; suffix?: string }) {
-  const ref = useRef<HTMLSpanElement>(null);
-  const inView = useInView(ref, { once: true, amount: 0.6 });
-  const reduce = useReducedMotion();
-  const [value, setValue] = useState(reduce ? to : 0);
-  useEffect(() => {
-    if (!inView || reduce) return;
-    const obj = { v: 0 };
-    const tween = gsap.to(obj, { v: to, duration: 1.6, ease: "power3.out", onUpdate: () => setValue(Math.round(obj.v)) });
-    return () => {
-      tween.kill();
-    };
-  }, [inView, reduce, to]);
-  return (
-    <span ref={ref}>
-      {prefix}
-      {value}
-      {suffix}
-    </span>
   );
 }
