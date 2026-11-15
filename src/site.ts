@@ -29,9 +29,7 @@ export const DEMOS = [
  */
 export const ABOUT_PHOTO = "";
 
-/**
- * Hero-Video: Motionsites-Video (z. B. „Dark Blue Waves“) als MP4 nach public/videos/ legen
- * und den Pfad hier eintragen. Solange leer, läuft die eigene Wellen-Animation im Canvas.
- */
-export const HERO_VIDEO = "";
+/** Hero-Hintergrund von Motionsites („Erde/Horizont“), komprimiert und als Ping-Pong-Schleife. */
+export const HERO_VIDEO = "/videos/hero-earth.mp4";
 export const HERO_POSTER = "/hero-poster.webp";
+export const HERO_POSTER_MOBILE = "/hero-poster-mobile.webp";

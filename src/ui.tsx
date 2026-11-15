@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState, type ReactNode, type PointerEvent as ReactPointerEvent } from "react";
+import { Fragment, useEffect, useRef, useState, type ReactNode, type PointerEvent as ReactPointerEvent } from "react";
 import { motion, useInView, useReducedMotion } from "framer-motion";
 import gsap from "gsap";
 
@@ -59,7 +59,8 @@ export function WordReveal({ text, as: Tag = "h2", className, delay = 0, immedia
         const accent = raw.startsWith("*") ? "is-serif" : raw.startsWith("_") ? "is-blue" : "";
         const word = raw.replace(/[*_]/g, "");
         return (
-          <span className="word" key={i}>
+          <Fragment key={i}>
+          <span className="word">
             <motion.span
               className={`word-inner ${accent}`}
               initial={reduce ? false : { y: "110%", opacity: 0 }}
@@ -68,8 +69,9 @@ export function WordReveal({ text, as: Tag = "h2", className, delay = 0, immedia
             >
               {word}
             </motion.span>
-            {i < words.length - 1 ? " " : ""}
           </span>
+          {i < words.length - 1 ? " " : null}
+          </Fragment>
         );
       })}
     </Tag>
