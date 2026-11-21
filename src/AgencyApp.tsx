@@ -24,6 +24,7 @@ const MARQUEE = ["Speditionen", "Kurierdienste", "Umzugsfirmen", "Friseursalons"
 const SERVICES = [
   ["Strategie & Struktur", "Klare Seiten, die in Sekunden zeigen, warum man bei Ihnen anfragen sollte."],
   ["Premium Design", "Ein eigener Look für Ihren Betrieb – kein Baukasten."],
+  ["Logo & Markenauftritt", "Logo, Farben und Schriften aus einem Guss – für Website, Visitenkarte, Schild und Social Media."],
   ["Lokale SEO & Google", "Gefunden werden in Duisburg und Umgebung, inklusive Unternehmensprofil."],
   ["Performance & Technik", "Schnell, sicher und auf dem Handy so gut wie am Computer."],
   ["Hosting & Pflege", "Domain, Hosting und Updates übernehme ich."],
@@ -39,6 +40,7 @@ const STEPS = [
 const FAQS = [
   ["Für wen arbeiten Sie?", "Für lokale Unternehmen in Duisburg, am Niederrhein und in ganz NRW – vor allem Transport und Logistik, aber auch Friseure, Gastronomie, Handwerk und lokale Shops."],
   ["Ist SEO enthalten?", "Ja. Jede Seite bekommt eine saubere technische Grundlage, lokale Suchbegriffe und strukturierte Daten für Google. Auf Wunsch richte ich auch Ihr Google-Unternehmensprofil ein."],
+  ["Macht ihr auch Logos?", "Ja. Ich entwickle Ihr Logo und einen passenden Markenauftritt – Farben, Schriften und Vorlagen, z. B. für Visitenkarten und Social Media. Haben Sie schon ein Logo, überarbeite ich es auf Wunsch oder baue die Website darauf auf."],
   ["Ist die Seite mobil optimiert?", "Immer. Die meisten Ihrer Kunden kommen über das Handy – deshalb entwerfe ich zuerst für kleine Bildschirme."],
   ["Was kostet eine Website?", "Das hängt vom Umfang ab – nach der kostenlosen Demo bekommen Sie ein klares Festpreis-Angebot."],
   ["Wie schnell ist die Seite online?", "Die Demo meist innerhalb weniger Tage, die fertige Seite in zwei bis vier Wochen – je nachdem, wie schnell Inhalte und Feedback da sind."],
@@ -233,7 +235,7 @@ function Services() {
     <section className="section" id="leistungen">
       <div className="container services">
         <div className="big-number" aria-hidden="true">
-          05
+          {String(SERVICES.length).padStart(2, "0")}
         </div>
         <div>
           <BlurUp>
