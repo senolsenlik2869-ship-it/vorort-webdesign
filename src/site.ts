@@ -12,6 +12,24 @@ export const WHATSAPP_HREF = `https://wa.me/491779339780?text=${encodeURICompone
  */
 export const ABOUT_PHOTO = "";
 
+/** Konzept-Demos – eigene Unterseiten mit fiktiven Firmen. */
+export const DEMOS = [
+  {
+    title: "Muster Transporte",
+    branch: "Transport & Spedition",
+    text: "Dunkler Premium-Auftritt mit interaktivem 3D-Lkw, der sich beim Scrollen dreht.",
+    image: "/demos/entwurf-muster-transporte-vorschau.webp",
+    url: "/demos/entwurf-muster-transporte/",
+  },
+  {
+    title: "Muster Logistik",
+    branch: "Lager & Kontraktlogistik",
+    text: "Heller, klarer Auftritt mit scroll-gesteuertem Luftaufnahme-Video und animiertem Netzwerk.",
+    image: "/demos/entwurf-muster-logistik-vorschau.webp",
+    url: "/demos/entwurf-muster-logistik/",
+  },
+];
+
 /** Hero-Hintergrund: Motionsites „Velvet Wave“, aufgehellt und in Markenblau umgefärbt. */
 export const HERO = {
   mp4: "/videos/velvet-blue.mp4",

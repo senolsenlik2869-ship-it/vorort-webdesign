@@ -64,8 +64,8 @@ export function Hero() {
             <WhatsAppIcon />
             <span>Per WhatsApp anfragen</span>
           </a>
-          <a className="btn btn-ghost" href="#angebot">
-            <span>So funktioniert's</span>
+          <a className="btn btn-ghost" href="#demos">
+            <span>Demos ansehen</span>
             <ArrowRight size={18} />
           </a>
         </div>

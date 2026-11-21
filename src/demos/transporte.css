@@ -1,0 +1,514 @@
+/* Muster Transporte – fiktives Transportunternehmen (Konzept-Demo) */
+.mt {
+  --bg: #0b0c0f;
+  --bg-2: #111318;
+  --line: rgba(255, 255, 255, 0.09);
+  --text: #f4f2ee;
+  --muted: #a9adb8;
+  --amber: #f5a524;
+  --amber-2: #ffc35c;
+  background: var(--bg);
+  color: var(--text);
+}
+
+/* Navigation */
+.mt-nav {
+  position: fixed;
+  top: 34px;
+  left: 0;
+  right: 0;
+  z-index: 100;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  padding: 14px clamp(16px, 4vw, 48px);
+  background: linear-gradient(180deg, rgba(11, 12, 15, 0.85), rgba(11, 12, 15, 0));
+}
+.mt-logo {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  text-decoration: none;
+}
+.mt-logo svg {
+  width: 36px;
+  height: 36px;
+  flex: none;
+}
+.mt-logo span {
+  font-family: "Clash Display", sans-serif;
+  font-size: 1.15rem;
+  font-weight: 500;
+  letter-spacing: -0.01em;
+  white-space: nowrap;
+}
+.mt-logo b {
+  margin-left: 4px;
+  color: var(--amber);
+  font-weight: 600;
+}
+.mt-nav nav {
+  display: flex;
+  align-items: center;
+  gap: 22px;
+}
+.mt-nav nav a {
+  color: var(--muted);
+  font-size: 0.95rem;
+  text-decoration: none;
+}
+.mt-nav nav a:hover {
+  color: var(--text);
+}
+.mt-nav nav a:not(.mt-nav-cta) {
+  display: none;
+}
+.mt-nav-cta {
+  padding: 10px 16px;
+  border-radius: 999px;
+  background: var(--amber);
+  color: #111216 !important;
+  font-weight: 700;
+  white-space: nowrap;
+}
+
+/* Hero mit 3D-Lkw */
+.mt-hero {
+  position: relative;
+  display: flex;
+  align-items: flex-end;
+  min-height: 100svh;
+  padding: 120px clamp(16px, 4vw, 48px) 72px;
+  overflow: hidden;
+  isolation: isolate;
+}
+.mt-stage {
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  background: radial-gradient(120% 80% at 70% 40%, #1b1d24 0%, var(--bg) 62%);
+}
+.mt-glow {
+  position: absolute;
+  top: 18%;
+  right: -10%;
+  width: 70vw;
+  height: 70vw;
+  max-width: 900px;
+  max-height: 900px;
+  border-radius: 50%;
+  background: radial-gradient(closest-side, rgba(245, 165, 36, 0.22), transparent);
+  filter: blur(10px);
+}
+.mt-road {
+  position: absolute;
+  left: -10%;
+  right: -10%;
+  bottom: 18%;
+  height: 2px;
+  background: repeating-linear-gradient(90deg, rgba(245, 165, 36, 0.55) 0 60px, transparent 60px 120px);
+  opacity: 0.35;
+  animation: road 2.4s linear infinite;
+}
+@keyframes road {
+  to {
+    transform: translateX(-120px);
+  }
+}
+.mt-canvas {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  opacity: 0;
+  transition: opacity 1s ease;
+}
+.mt-canvas.is-ready {
+  opacity: 1;
+}
+.mt-hero-copy {
+  position: relative;
+  max-width: 760px;
+}
+.mt-kicker {
+  margin-bottom: 18px;
+  color: var(--amber);
+  font-size: 0.8rem;
+  font-weight: 700;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+}
+.mt-hero h1 {
+  font-size: clamp(2.8rem, 8.4vw, 6.6rem);
+  line-height: 0.9;
+  hyphens: manual;
+}
+.mt-hero h1 span {
+  color: var(--amber);
+}
+.mt-lead {
+  max-width: 30rem;
+  margin-top: 24px;
+  color: #cfd2da;
+  font-size: clamp(1.02rem, 1.4vw, 1.18rem);
+}
+.mt-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+  margin-top: 32px;
+}
+.mt-btn {
+  display: inline-flex;
+  align-items: center;
+  min-height: 52px;
+  padding: 0 24px;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  border-radius: 999px;
+  color: var(--text);
+  font-weight: 700;
+  text-decoration: none;
+  transition: transform 0.25s, background-color 0.25s;
+  -webkit-user-select: none;
+  user-select: none;
+}
+.mt-btn:hover {
+  transform: translateY(-2px);
+}
+.mt-btn-primary {
+  border-color: transparent;
+  background: var(--amber);
+  color: #111216;
+}
+.mt-btn-primary:hover {
+  background: var(--amber-2);
+}
+.mt-hint {
+  position: absolute;
+  right: clamp(16px, 4vw, 48px);
+  bottom: 28px;
+  color: var(--muted);
+  font-size: 0.75rem;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+}
+.mt-hint {
+  display: none;
+}
+
+@media (max-width: 759px) {
+  /* Lkw oben, Text darunter */
+  .mt-hero {
+    padding-top: 52vh;
+    padding-top: 52svh;
+    padding-bottom: 48px;
+  }
+  .mt-stage {
+    bottom: auto;
+    height: 100vh;
+    height: 100svh;
+  }
+  .mt-nav-cta {
+    padding: 8px 14px;
+    font-size: 0.88rem;
+  }
+  .mt-logo span {
+    font-size: 1rem;
+  }
+}
+
+/* Kennzahlen */
+.mt-stats {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  border-top: 1px solid var(--line);
+  border-bottom: 1px solid var(--line);
+}
+.mt-stats div {
+  display: grid;
+  gap: 4px;
+  padding: 28px clamp(16px, 4vw, 48px);
+  border-right: 1px solid var(--line);
+}
+.mt-stats div:nth-child(2n) {
+  border-right: 0;
+}
+.mt-stats div:nth-child(-n + 2) {
+  border-bottom: 1px solid var(--line);
+}
+.mt-stats strong {
+  font-family: "Clash Display", sans-serif;
+  font-size: clamp(2.2rem, 5vw, 3.6rem);
+  font-weight: 600;
+  line-height: 1;
+  letter-spacing: -0.04em;
+  font-variant-numeric: tabular-nums;
+}
+.mt-stats span {
+  color: var(--muted);
+  font-size: 0.92rem;
+}
+
+/* Sections */
+.mt-section {
+  padding: clamp(72px, 9vw, 128px) clamp(16px, 4vw, 48px);
+}
+.mt-eyebrow {
+  margin-bottom: 16px;
+  color: var(--amber);
+  font-size: 0.8rem;
+  font-weight: 700;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+}
+.mt-section h2 {
+  max-width: 18ch;
+  font-size: clamp(2.2rem, 5.4vw, 4.6rem);
+  line-height: 0.95;
+}
+.mt-cards {
+  display: grid;
+  gap: 14px;
+  margin-top: 48px;
+}
+.mt-card {
+  display: grid;
+  gap: 12px;
+  padding: 28px;
+  border: 1px solid var(--line);
+  border-radius: 20px;
+  background: var(--bg-2);
+  transition: border-color 0.3s, transform 0.4s;
+}
+.mt-card:hover {
+  border-color: rgba(245, 165, 36, 0.45);
+  transform: translateY(-4px);
+}
+.mt-num {
+  color: var(--amber);
+  font-family: "Clash Display", sans-serif;
+  font-weight: 500;
+}
+.mt-card h3 {
+  font-size: 1.5rem;
+}
+.mt-card p {
+  color: var(--muted);
+}
+
+/* Fuhrpark */
+.mt-fleet {
+  display: grid;
+  gap: 40px;
+  background: var(--bg-2);
+}
+.mt-fleet-list {
+  border-top: 1px solid var(--line);
+}
+.mt-fleet-row {
+  display: grid;
+  grid-template-columns: 1fr auto;
+  gap: 4px 16px;
+  padding: 22px 0;
+  border-bottom: 1px solid var(--line);
+}
+.mt-fleet-row strong {
+  font-family: "Clash Display", sans-serif;
+  font-size: clamp(1.4rem, 2.6vw, 2rem);
+  font-weight: 500;
+}
+.mt-fleet-row span {
+  grid-column: 1;
+  color: var(--muted);
+}
+.mt-fleet-row em {
+  grid-column: 2;
+  grid-row: 1 / span 2;
+  align-self: center;
+  padding: 6px 12px;
+  border: 1px solid rgba(245, 165, 36, 0.4);
+  border-radius: 999px;
+  color: var(--amber);
+  font-size: 0.82rem;
+  font-style: normal;
+  font-weight: 700;
+}
+
+/* Einsatzgebiet */
+.mt-area {
+  position: relative;
+  display: grid;
+  gap: 40px;
+  align-items: center;
+  overflow: hidden;
+}
+.mt-rings {
+  position: relative;
+  width: min(80vw, 420px);
+  aspect-ratio: 1;
+  margin: 0 auto;
+}
+.mt-rings i {
+  position: absolute;
+  inset: 0;
+  border: 1px solid rgba(245, 165, 36, 0.3);
+  border-radius: 50%;
+  animation: pulse 4s ease-out infinite;
+}
+.mt-rings i:nth-child(2) {
+  animation-delay: 1.3s;
+}
+.mt-rings i:nth-child(3) {
+  animation-delay: 2.6s;
+}
+.mt-rings b {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 16px;
+  height: 16px;
+  border-radius: 50%;
+  background: var(--amber);
+  box-shadow: 0 0 0 8px rgba(245, 165, 36, 0.2);
+  transform: translate(-50%, -50%);
+}
+@keyframes pulse {
+  from {
+    transform: scale(0.15);
+    opacity: 1;
+  }
+  to {
+    transform: scale(1);
+    opacity: 0;
+  }
+}
+.mt-area-copy p:last-child {
+  max-width: 34rem;
+  margin-top: 20px;
+  color: var(--muted);
+}
+
+/* Karriere */
+.mt-career {
+  display: grid;
+  gap: 32px;
+  background: var(--amber);
+  color: #111216;
+}
+.mt-career .mt-eyebrow {
+  color: #111216;
+}
+.mt-career p:not(.mt-eyebrow) {
+  max-width: 32rem;
+  margin-top: 18px;
+}
+.mt-perks {
+  display: grid;
+  gap: 10px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  align-self: end;
+}
+.mt-perks li {
+  padding: 16px 20px;
+  border-radius: 14px;
+  background: rgba(17, 18, 22, 0.08);
+  font-weight: 700;
+}
+
+/* Kontakt */
+.mt-contact h2 {
+  max-width: 14ch;
+}
+.mt-contact > p {
+  max-width: 32rem;
+  margin-top: 18px;
+  color: var(--muted);
+}
+.mt-contact-grid {
+  display: grid;
+  gap: 12px;
+  margin-top: 40px;
+}
+.mt-contact-box {
+  display: grid;
+  gap: 6px;
+  padding: 22px;
+  border: 1px solid var(--line);
+  border-radius: 18px;
+  background: var(--bg-2);
+}
+.mt-contact-box span {
+  color: var(--muted);
+  font-size: 0.85rem;
+}
+.mt-contact-box strong {
+  font-size: 1.05rem;
+  overflow-wrap: anywhere;
+}
+.mt-demo-note {
+  margin-top: 18px !important;
+  color: var(--amber) !important;
+  font-size: 0.9rem;
+}
+.mt-footer {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 28px clamp(16px, 4vw, 48px) calc(28px + env(safe-area-inset-bottom));
+  border-top: 1px solid var(--line);
+  color: var(--muted);
+  font-size: 0.9rem;
+}
+
+@media (min-width: 760px) {
+  .mt-nav nav a:not(.mt-nav-cta) {
+    display: inline;
+  }
+  .mt-hint {
+    display: block;
+  }
+  .mt-stats {
+    grid-template-columns: repeat(4, 1fr);
+  }
+  .mt-stats div {
+    border-bottom: 0 !important;
+  }
+  .mt-stats div:nth-child(2n) {
+    border-right: 1px solid var(--line);
+  }
+  .mt-stats div:last-child {
+    border-right: 0;
+  }
+  .mt-cards {
+    grid-template-columns: repeat(2, 1fr);
+  }
+  .mt-contact-grid {
+    grid-template-columns: repeat(3, 1fr);
+  }
+}
+@media (min-width: 1100px) {
+  .mt-hero {
+    align-items: center;
+  }
+  .mt-cards {
+    grid-template-columns: repeat(4, 1fr);
+  }
+  .mt-fleet {
+    grid-template-columns: 0.8fr 1.2fr;
+    align-items: start;
+  }
+  .mt-area,
+  .mt-career {
+    grid-template-columns: 1fr 1fr;
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .mt-road,
+  .mt-rings i {
+    animation: none;
+  }
+}

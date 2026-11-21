@@ -161,6 +161,7 @@ p {
 .logo,
 .faq-list summary,
 .contact-tile,
+.demo-card,
 .round-btn,
 .footer-contact a,
 .footer-legal a,
@@ -648,6 +649,75 @@ p {
   }
   .glow-card:hover::before {
     opacity: 1;
+  }
+}
+
+/* Demos */
+.demo-grid {
+  display: grid;
+  gap: 20px;
+}
+.demo-card {
+  display: block;
+  height: 100%;
+  overflow: hidden;
+  border: 1px solid var(--line);
+  border-radius: var(--radius-lg);
+  background: var(--surface);
+  transition:
+    border-color 0.4s,
+    transform 0.5s var(--ease);
+}
+.demo-media {
+  aspect-ratio: 1200 / 722;
+  overflow: hidden;
+  background: var(--surface-2);
+}
+.demo-media img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform 1.1s var(--ease);
+}
+.demo-body {
+  display: grid;
+  justify-items: start;
+  gap: 10px;
+  padding: 24px 26px 28px;
+}
+.tag {
+  color: var(--blue-bright);
+  font-size: 0.78rem;
+  font-weight: 700;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+}
+.demo-body h3 {
+  font-size: clamp(1.7rem, 3vw, 2.4rem);
+  line-height: 1;
+  letter-spacing: -0.03em;
+}
+.demo-body p {
+  color: var(--muted);
+}
+.demo-btn {
+  margin-top: 8px;
+}
+@media (hover: hover) {
+  .demo-card:hover {
+    border-color: rgba(127, 162, 255, 0.4);
+    transform: translateY(-4px);
+  }
+  .demo-card:hover .demo-media img {
+    transform: scale(1.04);
+  }
+  .demo-card:hover .demo-btn {
+    border-color: rgba(127, 162, 255, 0.6);
+  }
+}
+@media (min-width: 768px) {
+  .demo-grid {
+    grid-template-columns: 1fr 1fr;
   }
 }
 
