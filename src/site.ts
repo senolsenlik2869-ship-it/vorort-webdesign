@@ -18,15 +18,15 @@ export const DEMOS = [
     title: "Muster Transporte",
     branch: "Transport & Spedition",
     text: "Dunkler Premium-Auftritt mit interaktivem 3D-Lkw, der sich beim Scrollen dreht.",
-    image: "/demos/muster-transporte-vorschau.webp",
-    url: "/demos/muster-transporte/",
+    image: "/demos/entwurf-muster-transporte-vorschau.webp",
+    url: "/demos/entwurf-muster-transporte/",
   },
   {
     title: "Muster Logistik",
     branch: "Lager & Kontraktlogistik",
     text: "Heller, klarer Auftritt mit scroll-gesteuertem Luftaufnahme-Video und animiertem Netzwerk.",
-    image: "/demos/muster-logistik-vorschau.webp",
-    url: "/demos/muster-logistik/",
+    image: "/demos/entwurf-muster-logistik-vorschau.webp",
+    url: "/demos/entwurf-muster-logistik/",
   },
 ];
 

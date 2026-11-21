@@ -37,7 +37,7 @@ const saveData = (navigator as Navigator & { connection?: { saveData?: boolean }
 if (video && track && !reduceMotion() && !saveData) {
   whenIdle(() => {
     const small = window.matchMedia("(max-width: 759px)").matches;
-    video.src = small ? "/demos/muster-logistik/flug-mobile.mp4" : "/demos/muster-logistik/flug.mp4";
+    video.src = small ? "/demos/entwurf-muster-logistik/flug-mobile.mp4" : "/demos/entwurf-muster-logistik/flug.mp4";
     video.load();
 
     let want = 0;
