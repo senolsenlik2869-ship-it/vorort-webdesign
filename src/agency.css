@@ -146,6 +146,27 @@ p {
   transform: none;
 }
 
+/* Klickbare Elemente nicht versehentlich markieren (Doppelklick/Doppeltipp).
+   Verhindert, dass Geräte mit „markieren = kopieren“ ungewollt etwas übernehmen.
+   Fließtext und Formularfelder bleiben normal markierbar. */
+.btn,
+.burger,
+.nav-links a,
+.mobile-menu nav a,
+.fab-whatsapp,
+.logo,
+.faq-list summary,
+.contact-tile,
+.round-btn,
+.footer-contact a,
+.footer-legal a,
+.skip-link {
+  -webkit-user-select: none;
+  user-select: none;
+  -webkit-touch-callout: none;
+  -webkit-tap-highlight-color: transparent;
+}
+
 /* ============ Typografie ============ */
 .display {
   font-size: clamp(2.6rem, 6.6vw, 6rem);
