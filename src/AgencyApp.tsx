@@ -1,7 +1,7 @@
 import { useEffect, useRef, useState, type FormEvent, type ReactNode } from "react";
 import { AnimatePresence, motion, useReducedMotion, useScroll } from "framer-motion";
 import { ArrowUpRight, Hammer, Mail, Menu, Phone, Scissors, Store, Truck, UtensilsCrossed, X } from "lucide-react";
-import { FlyHero } from "./FlyHero";
+import { Hero } from "./Hero";
 import { BlurUp, EASE, GlowCard, Logo, PinMark, WhatsAppIcon, WordReveal } from "./ui";
 import { DEMOS, EMAIL, EMAIL_HREF, PHONE_DISPLAY, PHONE_HREF, WHATSAPP_HREF } from "./site";
 
@@ -545,7 +545,7 @@ export default function AgencyApp() {
       </a>
       <Navigation />
       <main>
-        <FlyHero />
+        <Hero />
         <Offer />
         <Branches />
         <Demos />

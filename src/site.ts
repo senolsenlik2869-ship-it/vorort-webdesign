@@ -29,7 +29,19 @@ export const DEMOS = [
  */
 export const ABOUT_PHOTO = "";
 
-/** Hero-Hintergrund von Motionsites („Erde/Horizont“), komprimiert und als Ping-Pong-Schleife. */
-export const HERO_VIDEO = "/videos/hero-earth.mp4";
-export const HERO_POSTER = "/hero-poster.webp";
-export const HERO_POSTER_MOBILE = "/hero-poster-mobile.webp";
+/**
+ * Hero-Hintergrund: Motionsites „Velvet Wave“, komprimiert.
+ * Zwei Farbvarianten zur Auswahl: "blue" (in Markenblau umgefärbt) und "warm" (Original).
+ * Zum Vergleich per URL umschaltbar: ?hero=warm bzw. ?hero=blue (nur vorübergehend).
+ */
+const HERO_DEFAULT: "blue" | "warm" = "blue";
+const heroParam = typeof window !== "undefined" ? new URLSearchParams(window.location.search).get("hero") : null;
+const HERO_VARIANT = heroParam === "warm" || heroParam === "blue" ? heroParam : HERO_DEFAULT;
+
+export const HERO = {
+  mp4: `/videos/velvet-${HERO_VARIANT}.mp4`,
+  webm: `/videos/velvet-${HERO_VARIANT}.webm`,
+  mobile: `/videos/velvet-${HERO_VARIANT}-mobile.mp4`,
+  poster: `/hero-velvet-${HERO_VARIANT}.webp`,
+  posterMobile: `/hero-velvet-${HERO_VARIANT}-mobile.webp`,
+};
