@@ -10,6 +10,8 @@ export default defineConfig({
         main: "index.html",
         impressum: "impressum.html",
         datenschutz: "datenschutz.html",
+        "demo-transporte": "demos/muster-transporte/index.html",
+        "demo-logistik": "demos/muster-logistik/index.html",
       },
     },
   },

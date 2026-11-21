@@ -3,10 +3,11 @@ import { AnimatePresence, motion, useReducedMotion, useScroll } from "framer-mot
 import { ArrowUpRight, Hammer, Mail, Menu, Phone, Scissors, Store, Truck, UtensilsCrossed, X } from "lucide-react";
 import { Hero } from "./Hero";
 import { BlurUp, EASE, GlowCard, Logo, PinMark, WhatsAppIcon, WordReveal } from "./ui";
-import { EMAIL, EMAIL_HREF, PHONE_DISPLAY, PHONE_HREF, WHATSAPP_HREF } from "./site";
+import { DEMOS, EMAIL, EMAIL_HREF, PHONE_DISPLAY, PHONE_HREF, WHATSAPP_HREF } from "./site";
 
 const NAV = [
   ["Leistungen", "#leistungen"],
+  ["Demos", "#demos"],
   ["Ablauf", "#ablauf"],
   ["FAQ", "#faq"],
   ["Kontakt", "#kontakt"],
@@ -222,6 +223,45 @@ function Branches() {
               <span key={i}>{m}</span>
             ))}
           </div>
+        </div>
+      </div>
+    </section>
+  );
+}
+
+/* ---------------- Konzept-Demos ---------------- */
+
+function Demos() {
+  return (
+    <section className="section" id="demos">
+      <div className="container">
+        <div className="head-row head-row-split">
+          <BlurUp>
+            <h2 className="display">Konzept-Demos</h2>
+          </BlurUp>
+          <BlurUp delay={0.15}>
+            <p className="muted">Zwei komplette, klickbare Beispiel-Websites für fiktive Firmen – so kann Ihr Auftritt aussehen.</p>
+          </BlurUp>
+        </div>
+        <div className="demo-grid">
+          {DEMOS.map((d, i) => (
+            <BlurUp key={d.title} delay={i * 0.12}>
+              <a className="demo-card" href={d.url} aria-label={`Demo ansehen: ${d.title} (${d.branch})`}>
+                <div className="demo-media">
+                  <img src={d.image} alt={`Vorschau der Konzept-Demo ${d.title}`} loading="lazy" decoding="async" width={1200} height={722} />
+                </div>
+                <div className="demo-body">
+                  <span className="tag">{d.branch}</span>
+                  <h3>{d.title}</h3>
+                  <p>{d.text}</p>
+                  <span className="btn btn-ghost btn-sm demo-btn">
+                    <span>Demo ansehen</span>
+                    <ArrowUpRight size={17} />
+                  </span>
+                </div>
+              </a>
+            </BlurUp>
+          ))}
         </div>
       </div>
     </section>
@@ -492,6 +532,7 @@ export default function AgencyApp() {
         <Hero />
         <Offer />
         <Branches />
+        <Demos />
         <Services />
         <Process />
         <About />

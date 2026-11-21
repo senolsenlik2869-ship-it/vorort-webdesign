@@ -1,0 +1,155 @@
+<!doctype html>
+<html lang="de">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+    <title>Muster Transporte · Konzept-Demo von VorOrt Webdesign</title>
+    <meta name="description" content="Konzept-Demo von VorOrt Webdesign: Website für ein fiktives Transportunternehmen mit interaktivem 3D-Lkw." />
+    <meta name="robots" content="noindex, follow" />
+    <meta name="theme-color" content="#0b0c0f" />
+    <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+    <link rel="preload" as="font" type="font/woff2" href="/fonts/clash-display-600.woff2" crossorigin />
+    <link rel="preload" as="font" type="font/woff2" href="/fonts/satoshi-400.woff2" crossorigin />
+  </head>
+  <body class="mt">
+    <div class="demo-banner" role="note">
+      <span>Konzept-Demo von <a href="/">VorOrt Webdesign</a> · fiktive Firma</span>
+      <a class="demo-back" href="/#demos">← Zurück zu VorOrt</a>
+    </div>
+
+    <header class="mt-nav">
+      <a class="mt-logo" href="#top" aria-label="Muster Transporte – Startseite">
+        <svg viewBox="0 0 40 40" aria-hidden="true">
+          <rect width="40" height="40" rx="11" fill="var(--amber)" />
+          <path d="M8.5 28.5 14.5 12l5.5 11 5.5-11 6 16.5" fill="none" stroke="#111216" stroke-width="3.6" stroke-linecap="round" stroke-linejoin="round" />
+        </svg>
+        <span>Muster<b>Transporte</b></span>
+      </a>
+      <nav aria-label="Navigation">
+        <a href="#leistungen">Leistungen</a>
+        <a href="#fuhrpark">Fuhrpark</a>
+        <a href="#karriere">Karriere</a>
+        <a href="#kontakt" class="mt-nav-cta">Anfragen</a>
+      </nav>
+    </header>
+
+    <main id="top">
+      <section class="mt-hero" id="hero">
+        <div class="mt-stage" aria-hidden="true">
+          <div class="mt-glow"></div>
+          <div class="mt-road"></div>
+          <canvas id="truck" class="mt-canvas"></canvas>
+        </div>
+        <div class="mt-hero-copy">
+          <p class="mt-kicker">Transporte · Teil- &amp; Komplettladungen · Express</p>
+          <h1>Ihre Ladung.<br /><span>Unser Wort.</span></h1>
+          <p class="mt-lead">Termingenaue Transporte im Nahverkehr und deutschlandweit – mit eigenem Fuhrpark, festen Fahrern und einem Ansprechpartner, der erreichbar ist.</p>
+          <div class="mt-actions">
+            <a class="mt-btn mt-btn-primary" href="#kontakt">Angebot anfragen</a>
+            <a class="mt-btn" href="#fuhrpark">Fuhrpark ansehen</a>
+          </div>
+        </div>
+        <div class="mt-hint" aria-hidden="true"><span>3D-Modell · scrollen zum Drehen</span></div>
+      </section>
+
+      <section class="mt-stats" aria-label="Kennzahlen (fiktiv)">
+        <div><strong data-count="38">38</strong><span>eigene Fahrzeuge</span></div>
+        <div><strong data-count="24">24</strong><span>Stunden erreichbar</span></div>
+        <div><strong data-count="98" data-suffix=" %">98 %</strong><span>pünktliche Zustellung</span></div>
+        <div><strong data-count="27">27</strong><span>Jahre Erfahrung</span></div>
+      </section>
+
+      <section class="mt-section" id="leistungen">
+        <p class="mt-eyebrow">Leistungen</p>
+        <h2>Alles, was bewegt werden muss.</h2>
+        <div class="mt-cards">
+          <article class="mt-card reveal">
+            <span class="mt-num">01</span>
+            <h3>Komplettladungen</h3>
+            <p>Volle Lkw-Ladung direkt von A nach B – ohne Umladen, ohne Umwege.</p>
+          </article>
+          <article class="mt-card reveal">
+            <span class="mt-num">02</span>
+            <h3>Teilladungen</h3>
+            <p>Sie zahlen nur den Platz, den Sie brauchen. Wir bündeln Touren sinnvoll.</p>
+          </article>
+          <article class="mt-card reveal">
+            <span class="mt-num">03</span>
+            <h3>Express &amp; Termin</h3>
+            <p>Wenn es heute noch sein muss: Direktfahrt mit fester Ankunftszeit.</p>
+          </article>
+          <article class="mt-card reveal">
+            <span class="mt-num">04</span>
+            <h3>Baustellen-Logistik</h3>
+            <p>Material just in time an die Baustelle – mit Kran- und Ladebordwand.</p>
+          </article>
+        </div>
+      </section>
+
+      <section class="mt-section mt-fleet" id="fuhrpark">
+        <div class="mt-fleet-head">
+          <p class="mt-eyebrow">Fuhrpark</p>
+          <h2>Das passende Fahrzeug<br />für jede Ladung.</h2>
+        </div>
+        <div class="mt-fleet-list">
+          <div class="mt-fleet-row reveal"><strong>Sattelzug</strong><span>bis 24 t · 34 Paletten</span><em>Fernverkehr</em></div>
+          <div class="mt-fleet-row reveal"><strong>Gliederzug</strong><span>bis 18 t · Wechselbrücken</span><em>Regional</em></div>
+          <div class="mt-fleet-row reveal"><strong>7,5-Tonner</strong><span>bis 3 t · Ladebordwand</span><em>Innenstadt</em></div>
+          <div class="mt-fleet-row reveal"><strong>Sprinter</strong><span>bis 1 t · Express</span><em>Direktfahrt</em></div>
+        </div>
+      </section>
+
+      <section class="mt-section mt-area">
+        <div class="mt-rings" aria-hidden="true">
+          <i></i><i></i><i></i><b></b>
+        </div>
+        <div class="mt-area-copy reveal">
+          <p class="mt-eyebrow">Einsatzgebiet</p>
+          <h2>Zuhause in der Region.<br />Unterwegs in ganz Deutschland.</h2>
+          <p>Täglicher Nahverkehr im Umkreis von 150 km, Fernverkehr nach Absprache – auch ins benachbarte Ausland.</p>
+        </div>
+      </section>
+
+      <section class="mt-section mt-career" id="karriere">
+        <div class="reveal">
+          <p class="mt-eyebrow">Karriere</p>
+          <h2>Fahrer gesucht (m/w/d).</h2>
+          <p>Feste Touren, moderne Fahrzeuge, pünktlicher Lohn. Und abends wieder zuhause – wenn Sie das wollen.</p>
+        </div>
+        <ul class="mt-perks reveal">
+          <li>Unbefristeter Vertrag</li>
+          <li>Eigenes Fahrzeug, gepflegt</li>
+          <li>Planbare Arbeitszeiten</li>
+          <li>Bezahlte Weiterbildung (Module)</li>
+        </ul>
+      </section>
+
+      <section class="mt-section mt-contact" id="kontakt">
+        <h2>Was dürfen wir für Sie fahren?</h2>
+        <p>Schicken Sie uns Abholort, Ziel und Ladung – Sie bekommen noch heute ein Angebot.</p>
+        <div class="mt-contact-grid">
+          <div class="mt-contact-box">
+            <span>Telefon</span>
+            <strong>0000 / 000 000 · Demo</strong>
+          </div>
+          <div class="mt-contact-box">
+            <span>E-Mail</span>
+            <strong>anfrage@muster-transporte.example</strong>
+          </div>
+          <div class="mt-contact-box">
+            <span>Adresse</span>
+            <strong>Musterstraße 1 · 00000 Musterstadt</strong>
+          </div>
+        </div>
+        <p class="mt-demo-note">Alle Kontaktdaten sind Platzhalter – diese Firma gibt es nicht.</p>
+      </section>
+    </main>
+
+    <footer class="mt-footer">
+      <span>© Muster Transporte – fiktives Unternehmen</span>
+      <span>Konzept-Demo von <a href="/">VorOrt Webdesign</a> · <a href="/#kontakt">So eine Website anfragen</a></span>
+    </footer>
+
+    <script type="module" src="/src/demos/transporte.ts"></script>
+  </body>
+</html>

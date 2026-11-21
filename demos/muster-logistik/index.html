@@ -1,0 +1,171 @@
+<!doctype html>
+<html lang="de">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+    <title>Muster Logistik · Konzept-Demo von VorOrt Webdesign</title>
+    <meta name="description" content="Konzept-Demo von VorOrt Webdesign: Website für ein fiktives Logistikunternehmen mit scroll-gesteuertem Luftaufnahme-Video." />
+    <meta name="robots" content="noindex, follow" />
+    <meta name="theme-color" content="#0c1513" />
+    <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+    <link rel="preload" as="image" href="/demos/muster-logistik/flug-poster-mobile.webp" media="(max-width: 759px)" />
+    <link rel="preload" as="image" href="/demos/muster-logistik/flug-poster.webp" media="(min-width: 760px)" />
+    <link rel="preload" as="font" type="font/woff2" href="/fonts/clash-display-600.woff2" crossorigin />
+  </head>
+  <body class="ml">
+    <div class="demo-banner" role="note">
+      <span>Konzept-Demo von <a href="/">VorOrt Webdesign</a> · fiktive Firma</span>
+      <a class="demo-back" href="/#demos">← Zurück zu VorOrt</a>
+    </div>
+
+    <header class="ml-nav">
+      <a class="ml-logo" href="#top" aria-label="Muster Logistik – Startseite">
+        <svg viewBox="0 0 40 40" aria-hidden="true">
+          <rect width="40" height="40" rx="11" fill="currentColor" />
+          <path d="M12 11v18h16" fill="none" stroke="var(--teal)" stroke-width="3.8" stroke-linecap="round" stroke-linejoin="round" />
+          <rect x="17.5" y="11" width="10" height="8" rx="2" fill="#fff" />
+          <rect x="17.5" y="21" width="5" height="4" rx="1.4" fill="#fff" opacity=".7" />
+        </svg>
+        <span>Muster<b>Logistik</b></span>
+      </a>
+      <nav aria-label="Navigation">
+        <a href="#loesungen">Lösungen</a>
+        <a href="#netzwerk">Netzwerk</a>
+        <a href="#ablauf">Ablauf</a>
+        <a href="#kontakt" class="ml-nav-cta">Kontakt</a>
+      </nav>
+    </header>
+
+    <main id="top">
+      <section class="ml-track" id="flug">
+        <div class="ml-scene">
+          <picture>
+            <source media="(max-width: 759px)" srcset="/demos/muster-logistik/flug-poster-mobile.webp" />
+            <img class="ml-poster" src="/demos/muster-logistik/flug-poster.webp" alt="" fetchpriority="high" />
+          </picture>
+          <video class="ml-video" muted playsinline preload="auto" aria-hidden="true"></video>
+          <div class="ml-tint"></div>
+        </div>
+        <div class="ml-flow">
+          <header class="ml-intro">
+            <p class="ml-kicker">Kontraktlogistik · Lager · Distribution</p>
+            <h1>Logistik,<br />die mitdenkt.</h1>
+            <p class="ml-lead">Lagern, kommissionieren, versenden – aus einer Hand. Damit Sie sich um Ihr Geschäft kümmern können.</p>
+          </header>
+          <div class="ml-point ml-point-l">
+            <span>01</span>
+            <h2>Ein Ansprechpartner</h2>
+            <p>Vom Wareneingang bis zur Zustellung. Keine Weiterleitungen, kein Suchen.</p>
+          </div>
+          <div class="ml-point ml-point-r">
+            <span>02</span>
+            <h2>Volle Transparenz</h2>
+            <p>Bestände und Sendungen jederzeit live im Kundenportal.</p>
+          </div>
+          <div class="ml-point ml-point-l">
+            <span>03</span>
+            <h2>Skaliert mit Ihnen</h2>
+            <p>Saisonspitzen, neue Kanäle, mehr Volumen – wir wachsen mit.</p>
+          </div>
+        </div>
+      </section>
+
+      <section class="ml-section" id="loesungen">
+        <div class="ml-head">
+          <p class="ml-eyebrow">Lösungen</p>
+          <h2>Vier Bausteine.<br /><span>Eine Lieferkette.</span></h2>
+        </div>
+        <div class="ml-bento">
+          <article class="ml-tile ml-tile-big reveal">
+            <svg viewBox="0 0 48 48" aria-hidden="true"><path d="M6 20 24 9l18 11v19H6Z" /><path d="M14 39V27h20v12M14 32h20" /></svg>
+            <h3>Lagerlogistik</h3>
+            <p>Klimatisierte Hallen, Hochregal- und Blocklager, Gefahrgut nach Absprache. Ihr Bestand ist bei uns in guten Händen.</p>
+          </article>
+          <article class="ml-tile reveal">
+            <svg viewBox="0 0 48 48" aria-hidden="true"><rect x="8" y="12" width="32" height="24" rx="4" /><path d="M8 20h32M16 28h8" /></svg>
+            <h3>E-Commerce-Fulfillment</h3>
+            <p>Bestellung heute bis 15 Uhr, Versand noch heute.</p>
+          </article>
+          <article class="ml-tile reveal">
+            <svg viewBox="0 0 48 48" aria-hidden="true"><path d="M8 34h28V14H8ZM36 22h6l4 6v6h-10" /><circle cx="16" cy="36" r="4" /><circle cx="38" cy="36" r="4" /></svg>
+            <h3>Transportmanagement</h3>
+            <p>Wir planen Touren, buchen Frachtraum und behalten jede Sendung im Blick.</p>
+          </article>
+          <article class="ml-tile ml-tile-dark reveal">
+            <svg viewBox="0 0 48 48" aria-hidden="true"><path d="M10 38V10h28v28Z" /><path d="M18 18h12M18 24h12M18 30h7" /></svg>
+            <h3>Value Added Services</h3>
+            <p>Etikettieren, Konfektionieren, Retouren prüfen, Sets packen.</p>
+          </article>
+        </div>
+      </section>
+
+      <section class="ml-section ml-network" id="netzwerk">
+        <div class="ml-network-copy reveal">
+          <p class="ml-eyebrow">Netzwerk</p>
+          <h2>Ein Hub.<br /><span>Viele Ziele.</span></h2>
+          <p>Unser zentraler Standort liegt direkt an den wichtigsten Verkehrswegen. Von hier erreichen wir den Großteil Deutschlands über Nacht.</p>
+        </div>
+        <svg class="ml-map" viewBox="0 0 400 400" role="img" aria-label="Schematische Darstellung: Hub mit Verbindungen zu sechs Zielen">
+          <g class="ml-lines">
+            <path d="M200 200 C150 150 120 120 80 70" />
+            <path d="M200 200 C260 150 290 110 330 80" />
+            <path d="M200 200 C280 200 320 210 360 230" />
+            <path d="M200 200 C240 270 260 310 290 350" />
+            <path d="M200 200 C150 260 120 300 90 330" />
+            <path d="M200 200 C130 200 90 190 40 180" />
+          </g>
+          <g class="ml-nodes">
+            <circle cx="80" cy="70" r="6" />
+            <circle cx="330" cy="80" r="6" />
+            <circle cx="360" cy="230" r="6" />
+            <circle cx="290" cy="350" r="6" />
+            <circle cx="90" cy="330" r="6" />
+            <circle cx="40" cy="180" r="6" />
+          </g>
+          <circle class="ml-hub-ring" cx="200" cy="200" r="22" />
+          <circle class="ml-hub" cx="200" cy="200" r="11" />
+        </svg>
+      </section>
+
+      <section class="ml-section ml-steps" id="ablauf">
+        <div class="ml-head">
+          <p class="ml-eyebrow">Ablauf</p>
+          <h2>In vier Wochen startklar.</h2>
+        </div>
+        <ol class="ml-steplist">
+          <li class="reveal"><span>Woche 1</span><h3>Analyse</h3><p>Sortiment, Volumen, Saisonverlauf.</p></li>
+          <li class="reveal"><span>Woche 2</span><h3>Konzept</h3><p>Lagerplätze, Prozesse, Anbindung.</p></li>
+          <li class="reveal"><span>Woche 3</span><h3>Einlagerung</h3><p>Ware rein, Bestände abgleichen.</p></li>
+          <li class="reveal"><span>Woche 4</span><h3>Go-live</h3><p>Erste Aufträge, tägliche Abstimmung.</p></li>
+        </ol>
+      </section>
+
+      <section class="ml-numbers" aria-label="Kennzahlen (fiktiv)">
+        <div><strong data-count="42" data-suffix=".000">42.000</strong><span>m² Lagerfläche</span></div>
+        <div><strong data-count="9600">9600</strong><span>Palettenstellplätze</span></div>
+        <div><strong data-count="3500">3500</strong><span>Sendungen pro Tag</span></div>
+        <div><strong data-count="99" data-suffix=",7 %">99,7 %</strong><span>Liefergenauigkeit</span></div>
+      </section>
+
+      <section class="ml-section ml-contact" id="kontakt">
+        <div>
+          <p class="ml-eyebrow">Kontakt</p>
+          <h2>Lassen Sie uns über<br />Ihre Lieferkette sprechen.</h2>
+        </div>
+        <div class="ml-contact-list">
+          <p><span>Telefon</span><strong>0000 / 000 000 · Demo</strong></p>
+          <p><span>E-Mail</span><strong>hallo@muster-logistik.example</strong></p>
+          <p><span>Standort</span><strong>Am Musterhafen 1 · 00000 Musterstadt</strong></p>
+          <p class="ml-demo-note">Alle Kontaktdaten sind Platzhalter – diese Firma gibt es nicht.</p>
+        </div>
+      </section>
+    </main>
+
+    <footer class="ml-footer">
+      <span>© Muster Logistik – fiktives Unternehmen</span>
+      <span>Konzept-Demo von <a href="/">VorOrt Webdesign</a> · <a href="/#kontakt">So eine Website anfragen</a></span>
+    </footer>
+
+    <script type="module" src="/src/demos/logistik.ts"></script>
+  </body>
+</html>
