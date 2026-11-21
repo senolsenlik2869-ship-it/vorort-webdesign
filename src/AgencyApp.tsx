@@ -1,13 +1,12 @@
 import { useEffect, useRef, useState, type FormEvent, type ReactNode } from "react";
 import { AnimatePresence, motion, useReducedMotion, useScroll } from "framer-motion";
 import { ArrowUpRight, Hammer, Mail, Menu, Phone, Scissors, Store, Truck, UtensilsCrossed, X } from "lucide-react";
-import { FlyHero } from "./FlyHero";
+import { Hero } from "./Hero";
 import { BlurUp, EASE, GlowCard, Logo, PinMark, WhatsAppIcon, WordReveal } from "./ui";
-import { DEMOS, EMAIL, EMAIL_HREF, PHONE_DISPLAY, PHONE_HREF, WHATSAPP_HREF } from "./site";
+import { EMAIL, EMAIL_HREF, PHONE_DISPLAY, PHONE_HREF, WHATSAPP_HREF } from "./site";
 
 const NAV = [
   ["Leistungen", "#leistungen"],
-  ["Demos", "#demos"],
   ["Ablauf", "#ablauf"],
   ["FAQ", "#faq"],
   ["Kontakt", "#kontakt"],
@@ -221,63 +220,6 @@ function Branches() {
               <span key={i}>{m}</span>
             ))}
           </div>
-        </div>
-      </div>
-    </section>
-  );
-}
-
-/* ---------------- Demos: große Karten, nur kurzer Titel ---------------- */
-
-function Demos() {
-  return (
-    <section className="section" id="demos">
-      <div className="container">
-        <div className="head-row head-row-split">
-          <BlurUp>
-            <h2 className="display">Konzept-Demos</h2>
-          </BlurUp>
-          <BlurUp delay={0.15}>
-            <p className="muted">Zwei eigene Entwürfe von VorOrt Webdesign. Echte Kundenprojekte folgen in Kürze.</p>
-          </BlurUp>
-        </div>
-        <div className="demo-grid">
-          {DEMOS.map((d, i) => {
-            const body = (
-              <>
-                <div className="demo-media">
-                  <img src={d.image} alt={`Vorschau: ${d.title} – Konzept-Demo von VorOrt Webdesign`} loading="lazy" decoding="async" width={1400} height={740} />
-                </div>
-                <div className="demo-body">
-                  <span className="tag">Konzept-Demo von VorOrt Webdesign</span>
-                  <div className="demo-title-row">
-                    <h3>{d.title}</h3>
-                    {d.url ? (
-                      <span className="round-btn" aria-hidden="true">
-                        <ArrowUpRight size={20} />
-                      </span>
-                    ) : (
-                      <span className="soon">Link folgt</span>
-                    )}
-                  </div>
-                  <p>{d.kind}</p>
-                </div>
-              </>
-            );
-            return (
-              <BlurUp key={d.title} delay={i * 0.12}>
-                {d.url ? (
-                  <a className="demo-card" href={d.url} target="_blank" rel="noopener noreferrer" aria-label={`${d.title} ansehen (öffnet in neuem Tab)`}>
-                    {body}
-                  </a>
-                ) : (
-                  <div className="demo-card is-disabled" aria-disabled="true">
-                    {body}
-                  </div>
-                )}
-              </BlurUp>
-            );
-          })}
         </div>
       </div>
     </section>
@@ -545,10 +487,9 @@ export default function AgencyApp() {
       </a>
       <Navigation />
       <main>
-        <FlyHero />
+        <Hero />
         <Offer />
         <Branches />
-        <Demos />
         <Services />
         <Process />
         <About />

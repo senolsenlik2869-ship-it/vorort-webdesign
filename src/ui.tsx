@@ -53,7 +53,7 @@ export function BlurUp({ children, delay = 0, className, as = "div" }: { childre
 }
 
 /** Text, der Wort für Wort einblendet. Wörter in _Unterstrichen_ werden blau. */
-export function WordReveal({ text, as: Tag = "h2", className, delay = 0 }: { text: string; as?: "h1" | "h2" | "p"; className?: string; delay?: number }) {
+export function WordReveal({ text, as: Tag = "h2", className, delay = 0, immediate = false }: { text: string; as?: "h1" | "h2" | "p"; className?: string; delay?: number; immediate?: boolean }) {
   const reduce = useReducedMotion();
   const ref = useRef<HTMLHeadingElement>(null);
   const inView = useInView(ref, { once: true, amount: 0.4 });
@@ -69,7 +69,7 @@ export function WordReveal({ text, as: Tag = "h2", className, delay = 0 }: { tex
               <motion.span
                 className={`word-inner ${blue ? "accent" : ""}`}
                 initial={reduce ? false : { y: "110%" }}
-                animate={inView ? { y: "0%" } : undefined}
+                animate={immediate || inView ? { y: "0%" } : undefined}
                 transition={{ duration: 0.9, delay: delay + i * 0.05, ease: EASE }}
               >
                 {word}

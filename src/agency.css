@@ -67,7 +67,7 @@
   --radius: 20px;
   --radius-lg: 28px;
   --gutter: clamp(20px, 5vw, 56px);
-  --section-y: clamp(112px, 14vw, 200px);
+  --section-y: clamp(64px, 7vw, 112px);
   --ease: cubic-bezier(0.22, 1, 0.36, 1);
   color-scheme: dark;
 }
@@ -170,7 +170,7 @@ p {
   color: var(--blue);
 }
 .dim {
-  color: var(--dim);
+  color: #a3acbf;
 }
 .muted {
   color: var(--muted);
@@ -375,163 +375,84 @@ p {
   letter-spacing: 0;
 }
 
-/* ============ Fly-through-Hero ============ */
-.fly {
+/* ============ Hero (Video-Hintergrund) ============ */
+.hero {
   position: relative;
-  height: 300vh;
-  background: #000;
-}
-.fly-mobile {
-  height: 200vh;
-}
-.fly-static {
-  height: auto;
-}
-.fly-stage {
-  position: sticky;
-  top: 0;
-  height: 100vh;
-  height: 100svh;
+  display: flex;
+  align-items: flex-end;
+  min-height: 100vh;
+  min-height: 100svh;
+  padding: 128px 0 clamp(72px, 11vh, 128px);
   overflow: hidden;
   isolation: isolate;
   background: #000;
 }
-.fly-static .fly-stage {
-  position: relative;
-  min-height: 100svh;
+.hero-media {
+  position: absolute;
+  inset: -2px 0 -140px;
+  z-index: -2;
 }
-.fly-media {
+.hero-poster,
+.hero-video {
   position: absolute;
   inset: 0;
-  transform: scale(1.12);
-}
-.fly-media picture,
-.fly-media img,
-.fly-media video {
   width: 100%;
   height: 100%;
   object-fit: cover;
-  object-position: 50% 62%;
 }
-/* Schwarze Fläche, weiße Schrift, multipliziert: nur die Buchstaben zeigen das Video */
-.fly-mask {
-  position: absolute;
-  inset: 0;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  background: #000;
-  mix-blend-mode: multiply;
-  pointer-events: none;
-}
-.fly-type {
-  display: flex;
-  align-items: center;
-  margin-top: 8vh;
-  color: #fff;
-  font-family: var(--font-display);
-  font-size: 23.5vw;
-  font-weight: 700;
-  line-height: 0.8;
-  letter-spacing: -0.055em;
-  white-space: nowrap;
-  will-change: transform;
-}
-.fly-gap {
-  width: 0.2em;
-}
-.fly-pin {
-  width: 0.56em;
-  height: 0.745em;
-  margin: 0 0.035em 0 -0.01em;
-  flex: none;
-}
-.fly-dim {
-  position: absolute;
-  inset: 0;
+.hero-video {
   opacity: 0;
-  background:
-    linear-gradient(90deg, rgba(0, 0, 0, 0.78) 0%, rgba(0, 0, 0, 0.35) 65%, rgba(0, 0, 0, 0.2) 100%),
-    linear-gradient(0deg, rgba(0, 0, 0, 0.6), transparent 45%);
-  pointer-events: none;
+  transition: opacity 1.2s ease;
 }
-.fly-static .fly-dim {
+.hero-video.is-playing {
   opacity: 1;
 }
-.fly-copy {
-  position: absolute;
-  inset: auto 0 clamp(64px, 12vh, 120px);
-}
-.fly-static .fly-copy {
-  position: relative;
-  inset: auto;
-  display: flex;
-  flex-direction: column;
-  justify-content: flex-end;
-  min-height: 100svh;
-  padding-top: 120px;
-  padding-bottom: 72px;
-}
-.fly-full .fly-copy > *,
-.fly-mobile .fly-copy > * {
-  opacity: 0;
-  transform: translateY(40px);
-}
-.fly-copy h1 {
-  font-size: clamp(3rem, 9vw, 8.6rem);
-  font-weight: 600;
-  line-height: 0.9;
-  letter-spacing: -0.03em;
-}
-.fly-copy p {
-  max-width: 32rem;
-  margin-top: 26px;
-  color: #c9d0e0;
-  font-size: clamp(1.05rem, 1.5vw, 1.25rem);
-}
-.fly-actions {
-  display: grid;
-  gap: 12px;
-  margin-top: 34px;
-}
-.fly-hint {
-  position: absolute;
-  bottom: 28px;
-  left: 50%;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 12px;
-  color: var(--muted);
-  font-size: 0.72rem;
-  font-weight: 500;
-  letter-spacing: 0.32em;
-  text-transform: uppercase;
-  transform: translateX(-50%);
-}
-.fly-hint i {
-  position: relative;
-  width: 1px;
-  height: 48px;
-  overflow: hidden;
-  background: rgba(255, 255, 255, 0.18);
-}
-.fly-hint i::after {
-  content: "";
+.hero-shade {
   position: absolute;
   inset: 0;
-  background: #fff;
-  transform: translateY(-100%);
-  animation: hintLine 2.2s var(--ease) infinite;
+  z-index: -1;
+  background:
+    linear-gradient(90deg, rgba(3, 4, 7, 0.62) 0%, rgba(3, 4, 7, 0.2) 55%, rgba(3, 4, 7, 0) 100%),
+    linear-gradient(0deg, var(--bg) 0%, rgba(3, 4, 7, 0) 30%),
+    linear-gradient(180deg, rgba(3, 4, 7, 0.45) 0%, rgba(3, 4, 7, 0) 18%);
 }
-@keyframes hintLine {
-  0% {
-    transform: translateY(-100%);
-  }
-  60%,
-  100% {
-    transform: translateY(100%);
-  }
+.hero-copy {
+  position: relative;
+}
+.hero-eyebrow {
+  display: inline-flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 26px;
+  color: #c9d0e0;
+  font-size: 0.82rem;
+  font-weight: 500;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+}
+.hero-eyebrow span {
+  width: 32px;
+  height: 1px;
+  background: var(--blue);
+}
+.hero-title {
+  max-width: 13ch;
+  font-size: clamp(3rem, 8.6vw, 8.4rem);
+  font-weight: 600;
+  line-height: 0.92;
+  letter-spacing: -0.035em;
+}
+.hero-sub {
+  max-width: 34rem;
+  margin-top: 28px;
+  color: #c9d0e0;
+  font-size: clamp(1.05rem, 1.5vw, 1.28rem);
+  line-height: 1.55;
+}
+.hero-actions {
+  display: grid;
+  gap: 12px;
+  margin-top: 36px;
 }
 
 /* ============ Sections ============ */
@@ -541,7 +462,7 @@ p {
 }
 .head-row {
   max-width: 64rem;
-  margin-bottom: clamp(56px, 7vw, 104px);
+  margin-bottom: clamp(40px, 5vw, 72px);
 }
 .head-row-split {
   display: grid;
@@ -566,7 +487,7 @@ p {
   max-width: 30rem;
 }
 .offer {
-  padding-top: clamp(120px, 16vw, 220px);
+  padding-top: clamp(80px, 9vw, 140px);
 }
 
 /* Branchen: Bento */
@@ -705,104 +626,19 @@ p {
   }
 }
 
-/* Demos */
-.demo-grid {
-  display: grid;
-  gap: 20px;
-}
-.demo-card {
-  display: block;
-  overflow: hidden;
-  border: 1px solid var(--line);
-  border-radius: var(--radius-lg);
-  background: var(--surface);
-  transition: border-color 0.4s;
-}
-.demo-media {
-  aspect-ratio: 16 / 10;
-  overflow: hidden;
-  background: var(--surface-2);
-}
-.demo-media img {
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-  object-position: top;
-  transition: transform 1.1s var(--ease);
-}
-.demo-body {
-  display: grid;
-  gap: 10px;
-  padding: 24px 26px 28px;
-}
-.tag {
-  color: var(--muted);
-  font-size: 0.78rem;
-  font-weight: 500;
-  letter-spacing: 0.14em;
-  text-transform: uppercase;
-}
-.demo-title-row {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: 16px;
-}
-.demo-body h3 {
-  font-size: clamp(1.7rem, 3vw, 2.5rem);
-  line-height: 1;
-  letter-spacing: -0.03em;
-}
-.demo-body p {
-  color: var(--dim);
-}
-.round-btn {
-  display: grid;
-  place-items: center;
-  flex: none;
-  width: 52px;
-  height: 52px;
-  border: 1px solid var(--line-strong);
-  border-radius: 50%;
-  transition:
-    background-color 0.3s,
-    transform 0.4s var(--ease);
-}
-.soon {
-  flex: none;
-  color: var(--dim);
-  font-size: 0.85rem;
-}
-.demo-card.is-disabled {
-  cursor: default;
-}
-@media (hover: hover) {
-  a.demo-card:hover {
-    border-color: rgba(127, 162, 255, 0.35);
-  }
-  a.demo-card:hover .demo-media img {
-    transform: scale(1.04);
-  }
-  a.demo-card:hover .round-btn {
-    background: var(--blue);
-    border-color: var(--blue);
-    transform: rotate(45deg);
-  }
-}
-
 /* Leistungen: große Zahl + Liste */
 .services {
   display: grid;
   gap: 24px;
 }
 .big-number {
-  color: transparent;
+  color: rgba(127, 162, 255, 0.07);
   font-family: var(--font-display);
   font-size: clamp(7rem, 22vw, 20rem);
   font-weight: 600;
   line-height: 0.8;
   letter-spacing: -0.06em;
-  -webkit-text-stroke: 1.5px rgba(127, 162, 255, 0.7);
+  -webkit-text-stroke: 1.5px #9db6ff;
 }
 .service-list {
   margin: clamp(40px, 5vw, 64px) 0 0;
@@ -1016,7 +852,7 @@ p {
 .contact-buttons {
   display: grid;
   gap: 12px;
-  margin-top: clamp(56px, 7vw, 96px);
+  margin-top: clamp(40px, 5vw, 64px);
 }
 .contact-tile {
   position: relative;
@@ -1222,7 +1058,7 @@ p {
 
 /* ============ Breakpoints ============ */
 @media (min-width: 560px) {
-  .fly-actions {
+  .hero-actions {
     display: flex;
     flex-wrap: wrap;
   }
@@ -1237,25 +1073,12 @@ p {
   }
 }
 
-@media (max-width: 767px) {
-  .fly-type {
-    font-size: 24vw;
-    margin-top: 0;
-  }
-}
-
 @media (min-width: 768px) {
   .bento {
     grid-template-columns: repeat(2, 1fr);
   }
   .bento-feature {
     grid-column: span 2;
-  }
-  .demo-grid {
-    grid-template-columns: 1fr 1fr;
-  }
-  .demo-grid > :nth-child(2) {
-    margin-top: 96px;
   }
   .head-row-split {
     grid-template-columns: 1fr auto;
